@@ -13,10 +13,8 @@
 [functions]
   directory = "netlify/functions"
 
-# Android app download (signed APK), served over HTTPS by the site itself
+# pages always re-checked so visitors get the latest version
 [[headers]]
-  for = "/rokhssati.apk"
+  for = "/*.html"
   [headers.values]
-    Content-Type = "application/vnd.android.package-archive"
-    Content-Disposition = "attachment; filename=\"rokhssati.apk\""
-    Cache-Control = "no-cache"
+    Cache-Control = "public, max-age=0, must-revalidate"
