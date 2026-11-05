@@ -1,0 +1,38 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rokhssati · activations et messages (PRIVÉ)</title>
+<style>body{font:15px system-ui,sans-serif;margin:16px;color:#1a1a1a;background:#f6f6f3}h1{font-size:20px}input{font:inherit;padding:8px;width:min(360px,100%)}button{font:inherit;padding:8px 14px}
+table{border-collapse:collapse;margin-top:14px;width:100%;background:#fff}td,th{border-bottom:1px solid #ddd;padding:7px 8px;text-align:left;font-variant-numeric:tabular-nums}th{background:#eee}.err{color:#b00}.muted{color:#666}</style></head>
+<body><h1>Activations et messages</h1>
+<p class="muted">Collez la <b>clé admin</b> : c'est la valeur de la variable ROKH_ADMIN_KEY que vous avez mise dans Netlify (fichier netlify-variables-PRIVE.txt). Sans la clé, cette page n'affiche rien.</p>
+<input id="k" type="password" placeholder="Clé admin"> <button id="go">Codes activés</button> <button id="gm">Messages</button> <span id="msg"></span>
+<div id="out"></div>
+<script>
+var BASE=location.protocol==='https:'&&/rokhssati\.com$/.test(location.hostname)?'':'https://rokhssati.com';
+var k=document.getElementById('k'),msg=document.getElementById('msg'),out=document.getElementById('out');
+try{k.value=localStorage.getItem('rk-admin')||''}catch(e){}
+function rd(r){return r.text().then(function(t){try{return JSON.parse(t)}catch(e){return {ok:false,err:'HTTP '+r.status+' : '+t.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').slice(0,160)}}})}
+function d(s){return s?new Date(s).toLocaleString('fr-FR'):''}
+document.getElementById('go').onclick=function(){
+  msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
+  fetch(BASE+'/api/activations',{headers:{'x-admin-key':k.value},cache:'no-store'}).then(rd).then(function(j){
+    if(!j.ok){msg.className='err';msg.textContent=j.err==='key'?'Clé admin incorrecte.':j.err==='config'?'La variable ROKH_ADMIN_KEY n’est pas encore dans Netlify (ou pas de redeploy depuis).':'Erreur : '+j.err;out.innerHTML='';return}
+    msg.textContent=j.n+' code(s) activé(s)';
+    var h='<table><tr><th>Code</th><th>Appareil</th><th>1re activation</th><th>Dernière</th><th>Nb</th><th>Valable jusqu’au</th></tr>';
+    j.rows.forEach(function(r){h+='<tr><td>'+r.code+'</td><td>'+r.dev+'</td><td>'+d(r.first)+'</td><td>'+d(r.last)+'</td><td>'+r.n+'</td><td>'+new Date(r.until).toLocaleDateString('fr-FR')+'</td></tr>'});
+    out.innerHTML=h+'</table>';
+  }).catch(function(){msg.className='err';msg.textContent='Pas de réponse (connexion, ou page ouverte hors navigateur). Ouvrez-la dans Chrome : rokhssati.com/gestion.html'});
+};
+function esc(x){return String(x||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var KIND={code:'Code d’activation','auto-ecole':'Auto-école',autre:'Autre'};
+document.getElementById('gm').onclick=function(){
+  msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
+  fetch(BASE+'/api/messages',{headers:{'x-admin-key':k.value},cache:'no-store'}).then(rd).then(function(j){
+    if(!j.ok){msg.className='err';msg.textContent=j.err==='key'?'Clé admin incorrecte.':'Erreur : '+j.err;out.innerHTML='';return}
+    msg.textContent=j.n+' message(s)';
+    var h='<table><tr><th>Date</th><th>Sujet</th><th>Nom</th><th>Contact</th><th>Appareil</th><th>Message</th></tr>';
+    j.rows.forEach(function(r){var extra=r.school?('<br><small>'+esc(r.school)+' · '+esc(r.wilaya)+' · '+esc(r.students)+' élèves/mois</small>'):'';
+      h+='<tr><td>'+d(r.at)+'</td><td>'+esc(KIND[r.kind]||r.kind)+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.phone)+(r.email?'<br>'+esc(r.email):'')+'</td><td>'+esc(r.dev)+'</td><td style="white-space:pre-wrap">'+esc(r.msg)+extra+'</td></tr>'});
+    out.innerHTML=h+'</table>';
+  }).catch(function(){msg.className='err';msg.textContent='Pas de réponse (connexion, ou page ouverte hors navigateur). Ouvrez-la dans Chrome : rokhssati.com/gestion.html'});
+};
+</script></body></html>

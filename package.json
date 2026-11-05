@@ -1,0 +1,8 @@
+{
+  "name": "rokhssati-site",
+  "private": true,
+  "description": "Static site; the only dependency is for the Netlify Functions (activation list).",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.7"
+  }
+}
