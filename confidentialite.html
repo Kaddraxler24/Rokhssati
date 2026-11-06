@@ -548,6 +548,9 @@ html.v-open, html.v-open body { overflow: hidden; }
 .v-nav .btn[disabled] { opacity: .4; cursor: default; }
 .v-end { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .v-badge { width: 72px; height: 72px; border-radius: 50%; background: var(--sign); color: var(--sign-ink); display: grid; place-items: center; font-size: 36px; font-weight: 700; }
+.chap.is-locked .chap-open { opacity: .72; }
+.chap.is-locked .cstate { font-size: 18px; }
+.v-lock .v-badge { background: var(--amber-soft); color: var(--amber-ink); font-size: 32px; }
 .v-end-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 360px; margin-top: 8px; }
 
 /* quiz without picture */
@@ -1359,14 +1362,22 @@ var RokhCode = (function () {
   function nextChapter(p) {
     if (p.last) {
       var inf = chapInfo(p.last.chap);
-      if (inf && !p.done[inf.c.id]) return inf;
+      if (inf && !p.done[inf.c.id] && !lockedId(inf.c.id)) return inf;
     }
     if (!CI) return null;
     for (var i = 0; i < CI.length; i++) for (var j = 0; j < CI[i].chapters.length; j++)
-      if (!p.done[CI[i].chapters[j].id]) return { theme: CI[i], ti: i, c: CI[i].chapters[j], ci: j };
+      if (!p.done[CI[i].chapters[j].id] && !lockedId(CI[i].chapters[j].id)) return { theme: CI[i], ti: i, c: CI[i].chapters[j], ci: j };
     return null;
   }
   function chapHref(inf) { return inf.theme.url + "#c=" + inf.c.id; }
+  /* free version: the first FREE_CHAPS chapters of each theme; the next ones open with an activation code */
+  var FREE_CHAPS = 6;
+  function lockedId(id) { var inf = chapInfo(id); return !!inf && inf.ci >= FREE_CHAPS && !pass(); }
+  var LKU = {
+    ar: { t: "هذا الفصل يُفتح برمز التفعيل", p: "الفصول الستة الأولى من كل محور مجانية. أدخل رمز التفعيل لفتح باقي الفصول." },
+    fr: { t: "Ce chapitre s'ouvre avec un code d'activation", p: "Les 6 premiers chapitres de chaque thème sont gratuits. Activez un code pour ouvrir les suivants." },
+    dz: { t: "هاد الفصل يتحل بكود التفعيل", p: "الفصول الستة الأولين من كل محور بلاش. فعّل الكود باش تحل الباقي." }
+  };
   function setRing(el, pct) {
     if (!el) return;
     var v = Math.round(pct * 100);
@@ -1447,6 +1458,10 @@ var RokhCode = (function () {
         li.classList.toggle("is-started", !p.done[id] && r > 0);
         $(".cbar i", li).style.width = Math.round(r / n * 100) + "%";
         $(".cstate", li).textContent = p.done[id] ? "✓" : r > 0 ? Math.round(r / n * 100) + "%" : "";
+        var lk = lockedId(id);
+        li.classList.toggle("is-locked", lk);
+        if (lk) $(".cstate", li).textContent = "🔒";
+        var ob = $(".chap-open", li); if (ob) { if (lk) ob.setAttribute("aria-description", LKU[lang].t); else ob.removeAttribute("aria-description"); }
       });
       var tp = $(".th-progress");
       if (tp) {
@@ -1458,7 +1473,8 @@ var RokhCode = (function () {
     }
     function open(li, i, opener) {
       cur.li = li; cur.opener = opener || null;
-      cur.slides = $$(".slide", li);
+      cur.locked = lockedId(li.dataset.chap);
+      cur.slides = cur.locked ? [] : $$(".slide", li);
       var n = cur.slides.length;
       cur.i = Math.max(0, Math.min(i || 0, n));
       steps.innerHTML = "";
@@ -1476,6 +1492,7 @@ var RokhCode = (function () {
       if (cur.li) { var b = $(".chap-open", cur.li); if (b) b.focus(); }
     }
     function save() {
+      if (cur.locked) return;
       var n = cur.slides.length;
       Track.read(cur.li.dataset.theme, cur.li.dataset.chap, Math.min(n, cur.i + 1), n);
     }
@@ -1516,7 +1533,25 @@ var RokhCode = (function () {
       b3.addEventListener("click", close); btns.appendChild(b3);
       return box;
     }
+    function lockCard() {
+      var box = document.createElement("div");
+      box.className = "v-end v-lock";
+      box.innerHTML = '<div class="v-badge" aria-hidden="true">🔒</div><h3></h3><p class="muted"></p><div class="v-end-btns"></div>';
+      $("h3", box).textContent = LKU[lang].t;
+      $("p", box).textContent = LKU[lang].p;
+      var btns = $(".v-end-btns", box);
+      var a = document.createElement("a"); a.className = "btn btn-primary"; a.href = "activer.html"; a.textContent = t("unlock"); btns.appendChild(a);
+      var b = document.createElement("button"); b.type = "button"; b.className = "btn btn-ghost"; b.textContent = u("back"); b.addEventListener("click", close); btns.appendChild(b);
+      return box;
+    }
     function render() {
+      if (cur.locked) {
+        stage.innerHTML = ""; stage.appendChild(lockCard()); stage.scrollTop = 0;
+        $(".v-count", viewer).textContent = "🔒";
+        vPrev.textContent = u("prev"); vPrev.disabled = true; vNext.hidden = true;
+        var al = $(".v-lock .btn-primary", stage); if (al) al.focus();
+        return;
+      }
       var n = cur.slides.length, end = cur.i >= n;
       stage.innerHTML = "";
       if (end) stage.appendChild(endCard());
@@ -1562,7 +1597,7 @@ var RokhCode = (function () {
     var tpBtn = $(".tp-resume");
     if (tpBtn) tpBtn.addEventListener("click", function () {
       var p = Track.prog();
-      var li = chaps.filter(function (c) { return !p.done[c.dataset.chap]; })[0] || chaps[0];
+      var li = chaps.filter(function (c) { return !p.done[c.dataset.chap] && !lockedId(c.dataset.chap); })[0] || chaps[0];
       var r = p.read[li.dataset.chap] || 0;
       open(li, p.done[li.dataset.chap] ? 0 : Math.max(0, r - 1));
     });
