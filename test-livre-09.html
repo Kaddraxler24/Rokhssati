@@ -551,6 +551,13 @@ html.v-open, html.v-open body { overflow: hidden; }
 .chap.is-locked .chap-open { opacity: .72; }
 .chap.is-locked .cstate { font-size: 18px; }
 .v-lock .v-badge { background: var(--amber-soft); color: var(--amber-ink); font-size: 32px; }
+.old-app { background: var(--amber-soft); color: var(--amber-ink); border-bottom: 1px solid var(--line); }
+.old-app[hidden] { display: none; }
+.old-app-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; padding-block: 10px; }
+.old-app p { margin: 0; flex: 1 1 260px; font-size: 15px; line-height: 1.5; }
+.old-app-link { color: inherit; font-weight: 700; }
+.old-app-x { background: none; border: 0; color: inherit; font-size: 24px; line-height: 1; cursor: pointer; padding: 4px 8px; margin-inline-start: auto; }
+.exam-note { margin-top: 14px; }
 .v-end-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 360px; margin-top: 8px; }
 
 /* quiz without picture */
@@ -712,6 +719,8 @@ html.v-open, html.v-open body { overflow: hidden; }
 </head>
 <body>
 <div id="app" data-l="ar" lang="ar" dir="rtl">
+<div class="old-app" id="oldApp" role="note"><div class="wrap old-app-row"><p><span class="l-ar">عندك النسخة القديمة من تطبيق رخصتي؟ فيها أساسًا الإشارات وقليل من الدروس. نسخة جديدة كاملة قادمة: كل الدروس والاختبارات والتحديثات.</span><span class="l-fr" lang="fr">Vous avez l'ancienne appli Rokhssati ? Elle contient surtout des panneaux et peu de cours. Une nouvelle version complète arrive : tous les cours, les tests et les mises à jour.</span><span class="l-dz" lang="ar-DZ">عندك التطبيق القديم تاع رخصتي؟ فيه غير البانوات وشوية دروس. نسخة جديدة كاملة جاية: كامل الدروس، الاختبارات والتحديثات.</span></p><a class="old-app-link" href="index.html#android"><span class="l-ar">اعرف أكثر</span><span class="l-fr" lang="fr">En savoir plus</span><span class="l-dz" lang="ar-DZ">شوف أكثر</span></a><button type="button" class="old-app-x" aria-label="إغلاق · Fermer">×</button></div></div>
+<script>(function(){var b=document.getElementById("oldApp");if(!b)return;try{if(window.RokhNative||localStorage.getItem("rokhssati-oldapp-banner")==="1"){b.hidden=true;return;}}catch(e){}b.querySelector(".old-app-x").addEventListener("click",function(){b.hidden=true;try{localStorage.setItem("rokhssati-oldapp-banner","1");}catch(e){}});})();</script>
 <header class="top">
   <div class="wrap top-row">
     <a class="brand" href="./" aria-label="Rokhssati">

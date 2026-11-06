@@ -551,6 +551,13 @@ html.v-open, html.v-open body { overflow: hidden; }
 .chap.is-locked .chap-open { opacity: .72; }
 .chap.is-locked .cstate { font-size: 18px; }
 .v-lock .v-badge { background: var(--amber-soft); color: var(--amber-ink); font-size: 32px; }
+.old-app { background: var(--amber-soft); color: var(--amber-ink); border-bottom: 1px solid var(--line); }
+.old-app[hidden] { display: none; }
+.old-app-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; padding-block: 10px; }
+.old-app p { margin: 0; flex: 1 1 260px; font-size: 15px; line-height: 1.5; }
+.old-app-link { color: inherit; font-weight: 700; }
+.old-app-x { background: none; border: 0; color: inherit; font-size: 24px; line-height: 1; cursor: pointer; padding: 4px 8px; margin-inline-start: auto; }
+.exam-note { margin-top: 14px; }
 .v-end-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 360px; margin-top: 8px; }
 
 /* quiz without picture */
@@ -712,6 +719,8 @@ html.v-open, html.v-open body { overflow: hidden; }
 </head>
 <body>
 <div id="app" data-l="ar" lang="ar" dir="rtl">
+<div class="old-app" id="oldApp" role="note"><div class="wrap old-app-row"><p><span class="l-ar">عندك النسخة القديمة من تطبيق رخصتي؟ فيها أساسًا الإشارات وقليل من الدروس. نسخة جديدة كاملة قادمة: كل الدروس والاختبارات والتحديثات.</span><span class="l-fr" lang="fr">Vous avez l'ancienne appli Rokhssati ? Elle contient surtout des panneaux et peu de cours. Une nouvelle version complète arrive : tous les cours, les tests et les mises à jour.</span><span class="l-dz" lang="ar-DZ">عندك التطبيق القديم تاع رخصتي؟ فيه غير البانوات وشوية دروس. نسخة جديدة كاملة جاية: كامل الدروس، الاختبارات والتحديثات.</span></p><a class="old-app-link" href="index.html#android"><span class="l-ar">اعرف أكثر</span><span class="l-fr" lang="fr">En savoir plus</span><span class="l-dz" lang="ar-DZ">شوف أكثر</span></a><button type="button" class="old-app-x" aria-label="إغلاق · Fermer">×</button></div></div>
+<script>(function(){var b=document.getElementById("oldApp");if(!b)return;try{if(window.RokhNative||localStorage.getItem("rokhssati-oldapp-banner")==="1"){b.hidden=true;return;}}catch(e){}b.querySelector(".old-app-x").addEventListener("click",function(){b.hidden=true;try{localStorage.setItem("rokhssati-oldapp-banner","1");}catch(e){}});})();</script>
 <header class="top">
   <div class="wrap top-row">
     <a class="brand" href="./" aria-label="Rokhssati">
@@ -743,7 +752,7 @@ html.v-open, html.v-open body { overflow: hidden; }
 </header>
 <main>
 <section class="page-hero">
-  <div class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="./"><span class="l-ar">الرئيسية</span><span class="l-fr" lang="fr">Accueil</span><span class="l-dz" lang="ar-DZ">الرئيسية</span></a> <span aria-hidden="true">/</span> <a href="code-de-la-route.html"><span class="l-ar">الدروس</span><span class="l-fr" lang="fr">Cours</span><span class="l-dz" lang="ar-DZ">الدروس</span></a></nav><p class="eyebrow"><span class="law-tag" dir="ltr">Loi n° <span class="nw">26-09</span> · JO 36/2026</span></p><h1><span class="l-ar">قانون المرور الجديد 2026</span><span class="l-fr" lang="fr">Le nouveau code de la route 2026</span><span class="l-dz" lang="ar-DZ">قانون المرور الجديد 2026</span></h1><p class="lead"><span class="l-ar">نعرض هنا بطريقة مبسطة بعض ما ورد في القانون <span class="nw">26-09</span> (الجريدة الرسمية رقم 36، ماي 2026). رخصتي ليس مصدرا رسميا: ارجع دائما إلى النص المنشور وإلى مدرسة السياقة.</span><span class="l-fr" lang="fr">Nous présentons ici, de façon simplifiée, quelques points de la loi <span class="nw">26-09</span> (JO n° 36, mai 2026). Rokhssati n'est pas une source officielle : référez-vous toujours au texte publié et à votre auto-école.</span><span class="l-dz" lang="ar-DZ">هنا نوريولك بطريقة ساهلة شوية حوايج من القانون <span class="nw">26-09</span> (الجريدة الرسمية رقم 36، ماي 2026). رخصتي ماشي مصدر رسمي: ديما ارجع للنص الرسمي وللأوطو إيكول.</span></p></div>
+  <div class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="./"><span class="l-ar">الرئيسية</span><span class="l-fr" lang="fr">Accueil</span><span class="l-dz" lang="ar-DZ">الرئيسية</span></a> <span aria-hidden="true">/</span> <a href="code-de-la-route.html"><span class="l-ar">الدروس</span><span class="l-fr" lang="fr">Cours</span><span class="l-dz" lang="ar-DZ">الدروس</span></a></nav><p class="eyebrow"><span class="law-tag" dir="ltr">Loi n° <span class="nw">26-09</span> · JO 36/2026</span></p><h1><span class="l-ar">قانون المرور الجديد 2026</span><span class="l-fr" lang="fr">Le nouveau code de la route 2026</span><span class="l-dz" lang="ar-DZ">قانون المرور الجديد 2026</span></h1><p class="lead"><span class="l-ar">نعرض هنا بطريقة مبسطة بعض ما ورد في القانون <span class="nw">26-09</span> (الجريدة الرسمية رقم 36، ماي 2026). رخصتي ليس مصدرا رسميا: ارجع دائما إلى النص المنشور وإلى مدرسة السياقة. هذا الملخص قيد المراجعة مادة بمادة: المبالغ والعقوبات المعروضة قد تتغير.</span><span class="l-fr" lang="fr">Nous présentons ici, de façon simplifiée, quelques points de la loi <span class="nw">26-09</span> (JO n° 36, mai 2026). Rokhssati n'est pas une source officielle : référez-vous toujours au texte publié et à votre auto-école. Ce résumé est en cours de vérification article par article : les montants et sanctions affichés peuvent changer.</span><span class="l-dz" lang="ar-DZ">هنا نوريولك بطريقة ساهلة شوية حوايج من القانون <span class="nw">26-09</span> (الجريدة الرسمية رقم 36، ماي 2026). رخصتي ماشي مصدر رسمي: ديما ارجع للنص الرسمي وللأوطو إيكول. هاد الملخص راهو يتراجع مادة بمادة: المبالغ والعقوبات اللي راهم هنا يقدرو يتبدلو.</span></p></div>
   <div class="road" aria-hidden="true"></div>
 </section>
 <section class="block" id="changes">
