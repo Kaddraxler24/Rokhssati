@@ -774,3 +774,14 @@ html.news-open { overflow: hidden; }
 .soon-note { border: 1px solid #E0A43A; background: #FFF6E0; color: #4A3200; border-radius: 12px; padding: 12px 16px; margin: 0 0 18px; line-height: 1.5; }
 [data-theme="dark"] .soon-note { background: #3A2E12; color: #FBE7B5; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .soon-note { background: #3A2E12; color: #FBE7B5; } }
+
+/* Mes messages */
+#messages:has(#inbox[hidden]) { display: none; }
+.in-list { display: grid; gap: 10px; max-width: 720px; }
+.in-msg { border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; background: var(--surface); }
+.in-msg.is-r { border-color: var(--sign); box-shadow: inset 4px 0 0 var(--sign); }
+[dir="rtl"] .in-msg.is-r { box-shadow: inset -4px 0 0 var(--sign); }
+.in-msg small { color: var(--muted, #777); }
+.in-msg p { margin: 6px 0 0; white-space: pre-wrap; }
+.inbox-bar { background: var(--sign); color: #fff; text-align: center; padding: 10px 16px; font-weight: 600; }
+.inbox-bar a { color: #fff; text-decoration: underline; margin-inline-start: 6px; }

@@ -3,7 +3,8 @@
 <style>body{font:15px system-ui,sans-serif;margin:16px;color:#1a1a1a;background:#f6f6f3}h1{font-size:20px}input{font:inherit;padding:8px;width:min(360px,100%)}button{font:inherit;padding:8px 14px}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}.kpi{background:#fff;border:1px solid #ddd;border-radius:12px;padding:12px}.kpi b{display:block;font-size:26px;font-variant-numeric:tabular-nums}.kpi span{color:#555;font-size:13px}.kpi small{display:block;color:#0E6A43;margin-top:2px}
 h2{font-size:17px;margin:22px 0 4px}.bar{display:inline-block;height:10px;background:#0E6A43;border-radius:3px;vertical-align:middle;margin-inline-end:6px}.note{background:#FDF3DA;border:1px solid #F0B323;border-radius:10px;padding:10px 12px;margin-top:14px}
-table{border-collapse:collapse;margin-top:14px;width:100%;background:#fff}td,th{border-bottom:1px solid #ddd;padding:7px 8px;text-align:left;font-variant-numeric:tabular-nums}th{background:#eee}.err{color:#b00}.muted{color:#666}</style></head>
+table{border-collapse:collapse;margin-top:14px;width:100%;background:#fff}td,th{border-bottom:1px solid #ddd;padding:7px 8px;text-align:left;font-variant-numeric:tabular-nums}th{background:#eee}.err{color:#b00}.muted{color:#666}.rp{margin-top:8px;display:grid;gap:6px}.rp textarea{width:100%;box-sizing:border-box;font:inherit}.rp-done{margin-top:6px;color:#0E6B47}.rp-no{margin-top:6px;color:#888;font-size:12px}tr.done{background:#F2FAF5}
+</style></head>
 <body><h1>Gestion Rokhssati</h1>
 <p class="muted">Collez la <b>clé admin</b> : c'est la valeur de la variable ROKH_ADMIN_KEY (Cloudflare Pages → Settings → Variables and Secrets). Sans la clé, cette page n'affiche rien.</p>
 <input id="k" type="password" placeholder="Clé admin"> <button id="go">Codes activés</button> <button id="gm">Messages</button> <button id="gs">Statistiques</button> <select id="per"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">90 jours</option></select> <span id="msg"></span>
@@ -25,6 +26,11 @@ document.getElementById('go').onclick=function(){
   }).catch(function(){msg.className='err';msg.textContent='Pas de réponse (connexion, ou page ouverte hors navigateur). Ouvrez-la dans Chrome : rokhssati.com/gestion.html'});
 };
 function esc(x){return String(x||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var TPL=[
+ {n:'Codes bientôt disponibles',fr:'Bonjour, merci pour votre message. Les codes d’activation seront bientôt disponibles : nous vous préviendrons ici. En attendant, tous les cours sont gratuits dans l’appli. L’équipe Rokhssati',ar:'مرحبًا، شكرًا على رسالتك. رموز التفعيل ستكون متوفرة قريبًا وسنعلمك هنا. في الأثناء، كل الدروس مجانية في التطبيق. فريق رخصتي',dz:'السلام، يعطيك الصحة على الميساج. أكواد التفعيل راهم جايين قريب ونقولولك هنا. في هاد الوقت، كامل الدروس بلاش في التطبيق. فريق رخصتي'},
+ {n:'Merci pour le signalement',fr:'Merci pour votre signalement ! Nous avons vérifié la question et la corrigeons dans la prochaine mise à jour. L’équipe Rokhssati',ar:'شكرًا على تنبيهك! راجعنا السؤال وسنصححه في التحديث القادم. فريق رخصتي',dz:'يعطيك الصحة على التنبيه! شفنا السؤال وراح نصلحوه في التحديث الجاي. فريق رخصتي'},
+ {n:'Question bien reçue, réponse',fr:'Bonjour, merci pour votre question. ',ar:'مرحبًا، شكرًا على سؤالك. ',dz:'السلام، يعطيك الصحة على السؤال. '},
+ {n:'Auto-école : on vous recontacte',fr:'Bonjour, merci pour l’intérêt que vous portez à Rokhssati. Nous préparons l’offre auto-écoles et revenons vers vous très vite. L’équipe Rokhssati',ar:'مرحبًا، شكرًا على اهتمامك برخصتي. نحضّر عرض مدارس السياقة وسنعود إليك قريبًا جدًا. فريق رخصتي',dz:'السلام، يعطيك الصحة على الاهتمام برخصتي. راحنا نحضرو العرض تاع الأوطو إيكول ونرجعولك قريب. فريق رخصتي'}];
 var KIND={code:'Code d’activation','auto-ecole':'Auto-école',autre:'Autre',signal:'Signalement de question'};
 document.getElementById('gm').onclick=function(){
   msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
@@ -33,8 +39,19 @@ document.getElementById('gm').onclick=function(){
     msg.textContent=j.n+' message(s)';
     var h='<table><tr><th>Date</th><th>Sujet</th><th>Nom</th><th>Contact</th><th>Appareil</th><th>Message</th></tr>';
     j.rows.forEach(function(r){var extra=r.school?('<br><small>'+esc(r.school)+' · '+esc(r.wilaya)+' · '+esc(r.students)+' élèves/mois</small>'):'';
-      h+='<tr><td>'+d(r.at)+'</td><td>'+esc(KIND[r.kind]||r.kind)+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.phone)+(r.email?'<br>'+esc(r.email):'')+'</td><td>'+esc(r.dev)+'</td><td style="white-space:pre-wrap">'+esc(r.msg)+extra+'</td></tr>'});
+      var rep=(r.replies||[]).map(function(x){return '<div class="rp-done">↳ <b>Répondu le '+d(x.at)+'</b> : '+esc(x.text)+'</div>'}).join('');
+      var form=r.canReply?('<div class="rp" data-key="'+esc(r.key)+'" data-lang="'+esc(r.lang)+'"><select class="rp-t"><option value="">Réponse toute prête…</option>'+TPL.map(function(t,i){return '<option value="'+i+'">'+esc(t.n)+'</option>'}).join('')+'</select><textarea class="rp-x" rows="3" placeholder="Votre réponse (elle s’affichera dans « Mes messages » sur l’appareil de la personne)"></textarea><button type="button" class="rp-go">Envoyer dans l’appli / le site</button> <span class="rp-m"></span></div>'):'<div class="rp-no">Réponse dans l’appli impossible (message envoyé avant le 7/11 ou depuis une ancienne version).</div>';
+      h+='<tr'+((r.replies||[]).length?' class="done"':'')+'><td>'+d(r.at)+'</td><td>'+esc(KIND[r.kind]||r.kind)+((r.replies||[]).length?'<br><small>✓ répondu</small>':'')+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.phone)+(r.email?'<br>'+esc(r.email):'')+'</td><td>'+esc(r.dev)+'</td><td style="white-space:pre-wrap">'+esc(r.msg)+extra+rep+form+'</td></tr>'});
     out.innerHTML=h+'</table>';
+    out.querySelectorAll('.rp').forEach(function(f){
+      var L=/^fr/.test(f.dataset.lang)?'fr':/dz|ar-DZ/i.test(f.dataset.lang)?'dz':'ar';
+      f.querySelector('.rp-t').onchange=function(){var t=TPL[this.value];if(t)f.querySelector('.rp-x').value=t[L]};
+      f.querySelector('.rp-go').onclick=function(){var b=this,m=f.querySelector('.rp-m'),x=f.querySelector('.rp-x').value.trim();if(!x){m.textContent='Écrivez une réponse.';return}
+        b.disabled=true;m.textContent='Envoi…';
+        fetch(BASE+'/api/reply',{method:'POST',headers:{'x-admin-key':k.value,'Content-Type':'application/json'},body:JSON.stringify({key:f.dataset.key,text:x})}).then(rd).then(function(j){
+          b.disabled=false;if(j.ok){m.textContent='✓ Envoyé. La personne le verra en ouvrant l’appli ou le site.';f.querySelector('.rp-x').value=''}else m.textContent='Erreur : '+j.err;
+        }).catch(function(){b.disabled=false;m.textContent='Pas de réponse du serveur.'})};
+    });
   }).catch(function(){msg.className='err';msg.textContent='Pas de réponse (connexion, ou page ouverte hors navigateur). Ouvrez-la dans Chrome : rokhssati.com/gestion.html'});
 };
 /* ---------- statistiques ---------- */

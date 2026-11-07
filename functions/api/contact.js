@@ -1,6 +1,7 @@
 // Rokhssati: contact form (activation code questions, auto-écoles, other). Kept in KV under "msg:".
 import { out, preflight } from "../_lib/common.js";
 import { count } from "../_lib/stats.js";
+import { bxOf, addItem } from "../_lib/inbox.js";
 const cut = (v, n) => String(v || "").replace(/[\u0000-\u001f\u007f]/g, " ").trim().slice(0, n);
 export async function onRequest({ request, env }) {
   if (request.method === "OPTIONS") return preflight("POST");
@@ -16,6 +17,8 @@ export async function onRequest({ request, env }) {
   if (!m.msg && m.kind !== "auto-ecole") return out({ ok: false, err: "msg" }, 400);
   if (!env.ROKH_KV) return out({ ok: false, err: "store" }, 500);
   await count(env, "contact_" + (sig ? "signal" : m.kind === "auto-ecole" ? "autoecole" : m.kind === "code" ? "code" : "autre"), request);
+  m.bx = await bxOf(b.box);                                   // private thread for "Mes messages" (optional)
   await env.ROKH_KV.put("msg:" + m.at + "-" + Math.random().toString(36).slice(2, 8), JSON.stringify(m));
+  if (m.bx && !sig) await addItem(env, m.bx, { from: "me", text: m.msg || "(" + m.kind + ")", at: m.at });
   return out({ ok: true });
 }
