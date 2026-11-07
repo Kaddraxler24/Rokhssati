@@ -761,3 +761,11 @@ html.news-open { overflow: hidden; }
 
 /* backup / restore */
 .pg-backup textarea { width: 100%; box-sizing: border-box; font: 13px/1.4 ui-monospace, Menlo, monospace; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); word-break: break-all; }
+
+/* version & changelog (aide) */
+.ver-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 28px; margin: 14px 0 18px; }
+.ver-cols h3 { font-size: 16px; margin: 0 0 6px; }
+@media (max-width: 640px) { .ver-cols { grid-template-columns: minmax(0, 1fr); } }
+.ver-log { border-top: 1px solid var(--line); padding: 10px 0; }
+.ver-log summary { cursor: pointer; min-height: 32px; }
+.ver-log ul { margin: 8px 0 0; padding-inline-start: 20px; }
