@@ -214,6 +214,8 @@ var RokhCode = (function () {
       b = Array.prototype.map.call(a, function (x) { return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_".charAt(x % 64); }).join("") + Date.now().toString(36);
       try { localStorage.setItem("rokhssati-box", b); } catch (e) {}
     }
+    // app >= 1.4.21: lets Android check for replies and show a notification (InboxJob.java)
+    if (b && window.RokhNative && typeof window.RokhNative.setBox === "function") { try { window.RokhNative.setBox(b); } catch (e) {} }
     return b;
   }
   var I18N_FR_SIG = ["La réponse est fausse", "Erreur de traduction", "Image peu claire", "Autre chose"];
@@ -1108,7 +1110,7 @@ var RokhCode = (function () {
         if (!j.ok) return;
         items = j.items || [];
         var lastR = items.filter(function (x) { return x.from === "r"; }).map(function (x) { return x.at; }).sort().pop() || "";
-        if (list) { if (lastR) lsSet(SEEN, lastR); lsSet("rokhssati-box-unread", "0"); bar(false); }
+        if (list) { if (lastR) { lsSet(SEEN, lastR); if (window.RokhNative && typeof window.RokhNative.seen === "function") { try { window.RokhNative.seen(lastR); } catch (e) {} } } lsSet("rokhssati-box-unread", "0"); bar(false); }
         else { var unread = lastR && lastR > (lsGet(SEEN) || ""); lsSet("rokhssati-box-unread", unread ? "1" : "0"); bar(unread); }
         draw();
       }).catch(function () { if (list) { items = "net"; draw(); } });
