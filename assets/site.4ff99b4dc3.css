@@ -819,6 +819,7 @@ html.news-open { overflow: hidden; }
 .is-zoomable:focus-visible { outline: 3px solid var(--sign); outline-offset: 3px; border-radius: 14px; }
 .zoom-ov { position: fixed; inset: 0; z-index: 200; background: rgba(10,16,12,.92); display: flex; align-items: center; justify-content: center; padding: 56px 12px 12px; }
 .zoom-ov[hidden] { display: none; }
+.sg-hint { margin: 0 0 12px; padding: 12px 16px; border-radius: 12px; background: #F7D046; color: #15201A; font-weight: 700; font-size: 17px; }
 .sg { cursor: pointer; border-radius: 12px; transition: background .15s; }
 .sg:hover, .sg:focus-visible { background: rgba(14,106,67,.08); outline: none; }
 .sg figcaption::after { content: " ⓘ"; opacity: .55; }
