@@ -543,7 +543,7 @@ var RokhCode = (function () {
           k_ch: "فصول منتهية", k_tests: "اختبارات", k_avg: "المعدل", k_best: "أفضل نتيجة", k_err: "أخطاء للمراجعة", histEmpty: "لم تجر أي اختبار بعد. ابدأ سلسلة من صفحة التدريب.",
           h_date: "التاريخ", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
           all: "كل المحاور", signs: "الإشارات", situations: "ترتيب المرور", errors: "أخطائي", reset: "مسح كل التقدم", resetSure: "متأكد؟ اضغط مرة أخرى",
-          noErr: "لا توجد أخطاء للمراجعة.", days: ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"], step: "بطاقة",
+          noErr: "لا توجد أخطاء للمراجعة.", days: ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "أنهيت هذا المحور!", thDoneTxt: "اختبر نفسك الآن على أسئلته.", thFree: "3 أسئلة تجريبية مجانية؛ كل الأسئلة والامتحانات التجريبية برمز التفعيل.",
           k_more: "إحصائيات مفصّلة", prem: "برمز التفعيل", histFree: "النسخة المجانية: آخر 3 نتائج فقط. فعّل رمزًا لرؤية كل السجل والمعدل وأفضل نتيجة." },
     fr: { prev: "Précédent", next: "Suivant", finish: "Terminer le chapitre", check: "Vérifier", done: "Chapitre terminé !", doneTxt: "Bravo. Vous pouvez passer au chapitre suivant.",
           nextChap: "Chapitre suivant", nextTheme: "Thème suivant", back: "Retour aux chapitres", train: "S'entraîner sur ce thème", right: "Bonne réponse", wrong: "Pas tout à fait",
@@ -551,7 +551,7 @@ var RokhCode = (function () {
           k_ch: "Chapitres terminés", k_tests: "Tests passés", k_avg: "Moyenne", k_best: "Meilleur score", k_err: "Erreurs à revoir", histEmpty: "Aucun test pour l'instant. Lancez une série depuis la page Entraînement.",
           h_date: "Date", h_type: "Type", h_theme: "Thème", h_score: "Score", t_train: "Entraînement", t_exam: "Examen blanc", t_livre: "Test du livre",
           all: "Tous les thèmes", signs: "Panneaux", situations: "Ordre de passage", errors: "Mes erreurs", reset: "Effacer ma progression", resetSure: "Sûr ? Cliquez encore",
-          noErr: "Aucune erreur à revoir.", days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"], step: "Fiche",
+          noErr: "Aucune erreur à revoir.", days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"], step: "Fiche", thDone: "Thème terminé !", thDoneTxt: "Testez-vous maintenant sur ses questions.", thFree: "3 questions d'essai gratuites ; toutes les questions et les examens blancs avec un code.",
           k_more: "Statistiques détaillées", prem: "Avec un code", histFree: "Version gratuite : seulement les 3 derniers résultats. Activez un code pour tout l'historique, la moyenne et le meilleur score." },
     dz: { prev: "اللي قبل", next: "اللي بعد", finish: "كمّل الفصل", check: "شوف", done: "كملت الفصل!", doneTxt: "برافو. تقدر تفوت للفصل اللي جاي.",
           nextChap: "الفصل اللي جاي", nextTheme: "المحور اللي جاي", back: "ارجع للفصول", train: "تدرّب على هاد المحور", right: "صحيح!", wrong: "ماشي هاكا",
@@ -559,7 +559,7 @@ var RokhCode = (function () {
           k_ch: "فصول كملتهم", k_tests: "الاختبارات", k_avg: "المعدل", k_best: "أحسن نتيجة", k_err: "غلطات تعاودهم", histEmpty: "مازال ما درت حتى اختبار. ابدا سلسلة من صفحة التدريب.",
           h_date: "النهار", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
           all: "كامل المحاور", signs: "البانوات", situations: "شكون يفوت الأول", errors: "الغلطات تاعي", reset: "امسح كلش", resetSure: "متأكد؟ اضغط مرة أخرى",
-          noErr: "ما كانش غلطات تعاودهم.", days: ["حد", "تنين", "ثلاث", "ربع", "خميس", "جمعة", "سبت"], step: "بطاقة",
+          noErr: "ما كانش غلطات تعاودهم.", days: ["حد", "تنين", "ثلاث", "ربع", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "كمّلت هاد المحور!", thDoneTxt: "جرّب روحك دروك على الأسئلة تاعو.", thFree: "3 أسئلة تجريبية بلاش؛ كامل الأسئلة والامتحانات التجريبية بكود التفعيل.",
           k_more: "إحصائيات مفصّلة", prem: "بكود التفعيل", histFree: "النسخة بلاش: غير آخر 3 نتائج. فعّل كود باش تشوف كامل التاريخ، المعدل وأحسن نتيجة." }
   };
   var u = function (k) { return CU[lang][k]; };
@@ -745,6 +745,16 @@ var RokhCode = (function () {
       box.innerHTML = '<div class="v-badge">✓</div><h3></h3><p class="muted"></p><div class="v-end-btns"></div>';
       $("h3", box).textContent = u("done"); $("p", box).textContent = u("doneTxt");
       var btns = $(".v-end-btns", box);
+      if (!nxt) {   // last chapter of the theme: send the learner to practice (owner 07/11/2026)
+        $("h3", box).textContent = u("thDone"); $("p", box).textContent = u("thDoneTxt");
+        var tr = document.createElement("a"); tr.className = "btn btn-primary v-train"; tr.href = "entrainement.html#" + li.dataset.theme; tr.textContent = u("train"); btns.appendChild(tr);
+        if (!pass()) { var fr = document.createElement("p"); fr.className = "muted v-free"; fr.innerHTML = '<span></span> <a href="activer.html"></a>';
+          fr.firstChild.textContent = u("thFree"); fr.lastChild.textContent = t("unlock"); box.appendChild(fr); }
+        if (nextTh) { var an = document.createElement("a"); an.className = "btn btn-ghost"; an.href = nextTh.url + "#c=" + nextTh.chapters[0].id; an.textContent = u("nextTheme"); btns.appendChild(an); }
+        var bb = document.createElement("button"); bb.type = "button"; bb.className = "btn btn-ghost"; bb.textContent = u("back");
+        bb.addEventListener("click", close); btns.appendChild(bb);
+        return box;
+      }
       if (nxt) {
         var b1 = document.createElement("button"); b1.type = "button"; b1.className = "btn btn-primary"; b1.textContent = u("nextChap");
         b1.addEventListener("click", function () { open(nxt, 0); }); btns.appendChild(b1);
