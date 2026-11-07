@@ -30,9 +30,16 @@ export async function onRequest({ request, env }) {
   const K = env.ROKH_CODE_KEY, S = env.ROKH_SIGN_KEY;
   if (!K || !S) return out({ ok: false, err: "config" }, 500);
   if (!/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(dev)) return out({ ok: false, err: "dev" }, 400);
+  // lot 6 (cahier v2 § 12): at most 8 wrong codes per device and 30 per network address per hour
+  const slot = Math.floor(Date.now() / 3600000), ip = request.headers.get("cf-connecting-ip") || "?";
+  const rk = ["rl:d:" + dev + ":" + slot, "rl:i:" + ip + ":" + slot];
+  let tries = [0, 0];
+  if (env.ROKH_KV) { try { tries = await Promise.all(rk.map(async (k) => +(await env.ROKH_KV.get(k)) || 0)); } catch (e) {} }
+  if (tries[0] >= 8 || tries[1] >= 30) { await count(env, "act_trop", request); return out({ ok: false, err: "trop" }, 429); }
+  const fail = async () => { if (env.ROKH_KV) { try { await Promise.all(rk.map((k, i) => env.ROKH_KV.put(k, String(tries[i] + 1), { expirationTtl: 7200 }))); } catch (e) {} } };
   const r = await check(K.trim(), dev, code), c = clean(code);
   const log = (res) => console.log(JSON.stringify({ t: new Date().toISOString(), res, dev, code: c ? c.slice(0, 4) + "…" : "" }));
-  if (!r) { log("code"); await count(env, "act_faux", request); return out({ ok: false, err: "code" }); }
+  if (!r) { log("code"); await fail(); await count(env, "act_faux", request); return out({ ok: false, err: "code" }); }
   if (r.until < Date.now()) { log("exp"); await count(env, "act_expire", request); return out({ ok: false, err: "exp", until: r.until }); }
   log("ok");
   await count(env, "act_ok", request);
