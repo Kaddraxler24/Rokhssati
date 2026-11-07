@@ -22,3 +22,75 @@
 
 /gestion.html
   X-Robots-Tag: noindex, nofollow
+
+# clean URLs (no .html): always revalidate so no page shows an old version
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/activer
+  Cache-Control: public, max-age=0, must-revalidate
+/aide
+  Cache-Control: public, max-age=0, must-revalidate
+/auto-ecoles
+  Cache-Control: public, max-age=0, must-revalidate
+/code-2026
+  Cache-Control: public, max-age=0, must-revalidate
+/code-de-la-route
+  Cache-Control: public, max-age=0, must-revalidate
+/confidentialite
+  Cache-Control: public, max-age=0, must-revalidate
+/conseils
+  Cache-Control: public, max-age=0, must-revalidate
+/contact
+  Cache-Control: public, max-age=0, must-revalidate
+/entrainement
+  Cache-Control: public, max-age=0, must-revalidate
+/panneaux
+  Cache-Control: public, max-age=0, must-revalidate
+/permis
+  Cache-Control: public, max-age=0, must-revalidate
+/progression
+  Cache-Control: public, max-age=0, must-revalidate
+/sources
+  Cache-Control: public, max-age=0, must-revalidate
+/test-livre-01
+  Cache-Control: public, max-age=0, must-revalidate
+/test-livre-02
+  Cache-Control: public, max-age=0, must-revalidate
+/test-livre-03
+  Cache-Control: public, max-age=0, must-revalidate
+/test-livre-04
+  Cache-Control: public, max-age=0, must-revalidate
+/test-livre-05
+  Cache-Control: public, max-age=0, must-revalidate
+/test-livre-06
+  Cache-Control: public, max-age=0, must-revalidate
+/test-livre-07
+  Cache-Control: public, max-age=0, must-revalidate
+/test-livre-08
+  Cache-Control: public, max-age=0, must-revalidate
+/test-livre-09
+  Cache-Control: public, max-age=0, must-revalidate
+/test-livre-10
+  Cache-Control: public, max-age=0, must-revalidate
+/tests-livre
+  Cache-Control: public, max-age=0, must-revalidate
+/theme-circulation
+  Cache-Control: public, max-age=0, must-revalidate
+/theme-conducteur
+  Cache-Control: public, max-age=0, must-revalidate
+/theme-environnement
+  Cache-Control: public, max-age=0, must-revalidate
+/theme-mecanique
+  Cache-Control: public, max-age=0, must-revalidate
+/theme-reglementation
+  Cache-Control: public, max-age=0, must-revalidate
+/theme-route
+  Cache-Control: public, max-age=0, must-revalidate
+/theme-secours
+  Cache-Control: public, max-age=0, must-revalidate
+/theme-securite
+  Cache-Control: public, max-age=0, must-revalidate
+/theme-usagers
+  Cache-Control: public, max-age=0, must-revalidate
+/theme-vehicule
+  Cache-Control: public, max-age=0, must-revalidate

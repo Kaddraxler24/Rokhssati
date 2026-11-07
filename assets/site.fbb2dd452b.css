@@ -436,6 +436,7 @@ ul.ticks{padding-inline-start:1.2em;margin:0 0 1.2em}ul.ticks li{margin:.35em 0}
 .form-msg[data-state="ok"] { background: var(--soft); }
 .form-msg[data-state="ko"] { background: var(--red-soft); }
 .rules-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ae-status { margin: 18px 0 0; padding: 12px 16px; border-radius: 12px; border: 1px solid #e0a800; background: rgba(224,168,0,.12); }
 .soon { padding: 20px 22px; border-radius: 14px; border: 1px dashed var(--muted); display: flex; flex-direction: column; gap: 10px; }
 .soon ul { margin: 0; padding-inline-start: 22px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 6px 24px; color: var(--muted); }
 
