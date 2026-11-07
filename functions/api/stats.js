@@ -26,15 +26,25 @@ const Q = `query($a:String!,$s:String!,$f:Date!,$t:Date!){viewer{accounts(filter
  refs:rumPageloadEventsAdaptiveGroups(limit:10,filter:{siteTag:$s,date_geq:$f,date_leq:$t},orderBy:[count_DESC]){count sum{visits} dimensions{refererHost}}
 }}}`;
 
+// secrets pasted from a phone often carry invisible characters (line breaks, non-breaking spaces, quotes, "Bearer ")
+const clean = (v) => String(v || "").replace(/^\s*bearer\s+/i, "").replace(/[^\x21-\x7E]/g, "").replace(/^["'`]+|["'`]+$/g, "");
+const hex32 = (v) => (clean(v).toLowerCase().match(/[0-9a-f]{32}/) || [""])[0];
+
 async function web(env, from, to) {
-  if (!env.CF_API_TOKEN || !env.CF_ACCOUNT_ID || !env.CF_SITE_TAG) return { ok: false, err: "not_configured" };
+  const token = clean(env.CF_API_TOKEN), acc = hex32(env.CF_ACCOUNT_ID), site = hex32(env.CF_SITE_TAG);
+  if (!token || !acc || !site) {
+    if (!env.CF_API_TOKEN && !env.CF_ACCOUNT_ID && !env.CF_SITE_TAG) return { ok: false, err: "not_configured" };
+    return { ok: false, err: "Secret mal rempli : " + [!token && "CF_API_TOKEN", !acc && "CF_ACCOUNT_ID (32 caractères 0-9 a-f)", !site && "CF_SITE_TAG (32 caractères 0-9 a-f)"].filter(Boolean).join(", ") };
+  }
   try {
     const r = await fetch("https://api.cloudflare.com/client/v4/graphql", {
-      method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + env.CF_API_TOKEN.trim() },
-      body: JSON.stringify({ query: Q, variables: { a: env.CF_ACCOUNT_ID.trim(), s: env.CF_SITE_TAG.trim(), f: from, t: to } }) });
-    const j = await r.json();
+      method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+      body: JSON.stringify({ query: Q, variables: { a: acc, s: site, f: from, t: to } }) });
+    const txt = await r.text(); let j; try { j = JSON.parse(txt); } catch (e) { return { ok: false, err: "HTTP " + r.status + " : " + txt.slice(0, 160) }; }
     if (j.errors && j.errors.length) return { ok: false, err: j.errors.map((e) => e.message).join(" | ").slice(0, 300) };
-    const a = j.data.viewer.accounts[0] || {};
+    if (!j.data || !j.data.viewer) return { ok: false, err: "Réponse inattendue (HTTP " + r.status + ")" };
+    const a = j.data.viewer.accounts[0];
+    if (!a) return { ok: false, err: "Compte introuvable : vérifiez CF_ACCOUNT_ID, et que le jeton a la permission Account Analytics : Read sur ce compte" };
     return { ok: true,
       days: (a.days || []).map((x) => ({ d: x.dimensions.date, views: x.count, visits: x.sum.visits })),
       pages: (a.pages || []).map((x) => ({ p: x.dimensions.requestPath, views: x.count })),
