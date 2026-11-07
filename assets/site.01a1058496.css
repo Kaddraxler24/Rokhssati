@@ -827,3 +827,5 @@ html.news-open { overflow: hidden; }
 [data-theme="dark"] .trial-box { background: #3A2E12; color: #FBE7B5; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .trial-box { background: #3A2E12; color: #FBE7B5; } }
 .news-list li.news-offer { font-weight: 700; }
+
+.apk-offer { display: inline-block; margin-top: 8px; color: #F2C230; }

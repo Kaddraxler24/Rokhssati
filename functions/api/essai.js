@@ -4,7 +4,7 @@
 // One trial per device id and per network address; the server stops after TRIAL_MAX trials.
 import { out, preflight } from "../_lib/common.js";
 import { count } from "../_lib/stats.js";
-const TRIAL_MAX = 10, TRIAL_DAYS = 3;
+const TRIAL_MAX = 10, TRIAL_DAYS = 3, MIN_APP = 40;   // 40 = app 1.4.23
 const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 const b64url = (u8) => btoa(String.fromCharCode(...u8)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
@@ -19,6 +19,7 @@ export async function onRequest({ request, env }) {
   const dev = (u.searchParams.get("d") || "").slice(0, 20);
   if (!/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(dev)) return out({ ok: false, err: "dev" }, 400);
   if (used >= TRIAL_MAX) return out({ ok: false, err: "fini", left: 0 });
+  if ((+u.searchParams.get("v") || 0) < MIN_APP) return out({ ok: false, err: "maj" });   // app versions before 1.4.23
   const ip = request.headers.get("cf-connecting-ip") || "?";
   const [byDev, byIp] = await Promise.all([kv.get("trial:d:" + dev, "json"), kv.get("trial:ip:" + ip)]);
   if (byDev) return out({ ok: false, err: "deja", until: byDev.until });
