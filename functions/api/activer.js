@@ -1,6 +1,7 @@
 // Rokhssati: checks an activation code on the server (secret keys in Cloudflare > Pages > Settings > Variables).
 // ROKH_CODE_KEY (hex), ROKH_SIGN_KEY (base64 PKCS8 DER, EC P-256); KV binding ROKH_KV keeps successful activations.
 import { out, preflight } from "../_lib/common.js";
+import { count } from "../_lib/stats.js";
 const A = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const EPOCH = Date.UTC(2026, 0, 1), DZ = 3600000;
 const clean = (s) => { const c = String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, ""); return (c.length === 15 && c.slice(0, 3) === "RKS") ? c.slice(3) : c; };
@@ -31,9 +32,10 @@ export async function onRequest({ request, env }) {
   if (!/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(dev)) return out({ ok: false, err: "dev" }, 400);
   const r = await check(K.trim(), dev, code), c = clean(code);
   const log = (res) => console.log(JSON.stringify({ t: new Date().toISOString(), res, dev, code: c ? c.slice(0, 4) + "…" : "" }));
-  if (!r) { log("code"); return out({ ok: false, err: "code" }); }
-  if (r.until < Date.now()) { log("exp"); return out({ ok: false, err: "exp", until: r.until }); }
+  if (!r) { log("code"); await count(env, "act_faux", request); return out({ ok: false, err: "code" }); }
+  if (r.until < Date.now()) { log("exp"); await count(env, "act_expire", request); return out({ ok: false, err: "exp", until: r.until }); }
   log("ok");
+  await count(env, "act_ok", request);
   try {
     if (env.ROKH_KV) {
       const now = new Date().toISOString(), prev = await env.ROKH_KV.get("act:" + c, "json");

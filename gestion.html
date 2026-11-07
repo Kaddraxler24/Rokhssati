@@ -1,10 +1,12 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rokhssati · activations et messages (PRIVÉ)</title>
+<title>Rokhssati · gestion (PRIVÉ)</title>
 <style>body{font:15px system-ui,sans-serif;margin:16px;color:#1a1a1a;background:#f6f6f3}h1{font-size:20px}input{font:inherit;padding:8px;width:min(360px,100%)}button{font:inherit;padding:8px 14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}.kpi{background:#fff;border:1px solid #ddd;border-radius:12px;padding:12px}.kpi b{display:block;font-size:26px;font-variant-numeric:tabular-nums}.kpi span{color:#555;font-size:13px}.kpi small{display:block;color:#0E6A43;margin-top:2px}
+h2{font-size:17px;margin:22px 0 4px}.bar{display:inline-block;height:10px;background:#0E6A43;border-radius:3px;vertical-align:middle;margin-inline-end:6px}.note{background:#FDF3DA;border:1px solid #F0B323;border-radius:10px;padding:10px 12px;margin-top:14px}
 table{border-collapse:collapse;margin-top:14px;width:100%;background:#fff}td,th{border-bottom:1px solid #ddd;padding:7px 8px;text-align:left;font-variant-numeric:tabular-nums}th{background:#eee}.err{color:#b00}.muted{color:#666}</style></head>
-<body><h1>Activations et messages</h1>
-<p class="muted">Collez la <b>clé admin</b> : c'est la valeur de la variable ROKH_ADMIN_KEY que vous avez mise dans Netlify (fichier netlify-variables-PRIVE.txt). Sans la clé, cette page n'affiche rien.</p>
-<input id="k" type="password" placeholder="Clé admin"> <button id="go">Codes activés</button> <button id="gm">Messages</button> <span id="msg"></span>
+<body><h1>Gestion Rokhssati</h1>
+<p class="muted">Collez la <b>clé admin</b> : c'est la valeur de la variable ROKH_ADMIN_KEY (Cloudflare Pages → Settings → Variables and Secrets). Sans la clé, cette page n'affiche rien.</p>
+<input id="k" type="password" placeholder="Clé admin"> <button id="go">Codes activés</button> <button id="gm">Messages</button> <button id="gs">Statistiques</button> <select id="per"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">90 jours</option></select> <span id="msg"></span>
 <div id="out"></div>
 <script>
 var BASE=location.protocol==='https:'&&/rokhssati\.com$/.test(location.hostname)?'':'https://rokhssati.com';
@@ -15,7 +17,7 @@ function d(s){return s?new Date(s).toLocaleString('fr-FR'):''}
 document.getElementById('go').onclick=function(){
   msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
   fetch(BASE+'/api/activations',{headers:{'x-admin-key':k.value},cache:'no-store'}).then(rd).then(function(j){
-    if(!j.ok){msg.className='err';msg.textContent=j.err==='key'?'Clé admin incorrecte.':j.err==='config'?'La variable ROKH_ADMIN_KEY n’est pas encore dans Netlify (ou pas de redeploy depuis).':'Erreur : '+j.err;out.innerHTML='';return}
+    if(!j.ok){msg.className='err';msg.textContent=j.err==='key'?'Clé admin incorrecte.':j.err==='config'?'La variable ROKH_ADMIN_KEY n’est pas encore dans Cloudflare (ou pas de redéploiement depuis).':'Erreur : '+j.err;out.innerHTML='';return}
     msg.textContent=j.n+' code(s) activé(s)';
     var h='<table><tr><th>Code</th><th>Appareil</th><th>1re activation</th><th>Dernière</th><th>Nb</th><th>Valable jusqu’au</th></tr>';
     j.rows.forEach(function(r){h+='<tr><td>'+r.code+'</td><td>'+r.dev+'</td><td>'+d(r.first)+'</td><td>'+d(r.last)+'</td><td>'+r.n+'</td><td>'+new Date(r.until).toLocaleDateString('fr-FR')+'</td></tr>'});
@@ -34,5 +36,38 @@ document.getElementById('gm').onclick=function(){
       h+='<tr><td>'+d(r.at)+'</td><td>'+esc(KIND[r.kind]||r.kind)+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.phone)+(r.email?'<br>'+esc(r.email):'')+'</td><td>'+esc(r.dev)+'</td><td style="white-space:pre-wrap">'+esc(r.msg)+extra+'</td></tr>'});
     out.innerHTML=h+'</table>';
   }).catch(function(){msg.className='err';msg.textContent='Pas de réponse (connexion, ou page ouverte hors navigateur). Ouvrez-la dans Chrome : rokhssati.com/gestion.html'});
+};
+/* ---------- statistiques ---------- */
+function n(x){return (x||0).toLocaleString('fr-FR')}
+function sum(o,re){var t=0;for(var k in o)if(re.test(k))t+=o[k];return t}
+var SRC={popup:'Fenêtre « Nouveauté »',page:'Section Android (accueil)',autre:'Autre lien'};
+document.getElementById('gs').onclick=function(){
+  msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
+  var days=document.getElementById('per').value;
+  fetch(BASE+'/api/stats?days='+days,{headers:{'x-admin-key':k.value},cache:'no-store'}).then(rd).then(function(j){
+    if(!j.ok){msg.className='err';msg.textContent=j.err==='key'?'Clé admin incorrecte.':'Erreur : '+j.err;out.innerHTML='';return}
+    msg.textContent='Du '+new Date(j.from).toLocaleDateString('fr-FR')+' au '+new Date(j.to).toLocaleDateString('fr-FR');
+    var E=j.events||{},W=j.web||{},rows={},tot={},today=j.to,d7=new Date(Date.parse(j.to)-6*864e5).toISOString().slice(0,10);
+    Object.keys(E).forEach(function(d){rows[d]=rows[d]||{};for(var e in E[d]){rows[d][e]=E[d][e];tot[e]=(tot[e]||0)+E[d][e]}});
+    (W.days||[]).forEach(function(x){rows[x.d]=rows[x.d]||{};rows[x.d].visits=x.visits;rows[x.d].views=x.views;tot.visits=(tot.visits||0)+x.visits;tot.views=(tot.views||0)+x.views});
+    function per(re,from){var t=0;Object.keys(rows).forEach(function(d){if(d>=from)for(var e in rows[d])if(re.test(e))t+=rows[d][e]});return t}
+    var K=[['Visites',/^visits$/],['Pages vues',/^views$/],['Téléchargements de l’appli',/^dl_/],['Messages envoyés',/^contact_(code|autoecole|autre)$/],['Tentatives de contact',/^contact_try$/],['Codes activés',/^act_ok$/]];
+    var h='<div class="kpis">'+K.map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+n(per(x[1],'0'))+'</b><small>7 j : '+n(per(x[1],d7))+' · aujourd’hui : '+n(per(x[1],today))+'</small></div>'}).join('')+'</div>';
+    if(!W.ok)h+='<div class="note"><b>Visites et pages vues non branchées.</b> '+(W.err==='not_configured'?'Elles sont mesurées par Cloudflare Web Analytics (dashboard Cloudflare → Analytics &amp; Logs → Web Analytics). Pour les voir ici, ajoutez CF_API_TOKEN, CF_ACCOUNT_ID et CF_SITE_TAG dans Cloudflare Pages → Settings → Variables and Secrets, puis redéployez.':'Erreur Cloudflare : '+esc(W.err))+'</div>';
+    var ds=Object.keys(rows).sort().reverse();
+    h+='<h2>Jour par jour</h2><table><tr><th>Jour</th><th>Visites</th><th>Pages vues</th><th>Téléch.</th><th>Contact (envoyés / tentatives)</th><th>Activations (ok / code faux / expiré)</th></tr>';
+    ds.forEach(function(d){var r=rows[d];h+='<tr><td>'+new Date(d).toLocaleDateString('fr-FR',{weekday:'short',day:'2-digit',month:'2-digit'})+'</td><td>'+(r.visits!=null?n(r.visits):'–')+'</td><td>'+(r.views!=null?n(r.views):'–')+'</td><td>'+n(sum(r,/^dl_/))+'</td><td>'+n(sum(r,/^contact_(code|autoecole|autre)$/))+' / '+n(r.contact_try)+'</td><td>'+n(r.act_ok)+' / '+n(r.act_faux)+' / '+n(r.act_expire)+'</td></tr>'});
+    if(!ds.length)h+='<tr><td colspan="6" class="muted">Rien encore sur la période.</td></tr>';
+    h+='</table>';
+    function list(title,arr,lab,val){if(!arr||!arr.length)return '';var mx=Math.max.apply(null,arr.map(val))||1;return '<h2>'+title+'</h2><table>'+arr.map(function(x){return '<tr><td>'+esc(lab(x))+'</td><td style="width:55%"><span class="bar" style="width:'+Math.round(val(x)/mx*80)+'%"></span>'+n(val(x))+'</td></tr>'}).join('')+'</table>'}
+    var srcs=Object.keys(tot).filter(function(e){return /^dl_/.test(e)}).map(function(e){return {s:e.slice(3),v:tot[e]}}).sort(function(a,b){return b.v-a.v});
+    h+=list('Téléchargements par bouton',srcs,function(x){return SRC[x.s]||x.s},function(x){return x.v});
+    var kinds=[['code','Question sur un code'],['autoecole','Auto-école'],['autre','Autre sujet'],['incomplet','Formulaire sans téléphone ni e-mail']].map(function(x){return {s:x[1],v:tot['contact_'+x[0]]||0}}).filter(function(x){return x.v});
+    h+=list('Contact par sujet',kinds,function(x){return x.s},function(x){return x.v});
+    if(W.ok){h+=list('Pages les plus vues',W.pages,function(x){return x.p},function(x){return x.views});
+      h+=list('Pays des visiteurs',W.countries,function(x){return x.c},function(x){return x.visits});
+      h+=list('D’où viennent les visiteurs',W.refs,function(x){return x.h},function(x){return x.visits});}
+    out.innerHTML=h+'<p class="muted">Compteurs sans cookie ni donnée personnelle. Robots et aperçus de liens (WhatsApp, Facebook…) exclus. Jours à l’heure d’Algérie.</p>';
+  }).catch(function(){msg.className='err';msg.textContent='Pas de réponse (connexion). Ouvrez la page dans Chrome : rokhssati.com/gestion.html'});
 };
 </script></body></html>
