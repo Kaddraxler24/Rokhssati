@@ -1309,6 +1309,36 @@ var RokhCode = (function () {
     listeners.push(function () { $$(".is-zoomable").forEach(function (f) { f.setAttribute("aria-label", t("zoom")); }); });
   })();
 
+  /* panneaux: fiche of a sign (signification, réaction, situation, confusion) — build/signs_info.py */
+  (function () {
+    var figs = $$(".sg"); if (!figs.length) return;
+    var ov = document.createElement("div"); ov.className = "sg-ov"; ov.hidden = true; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
+    ov.innerHTML = '<div class="sg-box"><button type="button" class="sg-x" aria-label="×">×</button><div class="sg-big"></div><div class="sg-body"></div></div>';
+    document.getElementById("app").appendChild(ov);
+    var last = null;
+    function close() { if (ov.hidden) return; ov.hidden = true; document.documentElement.classList.remove("news-open"); if (location.hash.indexOf("#p-") === 0) history.replaceState(null, "", location.pathname + location.search); if (last && last.focus) last.focus(); }
+    function open(f) {
+      last = document.activeElement;
+      $(".sg-big", ov).innerHTML = ""; $(".sg-big", ov).appendChild(f.querySelector("svg").cloneNode(true));
+      var c = f.querySelector(".sg-card").cloneNode(true); c.hidden = false;
+      $$(".sg-mini", c).forEach(function (m) { var o = document.getElementById("p-" + m.getAttribute("data-k")); if (o) m.appendChild(o.querySelector("svg").cloneNode(true)); });
+      $(".sg-body", ov).innerHTML = ""; $(".sg-body", ov).appendChild(c);
+      ov.setAttribute("aria-label", (c.querySelector("h3") || {}).textContent || "");
+      ov.hidden = false; document.documentElement.classList.add("news-open"); $(".sg-x", ov).focus();
+      if (history.replaceState) history.replaceState(null, "", "#" + f.id);
+    }
+    ov.addEventListener("click", function (e) {
+      if (e.target === ov || e.target.classList.contains("sg-x")) return close();
+      var m = e.target.closest && e.target.closest(".sg-mini"); if (m) { e.preventDefault(); var o = document.getElementById("p-" + m.getAttribute("data-k")); if (o) open(o); }
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    figs.forEach(function (f) {
+      f.addEventListener("click", function () { open(f); });
+      f.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(f); } });
+    });
+    var h = location.hash.slice(1); if (h.indexOf("p-") === 0) { var f0 = document.getElementById(h); if (f0 && f0.classList.contains("sg")) open(f0); }
+  })();
+
   /* app: report installs and updates once per version (functions/api/maj.js) — no personal data */
   (function () {
     if (typeof ROKH_APP_CODE !== "number" || !window.RokhNative) return;
