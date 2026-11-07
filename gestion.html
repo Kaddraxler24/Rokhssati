@@ -7,7 +7,7 @@ table{border-collapse:collapse;margin-top:14px;width:100%;background:#fff}td,th{
 </style></head>
 <body><h1>Gestion Rokhssati</h1>
 <p class="muted">Collez la <b>clé admin</b> : c'est la valeur de la variable ROKH_ADMIN_KEY (Cloudflare Pages → Settings → Variables and Secrets). Sans la clé, cette page n'affiche rien.</p>
-<input id="k" type="password" placeholder="Clé admin"> <button id="go">Codes activés</button> <button id="gm">Messages</button> <button id="gs">Statistiques</button> <select id="per"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">90 jours</option></select> <span id="msg"></span>
+<input id="k" type="password" placeholder="Clé admin"> <button id="go">Codes activés</button> <button id="gm">Messages</button> <button id="gs">Statistiques</button> <select id="per"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">90 jours</option></select> <button id="nt"></button> <span id="msg"></span>
 <div id="out"></div>
 <script>
 var BASE=location.protocol==='https:'&&/rokhssati\.com$/.test(location.hostname)?'':'https://rokhssati.com';
@@ -95,4 +95,5 @@ document.getElementById('gs').onclick=function(){
     out.innerHTML=h+'<p class="muted">Compteurs sans cookie ni donnée personnelle. Robots et aperçus de liens (WhatsApp, Facebook…) exclus. Jours à l’heure d’Algérie.</p>';
   }).catch(function(){msg.className='err';msg.textContent='Pas de réponse (connexion). Ouvrez la page dans Chrome : rokhssati.com/gestion.html'});
 };
-</script></body></html>
+</script><script>(function(){var b=document.getElementById("nt");function r(){var on=false;try{on=localStorage.getItem("rokhssati-notrack")==="1"}catch(e){}b.textContent=on?"✅ Ce navigateur n'est pas compté (réactiver)":"Ne pas compter ce navigateur";}b.onclick=function(){try{if(localStorage.getItem("rokhssati-notrack")==="1")localStorage.removeItem("rokhssati-notrack");else localStorage.setItem("rokhssati-notrack","1")}catch(e){}r()};r();})();</script>
+</body></html>
