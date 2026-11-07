@@ -863,9 +863,11 @@ html.news-open { overflow: hidden; }
 .news-list li.news-offer { font-weight: 700; }
 
 .btn-xl { font-size: 19px; padding: 16px 28px; min-height: 58px; border-radius: 14px; font-weight: 800; }
+.hero .wrap { grid-template-columns: minmax(0, 1fr); }   /* single column: every hero block uses the full width */
+.hero .disclaimer { max-width: none; }
 .hero-ctas .btn-xl { flex: 1 1 220px; justify-content: center; }
 .hero-ctas .btn-alt { background: #F2B11B; color: #15201A; border-color: #F2B11B; }
-.offer-hero { margin: 14px 0 18px; display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 16px; background: linear-gradient(135deg, #F2B11B, #F7D046); color: #15201A; text-decoration: none; box-shadow: 0 8px 24px rgba(242,177,27,.35); border: 2px solid #15201A; max-width: 640px; }
+.offer-hero { margin: 14px 0 18px; display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 16px; background: linear-gradient(135deg, #F2B11B, #F7D046); color: #15201A; text-decoration: none; box-shadow: 0 8px 24px rgba(242,177,27,.35); border: 2px solid #15201A; }
 .offer-hero[hidden], .apk-offer-card[hidden] { display: none; }
 .offer-hero:hover { transform: translateY(-1px); }
 .oh-gift { font-size: 40px; line-height: 1; animation: oh-pop 2.4s ease-in-out infinite; }
