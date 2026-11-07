@@ -992,7 +992,7 @@ var RokhCode = (function () {
       var n = cur.slides.length, end = cur.i >= n;
       stage.innerHTML = "";
       if (end) stage.appendChild(endCard());
-      else { var node = cur.slides[cur.i].cloneNode(true); stage.appendChild(node); if (node.classList.contains("slide-q")) wireQ(node); }
+      else { var ob = cur.i === 0 && cur.li && $(".cobj", cur.li); if (ob) stage.appendChild(ob.cloneNode(true)); var node = cur.slides[cur.i].cloneNode(true); stage.appendChild(node); if (node.classList.contains("slide-q")) wireQ(node); }
       stage.scrollTop = 0;
       $$("i", steps).forEach(function (s, k) { s.className = k < cur.i ? "seen" : k === cur.i ? "now" : ""; });
       $(".v-count", viewer).textContent = end ? n + " / " + n : (cur.i + 1) + " / " + n;

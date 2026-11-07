@@ -496,6 +496,8 @@ ul.ticks{padding-inline-start:1.2em;margin:0 0 1.2em}ul.ticks li{margin:.35em 0}
 .chap.is-done .cstate { font-size: 22px; }
 .chap-body { padding: 16px 4px 8px; }
 .cintro { color: var(--muted); margin-bottom: 12px; }
+.v-stage .cobj { margin: 0 0 10px; }
+.cobj { margin: -4px 0 12px; padding: 8px 12px; border-radius: 10px; background: rgba(14,106,67,.08); }
 .slides { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
 .chap-body .slide { padding: 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
 .has-viewer .chap-body { display: none; }
