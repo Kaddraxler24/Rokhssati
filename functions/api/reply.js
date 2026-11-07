@@ -15,6 +15,6 @@ export async function onRequest({ request, env }) {
   const at = new Date().toISOString();
   await addItem(env, m.bx, { from: "r", text, at });
   m.replies = (m.replies || []).concat([{ text, at }]);
-  await env.ROKH_KV.put(key, JSON.stringify(m));
+  await env.ROKH_KV.put(key, JSON.stringify(m), { expirationTtl: Math.max(60, Math.round((Date.parse(m.at) + 365 * 86400000 - Date.now()) / 1000)) });
   return out({ ok: true, at });
 }

@@ -12,6 +12,6 @@ export async function addItem(env, bx, item) {
   const doc = (await env.ROKH_KV.get(k, "json")) || { items: [] };
   doc.items.push(item);
   doc.items = doc.items.slice(-50);
-  await env.ROKH_KV.put(k, JSON.stringify(doc), { expirationTtl: 400 * 86400 });
+  await env.ROKH_KV.put(k, JSON.stringify(doc), { expirationTtl: 365 * 86400 });
   return doc;
 }

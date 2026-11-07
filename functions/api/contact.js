@@ -13,12 +13,13 @@ export async function onRequest({ request, env }) {
               school: cut(b.school, 120), wilaya: cut(b.wilaya, 60), students: cut(b.students, 20),
               dev: cut(b.dev, 12), lang: cut(b.lang, 4), msg: cut(b.msg, 2000), at: new Date().toISOString() };
   const sig = m.kind === "signal";                           // "report a question" from the trainer: no contact needed
-  if (!sig && !m.phone && !m.email) { await count(env, "contact_incomplet", request); return out({ ok: false, err: "contact" }, 400); }
+  // phone/e-mail optional (replies go to "Mes messages"), except for driving schools
+  if (m.kind === "auto-ecole" && !m.phone && !m.email) { await count(env, "contact_incomplet", request); return out({ ok: false, err: "contact" }, 400); }
   if (!m.msg && m.kind !== "auto-ecole") return out({ ok: false, err: "msg" }, 400);
   if (!env.ROKH_KV) return out({ ok: false, err: "store" }, 500);
   await count(env, "contact_" + (sig ? "signal" : m.kind === "auto-ecole" ? "autoecole" : m.kind === "code" ? "code" : "autre"), request);
   m.bx = await bxOf(b.box);                                   // private thread for "Mes messages" (optional)
-  await env.ROKH_KV.put("msg:" + m.at + "-" + Math.random().toString(36).slice(2, 8), JSON.stringify(m));
+  await env.ROKH_KV.put("msg:" + m.at + "-" + Math.random().toString(36).slice(2, 8), JSON.stringify(m), { expirationTtl: 365 * 86400 });   // erased after 12 months
   if (m.bx && !sig) await addItem(env, m.bx, { from: "me", text: m.msg || "(" + m.kind + ")", at: m.at });
   return out({ ok: true });
 }
