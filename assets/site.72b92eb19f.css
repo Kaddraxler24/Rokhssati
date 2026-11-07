@@ -758,3 +758,6 @@ html.news-open { overflow: hidden; }
 .q-sig-form select, .q-sig-form textarea { font: inherit; font-size: 15px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); width: 100%; box-sizing: border-box; }
 .q-sig-form .btn { justify-self: start; }
 .q-sig-msg { font-size: 14px; margin: 6px 0 0; }
+
+/* backup / restore */
+.pg-backup textarea { width: 100%; box-sizing: border-box; font: 13px/1.4 ui-monospace, Menlo, monospace; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); word-break: break-all; }

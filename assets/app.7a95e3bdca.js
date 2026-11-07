@@ -134,6 +134,8 @@ var RokhCode = (function () {
       },
       history: function () { return get(HK, []); },
       favs: function () { return get(FK, {}); },
+      dump: function () { var o = { v: 1, at: Date.now() }; [PK, HK, EK, DK, FK].forEach(function (k) { o[k] = get(k, null); }); return o; },
+      load: function (o) { if (!o || o.v !== 1) return false; [PK, HK, EK, DK, FK].forEach(function (k) { if (o[k] !== null && o[k] !== undefined) set(k, o[k]); else { try { localStorage.removeItem(k); } catch (e) {} } }); return true; },
       setFav: function (id, on) { var f = get(FK, {}); if (on) f[id] = Date.now(); else delete f[id]; set(FK, f); return f; },
       reset: function () { [PK, HK, EK, DK, FK].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} }); }
     };
@@ -605,7 +607,7 @@ var RokhCode = (function () {
           h_date: "التاريخ", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
           all: "كل المحاور", signs: "الإشارات", situations: "ترتيب المرور", errors: "أخطائي", reset: "مسح كل التقدم", resetSure: "متأكد؟ اضغط مرة أخرى",
           noErr: "لا توجد أخطاء للمراجعة.", days: ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "أنهيت هذا المحور!", thDoneTxt: "اختبر نفسك الآن على أسئلته.", thFree: "3 أسئلة تجريبية مجانية؛ كل الأسئلة والامتحانات التجريبية برمز التفعيل.",
-          k_more: "إحصائيات مفصّلة", prem: "برمز التفعيل", histFree: "النسخة المجانية: آخر 3 نتائج فقط. فعّل رمزًا لرؤية كل السجل والمعدل وأفضل نتيجة." },
+          k_more: "إحصائيات مفصّلة", prem: "برمز التفعيل", bkCopied: "تم نسخ الرمز. احفظه في مكان آمن (رسالة لنفسك مثلًا).", bkSure: "سيُستبدل تقدمك الحالي. اضغط مرة أخرى للتأكيد.", bkOk: "تم استرجاع تقدمك.", bkBad: "هذا الرمز غير صالح. انسخه كاملًا.", histFree: "النسخة المجانية: آخر 3 نتائج فقط. فعّل رمزًا لرؤية كل السجل والمعدل وأفضل نتيجة." },
     fr: { prev: "Précédent", next: "Suivant", finish: "Terminer le chapitre", check: "Vérifier", done: "Chapitre terminé !", doneTxt: "Bravo. Vous pouvez passer au chapitre suivant.",
           nextChap: "Chapitre suivant", nextTheme: "Thème suivant", back: "Retour aux chapitres", train: "S'entraîner sur ce thème", right: "Bonne réponse", wrong: "Pas tout à fait",
           start: "Commencer le cours", resume: "Reprendre le cours", review: "Revoir depuis le début", readOf: "%a sur %b chapitres terminés", cont: "Reprendre : %t", startCourse: "Commencer les cours",
@@ -613,7 +615,7 @@ var RokhCode = (function () {
           h_date: "Date", h_type: "Type", h_theme: "Thème", h_score: "Score", t_train: "Entraînement", t_exam: "Examen blanc", t_livre: "Test du livre",
           all: "Tous les thèmes", signs: "Panneaux", situations: "Ordre de passage", errors: "Mes erreurs", reset: "Effacer ma progression", resetSure: "Sûr ? Cliquez encore",
           noErr: "Aucune erreur à revoir.", days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"], step: "Fiche", thDone: "Thème terminé !", thDoneTxt: "Testez-vous maintenant sur ses questions.", thFree: "3 questions d'essai gratuites ; toutes les questions et les examens blancs avec un code.",
-          k_more: "Statistiques détaillées", prem: "Avec un code", histFree: "Version gratuite : seulement les 3 derniers résultats. Activez un code pour tout l'historique, la moyenne et le meilleur score." },
+          k_more: "Statistiques détaillées", prem: "Avec un code", bkCopied: "Code copié. Gardez-le en lieu sûr (par exemple dans un message à vous-même).", bkSure: "Votre progression actuelle sera remplacée. Touchez encore pour confirmer.", bkOk: "Progression restaurée.", bkBad: "Ce code n'est pas valide. Copiez-le en entier.", histFree: "Version gratuite : seulement les 3 derniers résultats. Activez un code pour tout l'historique, la moyenne et le meilleur score." },
     dz: { prev: "اللي قبل", next: "اللي بعد", finish: "كمّل الفصل", check: "شوف", done: "كملت الفصل!", doneTxt: "برافو. تقدر تفوت للفصل اللي جاي.",
           nextChap: "الفصل اللي جاي", nextTheme: "المحور اللي جاي", back: "ارجع للفصول", train: "تدرّب على هاد المحور", right: "صحيح!", wrong: "ماشي هاكا",
           start: "ابدا الدرس", resume: "كمّل الدرس", review: "عاود من الأول", readOf: "%a من %b فصول كملتهم", cont: "كمّل: %t", startCourse: "ابدا الدروس",
@@ -621,7 +623,7 @@ var RokhCode = (function () {
           h_date: "النهار", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
           all: "كامل المحاور", signs: "البانوات", situations: "شكون يفوت الأول", errors: "الغلطات تاعي", reset: "امسح كلش", resetSure: "متأكد؟ اضغط مرة أخرى",
           noErr: "ما كانش غلطات تعاودهم.", days: ["حد", "تنين", "ثلاث", "ربع", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "كمّلت هاد المحور!", thDoneTxt: "جرّب روحك دروك على الأسئلة تاعو.", thFree: "3 أسئلة تجريبية بلاش؛ كامل الأسئلة والامتحانات التجريبية بكود التفعيل.",
-          k_more: "إحصائيات مفصّلة", prem: "بكود التفعيل", histFree: "النسخة بلاش: غير آخر 3 نتائج. فعّل كود باش تشوف كامل التاريخ، المعدل وأحسن نتيجة." }
+          k_more: "إحصائيات مفصّلة", prem: "بكود التفعيل", bkCopied: "الكود تنسخ. خبّيه في بلاصة آمنة (ميساج لروحك مثلًا).", bkSure: "التقدم تاعك دروك راح يتبدّل. اضغط مرة أخرى باش تأكد.", bkOk: "التقدم تاعك رجع.", bkBad: "هاد الكود ماشي صحيح. انسخو كامل.", histFree: "النسخة بلاش: غير آخر 3 نتائج. فعّل كود باش تشوف كامل التاريخ، المعدل وأحسن نتيجة." }
   };
   var u = function (k) { return CU[lang][k]; };
   var CI = null;
@@ -973,6 +975,28 @@ var RokhCode = (function () {
       setTimeout(function () { if (rs.dataset.armed) { delete rs.dataset.armed; rs.textContent = u("reset"); } }, 4000);
     });
     drawStats(); listeners.push(drawStats);
+    /* backup / restore (cahier v2 § 7): a copyable code, works in the app and in any browser */
+    var bk = $("#pgBackup");
+    if (bk) {
+      var code = $("#pgCode"), bmsg = $("#pgBkMsg"), imp = $("#pgImport"), file = $("#pgFile");
+      var say = function (k) { bmsg.hidden = false; bmsg.dataset.k = k; bmsg.textContent = u(k); };
+      listeners.push(function () { if (!bmsg.hidden && bmsg.dataset.k) bmsg.textContent = u(bmsg.dataset.k); });
+      var enc = function () { var j = JSON.stringify(Track.dump()); return "RK1." + btoa(unescape(encodeURIComponent(j))); };
+      $("#pgExport").addEventListener("click", function () {
+        code.value = enc(); code.select();
+        try { navigator.clipboard.writeText(code.value).catch(function () {}); } catch (e) {}
+        try { document.execCommand("copy"); } catch (e) {}
+        say("bkCopied");
+      });
+      if (file) file.addEventListener("click", function () { file.href = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(Track.dump())); });
+      imp.addEventListener("click", function () {
+        var raw = code.value.trim(), o = null;
+        try { o = raw.charAt(0) === "{" ? JSON.parse(raw) : JSON.parse(decodeURIComponent(escape(atob(raw.replace(/^RK1\./, ""))))); } catch (e) { o = null; }
+        if (!o || o.v !== 1) { delete imp.dataset.armed; say("bkBad"); return; }
+        if (!imp.dataset.armed) { imp.dataset.armed = "1"; say("bkSure"); return; }
+        delete imp.dataset.armed; Track.load(o); say("bkOk"); drawStats();
+      });
+    }
   }
   listeners.push(drawCards);
 
