@@ -19,7 +19,7 @@ document.getElementById('go').onclick=function(){
   msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
   fetch(BASE+'/api/activations',{headers:{'x-admin-key':k.value},cache:'no-store'}).then(rd).then(function(j){
     if(!j.ok){msg.className='err';msg.textContent=j.err==='key'?'Clé admin incorrecte.':j.err==='config'?'La variable ROKH_ADMIN_KEY n’est pas encore dans Cloudflare (ou pas de redéploiement depuis).':'Erreur : '+j.err;out.innerHTML='';return}
-    msg.textContent=j.n+' code(s) activé(s)';
+    msg.textContent=j.n+' code(s) activé(s)'+(j.trials?' · '+j.trials+' essai(s) gratuit(s) sur 10':'');
     var h='<table><tr><th>Code</th><th>Appareil</th><th>1re activation</th><th>Dernière</th><th>Nb</th><th>Valable jusqu’au</th></tr>';
     j.rows.forEach(function(r){h+='<tr><td>'+r.code+'</td><td>'+r.dev+'</td><td>'+d(r.first)+'</td><td>'+d(r.last)+'</td><td>'+r.n+'</td><td>'+new Date(r.until).toLocaleDateString('fr-FR')+'</td></tr>'});
     out.innerHTML=h+'</table>';
