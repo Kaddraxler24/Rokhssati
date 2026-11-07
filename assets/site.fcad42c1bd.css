@@ -742,3 +742,10 @@ html.news-open { overflow: hidden; }
 .pt-y { color: var(--sign); font-weight: 800; font-size: 1.15em; }
 .pt-n { color: var(--muted, #888); }
 @media (max-width: 560px) { .plan-tbl td, .plan-tbl th { font-size: 14px; padding-inline: 8px !important; } }
+
+/* favourites star */
+.quiz-head .q-fav { margin-inline-start: 8px; min-width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: #B7791F; font-size: 24px; line-height: 1; cursor: pointer; }
+.quiz-head .q-fav[aria-pressed="true"] { background: #FFF6E0; border-color: #E0A43A; }
+[data-theme="dark"] .quiz-head .q-fav[aria-pressed="true"] { background: #3A2E12; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .quiz-head .q-fav[aria-pressed="true"] { background: #3A2E12; } }
+.q-fav-msg { font-size: 14px; margin: 6px 0 0; }

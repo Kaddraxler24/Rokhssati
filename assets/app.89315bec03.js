@@ -84,24 +84,24 @@ var RokhCode = (function () {
           score: "نتيجتك", restart: "أعد السلسلة", great: "ممتاز! أنت تعرف القانون جيدًا.", mid: "بداية جيدة. راجع الدروس المعنية.", low: "الوقت مناسب للمراجعة.",
           time: "الوقت", recap: "التصحيح", yours: "إجابتك", none: "بدون إجابة", correct: "الإجابة الصحيحة", pick: "اختر إجابة.", examNote: "التصحيح في نهاية الامتحان.",
           ok: "لا توجد مخالفة", d2: "مخالفة من الدرجة الثانية", d3: "مخالفة من الدرجة الثالثة", d4: "مخالفة من الدرجة الرابعة", delit: "جنحة تُحال على القضاء", cur: "دج", inLimit: "سرعتك ضمن الحد المسموح.", check: "أدخل أرقامًا صحيحة.",
-          formOk: "شكرًا!", formKo: "يرجى كتابة رسالتك وترك رقم هاتف أو بريد.", cSend: "جارٍ الإرسال…", cOk: "وصلتنا رسالتك، سنرد عليك قريبًا.", cNet: "تعذر الإرسال. تحقق من الإنترنت وأعد المحاولة.", empty: "لا توجد أسئلة لهذا المحور بعد." },
+          formOk: "شكرًا!", formKo: "يرجى كتابة رسالتك وترك رقم هاتف أو بريد.", cSend: "جارٍ الإرسال…", cOk: "وصلتنا رسالتك، سنرد عليك قريبًا.", cNet: "تعذر الإرسال. تحقق من الإنترنت وأعد المحاولة.", empty: "لا توجد أسئلة لهذا المحور بعد.", favAdd: "أضف إلى المفضلة", favDel: "احذف من المفضلة", favMax: "النسخة المجانية: 20 سؤالًا في المفضلة كحد أقصى. فعّل رمزًا لمفضلة غير محدودة.", favEmpty: "لا توجد أسئلة في المفضلة بعد. اضغط على النجمة ☆ أثناء التدريب لإضافة سؤال." },
     fr: { codeNet: "Une connexion internet est nécessaire pour activer le code. Réessayez.", codeWait: "Vérification…", ltPass: "Bravo, vous êtes prêt pour ce test.", ltFail: "Revoyez vos erreurs et refaites le test.", lockExam: "L'examen blanc s'ouvre avec un code d'activation.", lockMore: "Version gratuite : %n questions d'essai, toujours les mêmes. Activez un code pour tout l'entraînement et les examens blancs.", unlock: "Activer un code", codeOk: "Activé jusqu'au %d.", codeKo: "Code incorrect, ou il n'est pas fait pour cet appareil.", codeExp: "Ce code a expiré.", payOk: "Reçu envoyé. Vous recevrez votre code par SMS après vérification.", payKo: "Envoi impossible ici. Envoyez la photo du reçu par WhatsApp ou SMS.", active: "Activation valable jusqu'au %d.", sitQ: "Dans quel ordre les véhicules passent-ils ?", signQ: "Que signifie ce panneau ?", right: "✓ Bonne réponse", wrong: "✗ Pas tout à fait", markRight: "Correct", markWrong: "Votre choix", next: "Question suivante", last: "Voir mon score", validate: "Valider",
           score: "Votre score", restart: "Recommencer", great: "Excellent ! Vous connaissez bien le code.", mid: "Bon début. Revoyez les leçons concernées.", low: "C'est le moment de réviser.",
           time: "Temps", recap: "Correction", yours: "Votre réponse", none: "Sans réponse", correct: "Bonne réponse", pick: "Choisissez une réponse.", examNote: "Correction à la fin de l'examen.",
           ok: "Pas d'infraction", d2: "Contravention du 2e degré", d3: "Contravention du 3e degré", d4: "Contravention du 4e degré", delit: "Délit jugé par le tribunal", cur: "DA", inLimit: "Vous êtes dans la limite.", check: "Entrez des valeurs valides.",
-          formOk: "Merci !", formKo: "Écrivez votre message et laissez un téléphone ou un e-mail.", cSend: "Envoi…", cOk: "Message reçu, nous vous répondons bientôt.", cNet: "Envoi impossible. Vérifiez votre connexion et réessayez.", empty: "Pas encore de questions pour ce thème." },
+          formOk: "Merci !", formKo: "Écrivez votre message et laissez un téléphone ou un e-mail.", cSend: "Envoi…", cOk: "Message reçu, nous vous répondons bientôt.", cNet: "Envoi impossible. Vérifiez votre connexion et réessayez.", empty: "Pas encore de questions pour ce thème.", favAdd: "Ajouter aux favoris", favDel: "Retirer des favoris", favMax: "Version gratuite : 20 favoris au maximum. Activez un code pour des favoris illimités.", favEmpty: "Aucun favori pour l'instant. Touchez l'étoile ☆ pendant l'entraînement pour garder une question." },
     dz: { codeNet: "لازم الأنترنت باش تفعّل الكود. عاود جرّب.", codeWait: "راهو يتحقق…", ltPass: "مليح بزاف! راك واجد.", ltFail: "عاود شوف الغلطات وعاود الاختبار.", lockExam: "الامتحان التجريبي يتحل بكود التفعيل.", lockMore: "النسخة بلاش: %n أسئلة باش تجرّب، ديما هوما. فعّل كود باش تحل كامل التدريب والامتحانات التجريبية.", unlock: "فعّل الكود", codeOk: "تفعّل حتى %d.", codeKo: "الكود غالط ولا ماشي تاع هاد التيليفون.", codeExp: "هاد الكود فات وقتو.", payOk: "الوصل تبعث. يجيك الكود في ميساج من بعد ما نتأكدو.", payKo: "ما قدرناش نبعثو من هنا. ابعث تصويرة الوصل في واتساب ولا ميساج.", active: "التفعيل يخدم حتى %d.", sitQ: "شكون يفوت الأول؟", signQ: "واش معناه هاد البانو؟", right: "✓ صحيح!", wrong: "✗ ماشي هاكا", markRight: "صحيح", markWrong: "اخترت هادي", next: "السؤال اللي بعدو", last: "شوف النتيجة", validate: "أكّد",
           score: "النتيجة تاعك", restart: "عاود من الأول", great: "برافو! راك تعرف القانون مليح.", mid: "مليح، راجع الدروس اللي غلطت فيهم.", low: "لازم تراجع شوية.",
           time: "الوقت", recap: "التصحيح", yours: "الجواب تاعك", none: "ما جاوبتش", correct: "الجواب الصحيح", pick: "اختار جواب.", examNote: "التصحيح في اللخر تاع الامتحان.",
           ok: "ما كانش خطية", d2: "خطية من الدرجة الثانية", d3: "خطية من الدرجة الثالثة", d4: "خطية من الدرجة الرابعة", delit: "جنحة تروح للمحكمة", cur: "دج", inLimit: "راك في الحد المسموح.", check: "دخّل أرقام صحاح.",
-          formOk: "يعطيك الصحة!", formKo: "اكتب الميساج وخلّي نيمرو ولا إيميل.", cSend: "راهو يتبعث…", cOk: "وصلنا الميساج، نردو عليك قريب.", cNet: "ما تبعثش. شوف الأنترنت وعاود.", empty: "مازال ما كانش أسئلة لهاد المحور." }
+          formOk: "يعطيك الصحة!", formKo: "اكتب الميساج وخلّي نيمرو ولا إيميل.", cSend: "راهو يتبعث…", cOk: "وصلنا الميساج، نردو عليك قريب.", cNet: "ما تبعثش. شوف الأنترنت وعاود.", empty: "مازال ما كانش أسئلة لهاد المحور.", favAdd: "زيد للمفضلة", favDel: "نحّي من المفضلة", favMax: "النسخة بلاش: 20 سؤال في المفضلة ماكسيموم. فعّل كود باش تولي بلا حدود.", favEmpty: "مازال ما كانش أسئلة في المفضلة. اضغط على النجمة ☆ وقت التدريب باش تخبّي سؤال." }
   };
   var t = function (k) { return UI[lang][k]; };
   var fmt = function (n) { return lang === "fr" ? n.toLocaleString("fr-FR").replace(/ | /g, " ") : String(n); };
 
   /* ---------- progress & history store (this device only) ---------- */
   var Track = (function () {
-    var PK = "rokhssati-progress", HK = "rokhssati-history", EK = "rokhssati-errors", DK = "rokhssati-days";
+    var PK = "rokhssati-progress", HK = "rokhssati-history", EK = "rokhssati-errors", DK = "rokhssati-days", FK = "rokhssati-favs";
     function get(k, d) { try { var v = JSON.parse(localStorage.getItem(k) || "null"); return v === null ? d : v; } catch (e) { return d; } }
     function set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
     function day(d) { d = d || new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
@@ -133,7 +133,9 @@ var RokhCode = (function () {
         set(HK, h.slice(-200)); markDay();
       },
       history: function () { return get(HK, []); },
-      reset: function () { [PK, HK, EK, DK].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} }); }
+      favs: function () { return get(FK, {}); },
+      setFav: function (id, on) { var f = get(FK, {}); if (on) f[id] = Date.now(); else delete f[id]; set(FK, f); return f; },
+      reset: function () { [PK, HK, EK, DK, FK].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} }); }
     };
   })();
 
@@ -244,7 +246,31 @@ var RokhCode = (function () {
         els.dots.appendChild(s);
       });
     }
+    var favBtn = null, favMsg = null;
+    if (meta.track) {
+      var qh = $(".quiz-head", root);
+      if (qh && !$(".q-fav", qh)) {
+        favBtn = document.createElement("button"); favBtn.type = "button"; favBtn.className = "q-fav"; favBtn.innerHTML = "☆";
+        qh.appendChild(favBtn);
+        favMsg = document.createElement("p"); favMsg.className = "q-fav-msg muted"; favMsg.hidden = true; qh.parentNode.insertBefore(favMsg, qh.nextSibling);
+      } else if (qh) { favBtn = $(".q-fav", qh); favMsg = $(".q-fav-msg", root); }
+      if (favBtn) favBtn.onclick = function () {
+        var q = questions[idx]; if (!q || !q.id) return;
+        var f = Track.favs(), on = !f[q.id];
+        if (on && !pass() && Object.keys(f).length >= 20) { favMsg.innerHTML = '<span></span> <a href="activer.html"></a>'; favMsg.firstChild.textContent = t("favMax"); favMsg.lastChild.textContent = t("unlock"); favMsg.hidden = false; return; }
+        Track.setFav(q.id, on); favMsg.hidden = true; drawFav();
+      };
+    }
+    function drawFav() {
+      if (!favBtn) return;
+      var q = questions[idx], on = !!(q && q.id && Track.favs()[q.id]);
+      favBtn.hidden = !q || idx >= questions.length;
+      favBtn.textContent = on ? "★" : "☆"; favBtn.setAttribute("aria-pressed", on ? "true" : "false");
+      favBtn.setAttribute("aria-label", t(on ? "favDel" : "favAdd")); favBtn.title = t(on ? "favDel" : "favAdd");
+    }
     function render() {
+      if (favMsg) favMsg.hidden = true;
+      if (favBtn) drawFav();
       if (!questions.length) { els.stage.hidden = true; els.end.hidden = true; if (els.empty) { els.empty.hidden = false; els.empty.textContent = t("empty"); } els.count.textContent = "0"; return; }
       if (els.empty) els.empty.hidden = true;
       var done = idx >= questions.length;
@@ -398,6 +424,7 @@ var RokhCode = (function () {
       function pool(th) {
         if (th === "signs") return signQuestions();
         if (th === "situations") return DATA.situations.slice();
+        if (th === "favs") { var fv = Track.favs(); return DATA.questions.concat(DATA.situations, signQuestions()).filter(function (q) { return fv[q.id]; }); }
         if (th === "all") return DATA.questions.concat(DATA.situations);
         if (th === "errors") {
           var errs = Track.errors();
@@ -410,10 +437,11 @@ var RokhCode = (function () {
         var th = sel.value;
         var exam = (modes.filter(function (m) { return m.checked; })[0] || {}).value === "exam";
         var qs = pool(th);
-        if (exam || th === "signs" || th === "all" || th === "errors") qs = shuffle(qs);
+        if (exam || th === "signs" || th === "all" || th === "errors" || th === "favs") qs = shuffle(qs);
         var premium = !!pass(), limit = DATA.free[th] || DATA.free.default, msg = "";
         if (!premium && exam) { qs = []; msg = t("lockExam"); }
-        else if (!premium) {
+        else if (th === "favs" && !qs.length) msg = t("favEmpty");
+        else if (!premium && th !== "favs") {
           // free (owner 07/11/2026): a short trial, always the same `limit` questions per category, in a random order
           var fixed = pool(th).slice(0, limit);
           if (pool(th).length > limit) msg = t("lockMore").replace("%n", limit);
