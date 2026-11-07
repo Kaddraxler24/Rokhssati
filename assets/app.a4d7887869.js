@@ -1,0 +1,967 @@
+var ROKH_PUB = {"kty":"EC","crv":"P-256","x":"nMBJqaUUayqgjVWvqONwRGrCL89aygeP3hjLNIaaU2g","y":"4VeNs_MKat3e9p8fvZ_gPCLwfEB-lTzKMVTjkQVNDvM"};
+/* Rokhssati code kit: phone-locked activation codes (pure JS, works offline everywhere).
+   code = 12 base32 chars = 14 bits end-day + 46 bits HMAC-SHA256(key, deviceId|day). */
+var RokhCode = (function () {
+  var A = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  var EPOCH = Date.UTC(2026, 0, 1);
+  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+    0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+    0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];
+  function sha256(b) {
+    var H = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+    var m = b.slice(), bl = b.length * 8, i, j;
+    m.push(0x80); while (m.length % 64 !== 56) m.push(0);
+    for (i = 7; i >= 0; i--) m.push(i > 3 ? 0 : (bl >>> (i * 8)) & 255);
+    var w = new Array(64);
+    for (i = 0; i < m.length; i += 64) {
+      for (j = 0; j < 16; j++) w[j] = (m[i + 4 * j] << 24) | (m[i + 4 * j + 1] << 16) | (m[i + 4 * j + 2] << 8) | m[i + 4 * j + 3];
+      for (j = 16; j < 64; j++) {
+        var a0 = w[j - 15], a1 = w[j - 2];
+        var s0 = ((a0 >>> 7) | (a0 << 25)) ^ ((a0 >>> 18) | (a0 << 14)) ^ (a0 >>> 3);
+        var s1 = ((a1 >>> 17) | (a1 << 15)) ^ ((a1 >>> 19) | (a1 << 13)) ^ (a1 >>> 10);
+        w[j] = (w[j - 16] + s0 + w[j - 7] + s1) | 0;
+      }
+      var a = H[0], bb = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+      for (j = 0; j < 64; j++) {
+        var S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+        var t1 = (h + S1 + ((e & f) ^ (~e & g)) + K[j] + w[j]) | 0;
+        var S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+        var t2 = (S0 + ((a & bb) ^ (a & c) ^ (bb & c))) | 0;
+        h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = bb; bb = a; a = (t1 + t2) | 0;
+      }
+      H[0] = (H[0] + a) | 0; H[1] = (H[1] + bb) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+      H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+    }
+    var out = [];
+    for (i = 0; i < 8; i++) out.push((H[i] >>> 24) & 255, (H[i] >>> 16) & 255, (H[i] >>> 8) & 255, H[i] & 255);
+    return out;
+  }
+  function bytes(s) { var o = []; s = unescape(encodeURIComponent(s)); for (var i = 0; i < s.length; i++) o.push(s.charCodeAt(i)); return o; }
+  function hex2b(h) { var o = []; for (var i = 0; i < h.length; i += 2) o.push(parseInt(h.substr(i, 2), 16)); return o; }
+  function hmac(key, msg) {
+    var k = key.slice(); if (k.length > 64) k = sha256(k); while (k.length < 64) k.push(0);
+    var ip = k.map(function (x) { return x ^ 0x36; }), op = k.map(function (x) { return x ^ 0x5c; });
+    return sha256(op.concat(sha256(ip.concat(msg))));
+  }
+  function bits(arr, n) { var s = ""; for (var i = 0; i < arr.length && s.length < n; i++) s += ("00000000" + arr[i].toString(2)).slice(-8); return s.slice(0, n); }
+  function b32(bs) { var o = ""; for (var i = 0; i < bs.length; i += 5) o += A[parseInt(bs.substr(i, 5), 2)]; return o; }
+  function clean(s) { var c = String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, ""); return (c.length === 15 && c.slice(0, 3) === "RKS") ? c.slice(3) : c; }
+  function fmtId(raw) { return raw.slice(0, 4) + "-" + raw.slice(4, 8); }
+  /* device id: 8 chars from a stable seed */
+  function deviceId(seed) { return fmtId(b32(bits(sha256(bytes("rokh-dev|" + seed)), 40))); }
+  function sig(keyHex, dev, day) { return bits(hmac(hex2b(keyHex), bytes(clean(dev) + "|" + day)), 46); }
+  function make(keyHex, dev, day) {
+    var bs = ("00000000000000" + day.toString(2)).slice(-14) + sig(keyHex, dev, day), c = b32(bs);
+    return "RKS-" + c.slice(0, 4) + "-" + c.slice(4, 8) + "-" + c.slice(8, 12);
+  }
+  /* returns {until: ms} if valid for this device, else null */
+  function check(keyHex, dev, code) {
+    var c = clean(code); if (c.length !== 12) return null;
+    var bs = "";
+    for (var i = 0; i < 12; i++) { var v = A.indexOf(c[i]); if (v < 0) return null; bs += ("00000" + v.toString(2)).slice(-5); }
+    var day = parseInt(bs.slice(0, 14), 2);
+    if (bs.slice(14) !== sig(keyHex, dev, day)) return null;
+    return { day: day, until: dayEnd(day) };
+  }
+  var DZ = 3600000; /* Algeria: UTC+1 all year */
+  function dayOf(ms) { return Math.floor((ms + DZ - EPOCH) / 86400000); }
+  function dayEnd(day) { return EPOCH + (day + 1) * 86400000 - 1 - DZ; }
+  return { make: make, check: check, deviceId: deviceId, dayOf: dayOf, dayEnd: dayEnd, sha256: sha256, bytes: bytes, b32: b32, bits: bits };
+})();
+
+(function () {
+  "use strict";
+  var app = document.getElementById("app");
+  var LANGS = { ar: { lang: "ar", dir: "rtl" }, fr: { lang: "fr", dir: "ltr" }, dz: { lang: "ar-DZ", dir: "rtl" } };
+  var lang = "ar";
+  var listeners = [];
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  var UI = {
+    ar: { codeNet: "يلزم الاتصال بالإنترنت لتفعيل الرمز. حاول مرة أخرى.", codeWait: "جارٍ التحقق…", ltPass: "ممتاز! أنت جاهز لهذا الاختبار.", ltFail: "راجع الأخطاء وأعد الاختبار.", lockExam: "الامتحان التجريبي يُفتح برمز التفعيل.", lockMore: "النسخة المجانية: %n أسئلة في كل سلسلة.", unlock: "تفعيل رمز", codeOk: "تم التفعيل حتى %d.", codeKo: "الرمز غير صحيح أو لا يخص هذا الجهاز.", codeExp: "انتهت صلاحية هذا الرمز.", payOk: "تم إرسال الوصل. ستصلك رسالة برمز التفعيل بعد التحقق.", payKo: "تعذّر الإرسال من هنا. أرسل صورة الوصل عبر واتساب أو رسالة نصية.", active: "التفعيل صالح حتى %d.", sitQ: "ما هو ترتيب المرور؟", signQ: "ماذا تعني هذه الإشارة؟", right: "✓ إجابة صحيحة", wrong: "✗ ليس تمامًا", markRight: "صحيح", markWrong: "اختيارك", next: "السؤال التالي", last: "عرض النتيجة", validate: "تأكيد",
+          score: "نتيجتك", restart: "أعد السلسلة", great: "ممتاز! أنت تعرف القانون جيدًا.", mid: "بداية جيدة. راجع الدروس المعنية.", low: "الوقت مناسب للمراجعة.",
+          time: "الوقت", recap: "التصحيح", yours: "إجابتك", none: "بدون إجابة", correct: "الإجابة الصحيحة", pick: "اختر إجابة.", examNote: "التصحيح في نهاية الامتحان.",
+          ok: "لا توجد مخالفة", d2: "مخالفة من الدرجة الثانية", d3: "مخالفة من الدرجة الثالثة", d4: "مخالفة من الدرجة الرابعة", delit: "جنحة تُحال على القضاء", cur: "دج", inLimit: "سرعتك ضمن الحد المسموح.", check: "أدخل أرقامًا صحيحة.",
+          formOk: "شكرًا!", formKo: "يرجى كتابة رسالتك وترك رقم هاتف أو بريد.", cSend: "جارٍ الإرسال…", cOk: "وصلتنا رسالتك، سنرد عليك قريبًا.", cNet: "تعذر الإرسال. تحقق من الإنترنت وأعد المحاولة.", empty: "لا توجد أسئلة لهذا المحور بعد." },
+    fr: { codeNet: "Une connexion internet est nécessaire pour activer le code. Réessayez.", codeWait: "Vérification…", ltPass: "Bravo, vous êtes prêt pour ce test.", ltFail: "Revoyez vos erreurs et refaites le test.", lockExam: "L'examen blanc s'ouvre avec un code d'activation.", lockMore: "Version gratuite : %n questions par série.", unlock: "Activer un code", codeOk: "Activé jusqu'au %d.", codeKo: "Code incorrect, ou il n'est pas fait pour cet appareil.", codeExp: "Ce code a expiré.", payOk: "Reçu envoyé. Vous recevrez votre code par SMS après vérification.", payKo: "Envoi impossible ici. Envoyez la photo du reçu par WhatsApp ou SMS.", active: "Activation valable jusqu'au %d.", sitQ: "Dans quel ordre les véhicules passent-ils ?", signQ: "Que signifie ce panneau ?", right: "✓ Bonne réponse", wrong: "✗ Pas tout à fait", markRight: "Correct", markWrong: "Votre choix", next: "Question suivante", last: "Voir mon score", validate: "Valider",
+          score: "Votre score", restart: "Recommencer", great: "Excellent ! Vous connaissez bien le code.", mid: "Bon début. Revoyez les leçons concernées.", low: "C'est le moment de réviser.",
+          time: "Temps", recap: "Correction", yours: "Votre réponse", none: "Sans réponse", correct: "Bonne réponse", pick: "Choisissez une réponse.", examNote: "Correction à la fin de l'examen.",
+          ok: "Pas d'infraction", d2: "Contravention du 2e degré", d3: "Contravention du 3e degré", d4: "Contravention du 4e degré", delit: "Délit jugé par le tribunal", cur: "DA", inLimit: "Vous êtes dans la limite.", check: "Entrez des valeurs valides.",
+          formOk: "Merci !", formKo: "Écrivez votre message et laissez un téléphone ou un e-mail.", cSend: "Envoi…", cOk: "Message reçu, nous vous répondons bientôt.", cNet: "Envoi impossible. Vérifiez votre connexion et réessayez.", empty: "Pas encore de questions pour ce thème." },
+    dz: { codeNet: "لازم الأنترنت باش تفعّل الكود. عاود جرّب.", codeWait: "راهو يتحقق…", ltPass: "مليح بزاف! راك واجد.", ltFail: "عاود شوف الغلطات وعاود الاختبار.", lockExam: "الامتحان التجريبي يتحل بكود التفعيل.", lockMore: "النسخة بلاش: %n أسئلة في كل سلسلة.", unlock: "فعّل الكود", codeOk: "تفعّل حتى %d.", codeKo: "الكود غالط ولا ماشي تاع هاد التيليفون.", codeExp: "هاد الكود فات وقتو.", payOk: "الوصل تبعث. يجيك الكود في ميساج من بعد ما نتأكدو.", payKo: "ما قدرناش نبعثو من هنا. ابعث تصويرة الوصل في واتساب ولا ميساج.", active: "التفعيل يخدم حتى %d.", sitQ: "شكون يفوت الأول؟", signQ: "واش معناه هاد البانو؟", right: "✓ صحيح!", wrong: "✗ ماشي هاكا", markRight: "صحيح", markWrong: "اخترت هادي", next: "السؤال اللي بعدو", last: "شوف النتيجة", validate: "أكّد",
+          score: "النتيجة تاعك", restart: "عاود من الأول", great: "برافو! راك تعرف القانون مليح.", mid: "مليح، راجع الدروس اللي غلطت فيهم.", low: "لازم تراجع شوية.",
+          time: "الوقت", recap: "التصحيح", yours: "الجواب تاعك", none: "ما جاوبتش", correct: "الجواب الصحيح", pick: "اختار جواب.", examNote: "التصحيح في اللخر تاع الامتحان.",
+          ok: "ما كانش خطية", d2: "خطية من الدرجة الثانية", d3: "خطية من الدرجة الثالثة", d4: "خطية من الدرجة الرابعة", delit: "جنحة تروح للمحكمة", cur: "دج", inLimit: "راك في الحد المسموح.", check: "دخّل أرقام صحاح.",
+          formOk: "يعطيك الصحة!", formKo: "اكتب الميساج وخلّي نيمرو ولا إيميل.", cSend: "راهو يتبعث…", cOk: "وصلنا الميساج، نردو عليك قريب.", cNet: "ما تبعثش. شوف الأنترنت وعاود.", empty: "مازال ما كانش أسئلة لهاد المحور." }
+  };
+  var t = function (k) { return UI[lang][k]; };
+  var fmt = function (n) { return lang === "fr" ? n.toLocaleString("fr-FR").replace(/ | /g, " ") : String(n); };
+
+  /* ---------- progress & history store (this device only) ---------- */
+  var Track = (function () {
+    var PK = "rokhssati-progress", HK = "rokhssati-history", EK = "rokhssati-errors", DK = "rokhssati-days";
+    function get(k, d) { try { var v = JSON.parse(localStorage.getItem(k) || "null"); return v === null ? d : v; } catch (e) { return d; } }
+    function set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+    function day(d) { d = d || new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+    function markDay() { var a = get(DK, []), td = day(); if (a.indexOf(td) < 0) { a.push(td); set(DK, a.slice(-120)); } }
+    function prog() { var p = get(PK, {}); p.read = p.read || {}; p.done = p.done || {}; p.qs = p.qs || {}; return p; }
+    return {
+      day: day,
+      prog: prog,
+      days: function () { return get(DK, []); },
+      read: function (theme, chap, step, n) {
+        var p = prog();
+        if ((p.read[chap] || 0) < step) p.read[chap] = Math.min(step, n);
+        p.last = { theme: theme, chap: chap, step: step, ts: Date.now() };
+        if (step >= n && !p.done[chap]) p.done[chap] = Date.now();
+        set(PK, p); markDay();
+      },
+      chapQ: function (qid, ok) { var p = prog(); p.qs[qid] = ok ? 1 : 0; set(PK, p); this.answer(qid, ok); },
+      answer: function (qid, ok) {
+        if (!qid) return;
+        var e = get(EK, {});
+        if (ok) delete e[qid]; else e[qid] = (e[qid] || 0) + 1;
+        set(EK, e); markDay();
+      },
+      errors: function () { return get(EK, {}); },
+      test: function (kind, theme, score, total) {
+        if (!total) return;
+        var h = get(HK, []);
+        h.push({ ts: Date.now(), kind: kind, theme: theme || "all", score: score, total: total });
+        set(HK, h.slice(-200)); markDay();
+      },
+      history: function () { return get(HK, []); },
+      reset: function () { [PK, HK, EK, DK].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} }); }
+    };
+  })();
+
+  /* ---------- language ---------- */
+  function applyLang(l) {
+    if (!LANGS[l]) l = "ar";
+    lang = l;
+    app.setAttribute("data-l", l);
+    app.setAttribute("lang", LANGS[l].lang);
+    app.setAttribute("dir", LANGS[l].dir);
+    document.documentElement.setAttribute("lang", LANGS[l].lang);
+    $$("[data-setlang]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.setlang === l)); });
+    try { localStorage.setItem("rokhssati-lang", l); } catch (e) {}
+    /* native <select> options cannot hide spans: show the chosen language only */
+    $$("option[data-fr]").forEach(function (o) { o.textContent = o.getAttribute("data-" + l) || o.getAttribute("data-fr"); });
+    listeners.forEach(function (f) { f(); });
+  }
+  $$("[data-setlang]").forEach(function (b) { b.addEventListener("click", function () { applyLang(b.dataset.setlang); }); });
+
+  /* ---------- navigation ---------- */
+  var header = $(".top");
+  var burger = $(".burger");
+  function closeSubs(except) {
+    $$(".has-sub.open").forEach(function (li) {
+      if (li !== except) { li.classList.remove("open"); $(".nav-btn", li).setAttribute("aria-expanded", "false"); }
+    });
+  }
+  $$(".nav-btn").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var li = btn.parentElement, open = !li.classList.contains("open");
+      closeSubs(li);
+      li.classList.toggle("open", open);
+      btn.setAttribute("aria-expanded", String(open));
+    });
+  });
+  if (burger) burger.addEventListener("click", function () {
+    var open = !header.classList.contains("nav-open");
+    header.classList.toggle("nav-open", open);
+    burger.setAttribute("aria-expanded", String(open));
+  });
+  document.addEventListener("click", function (e) { if (!e.target.closest || !e.target.closest(".has-sub")) closeSubs(null); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeSubs(null); });
+
+  /* ---------- tabs ---------- */
+  $$("[data-tabs]").forEach(function (list) {
+    var tabs = $$("[role=tab]", list);
+    function select(tab) {
+      tabs.forEach(function (b) {
+        var on = b === tab;
+        b.setAttribute("aria-selected", String(on)); b.tabIndex = on ? 0 : -1;
+        var p = document.getElementById(b.getAttribute("aria-controls")); if (p) p.hidden = !on;
+      });
+    }
+    tabs.forEach(function (b, i) {
+      b.addEventListener("click", function () { select(b); });
+      b.addEventListener("keydown", function (e) {
+        var rtl = app.getAttribute("dir") === "rtl";
+        var next = ["ArrowDown", rtl ? "ArrowLeft" : "ArrowRight"], prev = ["ArrowUp", rtl ? "ArrowRight" : "ArrowLeft"];
+        var d = next.indexOf(e.key) >= 0 ? 1 : prev.indexOf(e.key) >= 0 ? -1 : 0;
+        if (!d) return; e.preventDefault();
+        var nb = tabs[(i + d + tabs.length) % tabs.length]; select(nb); nb.focus();
+      });
+    });
+    select(tabs.filter(function (b) { return b.getAttribute("aria-selected") === "true"; })[0] || tabs[0]);
+  });
+
+  /* ---------- quiz engine ---------- */
+  var DATA = null;
+  var dataEl = document.getElementById("quizData");
+  if (dataEl) { try { DATA = JSON.parse(dataEl.textContent); } catch (e) { DATA = null; } }
+
+  function Quiz(root, questions, exam, seconds, meta) {
+    meta = meta || {};
+    var idx = 0, picked = null, answers = [], timer = null, left = seconds || 0;
+    var els = {
+      count: $(".q-count", root), clock: $(".q-clock", root), dots: $(".dots", root), stage: $(".q-stage", root),
+      sign: $(".q-sign", root), text: $(".quiz-q", root), opts: $(".opts", root), fb: $(".feedback", root),
+      fbTitle: $(".fb-title", root), fbText: $(".fb-text", root), next: $(".q-next", root), hint: $(".q-hint", root),
+      end: $(".score", root), num: $(".score-num", root), msg: $(".score-msg", root), recap: $(".recap", root), restart: $(".q-restart", root),
+      empty: $(".q-empty", root)
+    };
+    function tick() {
+      if (!exam) return;
+      left--; drawClock();
+      if (left <= 0) { stop(); idx = questions.length; render(); }
+    }
+    function drawClock() {
+      if (!els.clock) return;
+      els.clock.hidden = !exam;
+      var m = Math.max(0, Math.floor(left / 60)), s = Math.max(0, left % 60);
+      els.clock.textContent = t("time") + " " + m + ":" + (s < 10 ? "0" : "") + s;
+    }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    var recorded = false;
+    function start() {
+      stop(); idx = 0; picked = null; answers = []; left = seconds || 0; recorded = false;
+      if (exam && questions.length) timer = setInterval(tick, 1000);
+      drawClock(); render();
+    }
+    function dots() {
+      els.dots.innerHTML = "";
+      questions.forEach(function (q, i) {
+        var s = document.createElement("i");
+        if (!exam && answers[i] !== undefined) s.className = answers[i] === q.ok ? "ok" : "ko";
+        else if (exam && answers[i] !== undefined) s.className = "done";
+        else if (i === idx) s.className = "now";
+        els.dots.appendChild(s);
+      });
+    }
+    function render() {
+      if (!questions.length) { els.stage.hidden = true; els.end.hidden = true; if (els.empty) { els.empty.hidden = false; els.empty.textContent = t("empty"); } els.count.textContent = "0"; return; }
+      if (els.empty) els.empty.hidden = true;
+      var done = idx >= questions.length;
+      els.stage.hidden = done; els.end.hidden = !done;
+      els.count.textContent = (done ? questions.length : idx + 1) + " / " + questions.length;
+      dots();
+      if (done) { stop(); finish(); return; }
+      var q = questions[idx], c = q[lang];
+      els.sign.setAttribute("viewBox", q.vb || "0 0 100 100");
+      var vis = q.svg || DATA.signs[q.sign] || "";
+      els.sign.innerHTML = vis;
+      els.sign.parentNode.classList.toggle("is-situation", !!q.svg);
+      els.sign.parentNode.classList.toggle("no-visual", !vis);
+      els.text.textContent = c.q;
+      els.opts.innerHTML = "";
+      c.o.forEach(function (txt, i) {
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "opt";
+        b.innerHTML = '<span class="k">' + "ABC".charAt(i) + '</span><span class="ot"></span><span class="mark"></span>';
+        b.querySelector(".ot").textContent = txt;
+        var m = b.querySelector(".mark");
+        if (picked !== null) {
+          if (exam) { if (i === picked) b.classList.add("is-picked"); }
+          else {
+            b.disabled = true;
+            if (i === q.ok) { b.classList.add("is-correct"); m.textContent = t("markRight"); }
+            else if (i === picked) { b.classList.add("is-wrong"); m.textContent = t("markWrong"); }
+          }
+        }
+        b.setAttribute("aria-pressed", String(picked === i));
+        b.addEventListener("click", function () {
+          if (!exam && picked !== null) return;
+          picked = i; if (!exam) { answers[idx] = i; if (meta.track) Track.answer(q.id, i === q.ok); } render();
+          if (!exam) els.next.focus();
+        });
+        els.opts.appendChild(b);
+      });
+      var showNext = picked !== null;
+      els.fb.hidden = exam || picked === null;
+      els.hint.hidden = showNext;
+      els.hint.textContent = exam ? t("examNote") : t("pick");
+      els.next.hidden = !showNext;
+      els.next.textContent = exam ? (idx === questions.length - 1 ? t("last") : t("validate")) : (idx === questions.length - 1 ? t("last") : t("next"));
+      if (!exam && picked !== null) {
+        els.fbTitle.textContent = picked === q.ok ? t("right") : t("wrong");
+        els.fbText.textContent = c.e;
+      }
+    }
+    function finish() {
+      var score = 0;
+      questions.forEach(function (q, i) { if (answers[i] === q.ok) score++; });
+      if (meta.track && !recorded) {
+        recorded = true;
+        if (exam) questions.forEach(function (q, i) { if (answers[i] !== undefined) Track.answer(q.id, answers[i] === q.ok); });
+        Track.test(exam ? "exam" : "train", meta.theme, score, questions.length);
+      }
+      els.num.textContent = score + " / " + questions.length;
+      var r = score / questions.length;
+      els.msg.textContent = r >= 0.85 ? t("great") : r >= 0.5 ? t("mid") : t("low");
+      if (els.recap) {
+        els.recap.innerHTML = "";
+        els.recap.hidden = !exam;
+        if (exam) questions.forEach(function (q, i) {
+          var c = q[lang], li = document.createElement("li"), ok = answers[i] === q.ok;
+          li.className = ok ? "ok" : "ko";
+          li.innerHTML = "<b></b><span class=\"r-y\"></span><span class=\"r-c\"></span><span class=\"r-e\"></span>";
+          li.querySelector("b").textContent = (ok ? "✓ " : "✗ ") + c.q;
+          li.querySelector(".r-y").textContent = t("yours") + " : " + (answers[i] === undefined ? t("none") : c.o[answers[i]]);
+          li.querySelector(".r-c").textContent = t("correct") + " : " + c.o[q.ok];
+          li.querySelector(".r-e").textContent = c.e;
+          els.recap.appendChild(li);
+        });
+      }
+    }
+    var alive = true;
+    function fresh(n) { var c = n.cloneNode(true); n.parentNode.replaceChild(c, n); return c; }
+    els.next = fresh(els.next); els.restart = fresh(els.restart);
+    els.next.addEventListener("click", function () {
+      if (exam) answers[idx] = picked;
+      idx++; picked = null; render();
+      var f = $(".opt", root); if (f && idx < questions.length) f.focus();
+    });
+    els.restart.addEventListener("click", start);
+    listeners.push(function () { if (alive) { render(); drawClock(); } });
+    return { start: start, stop: stop, kill: function () { alive = false; stop(); } };
+  }
+
+  /* ---------- pass (premium) ---------- */
+  function devSeed() {
+    try { if (window.RokhNative && RokhNative.id) { var n = RokhNative.id(); if (n) return "a:" + n; } } catch (e) {}
+    var s = null;
+    try { s = localStorage.getItem("rokhssati-device"); } catch (e) {}
+    if (!s) { s = "w:" + Date.now().toString(36) + Math.random().toString(36).slice(2); try { localStorage.setItem("rokhssati-device", s); } catch (e) {} }
+    return s;
+  }
+  var DEV = RokhCode.deviceId(devSeed());
+  /* a pass is {until, dev, t}: t is the server's ECDSA signature of "dev|until", checked with the public key only */
+  function pass() {
+    try { var p = JSON.parse(localStorage.getItem("rokhssati-pass") || "null"); if (p && p.t && p.dev === DEV && p.until > Date.now()) return p; } catch (e) {}
+    return null;
+  }
+  function b64u(s) { s = s.replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; var b = atob(s), o = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) o[i] = b.charCodeAt(i); return o; }
+  function verifyPass(p) {
+    try {
+      var cs = window.crypto && window.crypto.subtle;
+      if (!cs || !p || !p.t) return Promise.resolve(false);
+      return cs.importKey("jwk", ROKH_PUB, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]).then(function (k) {
+        return cs.verify({ name: "ECDSA", hash: "SHA-256" }, k, b64u(p.t), new TextEncoder().encode(p.dev + "|" + p.until));
+      }).catch(function () { return false; });
+    } catch (e) { return Promise.resolve(false); }
+  }
+  (function () {
+    var raw = null; try { raw = localStorage.getItem("rokhssati-pass"); } catch (e) {}
+    if (!raw) return;
+    var p = null; try { p = JSON.parse(raw); } catch (e) {}
+    var good = pass();
+    if (!good) { try { localStorage.removeItem("rokhssati-pass"); } catch (e) {} if (p && p.until > Date.now()) location.reload(); return; }
+    verifyPass(good).then(function (ok) { if (!ok) { try { localStorage.removeItem("rokhssati-pass"); } catch (e) {} location.reload(); } });
+  })();
+  function fmtDate(ms) { var d = new Date(ms); return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear(); }
+
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var k = Math.floor(Math.random() * (i + 1)); var x = a[i]; a[i] = a[k]; a[k] = x; } return a; }
+  function mix(q) {
+    var perm = shuffle([0, 1, 2].slice(0, q.fr.o.length)), out = { id: q.id, sign: q.sign, svg: q.svg, vb: q.vb, theme: q.theme, ok: perm.indexOf(q.ok) };
+    ["ar", "fr", "dz"].forEach(function (k) { out[k] = { q: q[k].q, e: q[k].e, o: perm.map(function (i) { return q[k].o[i]; }) }; });
+    return out;
+  }
+  function signQuestions() {
+    var keys = Object.keys(DATA.catalog);
+    return keys.map(function (key) {
+      var c = DATA.catalog[key];
+      var same = keys.filter(function (k) { return k !== key && DATA.catalog[k].fam === c.fam; });
+      if (same.length < 2) same = keys.filter(function (k) { return k !== key; });
+      var picks = shuffle(same).slice(0, 2);
+      var q = { id: "sg-" + key, sign: key, theme: "signs", ok: 0 };
+      ["ar", "fr", "dz"].forEach(function (k) {
+        q[k] = { q: UI[k].signQ, o: [c.name[k]].concat(picks.map(function (p) { return DATA.catalog[p].name[k]; })), e: c.name[k] };
+      });
+      return q;
+    });
+  }
+
+  if (DATA) {
+    var demo = $("#quizDemo");
+    if (demo) Quiz(demo, DATA.questions.slice(0, DATA.demoCount || 6).map(mix), false, 0).start();
+    var trainer = $("#trainer");
+    if (trainer) {
+      var sel = $("#themeSel"), current = null, lockBox = $("#lockBox");
+      var modes = $$("[name=mode]");
+      var startBtn = $("#startBtn");
+      function pool(th) {
+        if (th === "signs") return signQuestions();
+        if (th === "situations") return DATA.situations.slice();
+        if (th === "all") return DATA.questions.concat(DATA.situations);
+        if (th === "errors") {
+          var errs = Track.errors();
+          return DATA.questions.concat(DATA.situations, signQuestions()).filter(function (q) { return errs[q.id]; });
+        }
+        return DATA.questions.filter(function (q) { return q.theme === th; });
+      }
+      function launch() {
+        if (current) current.kill();
+        var th = sel.value;
+        var exam = (modes.filter(function (m) { return m.checked; })[0] || {}).value === "exam";
+        var qs = pool(th);
+        if (exam || th === "signs" || th === "all" || th === "errors") qs = shuffle(qs);
+        var premium = !!pass(), limit = DATA.free[th] || DATA.free.default, msg = "";
+        if (!premium && exam) { qs = []; msg = t("lockExam"); }
+        else if (!premium) {
+          // free: always the same short list (the first limit+3 questions, fixed order); each try shows `limit` of them at random
+          var fixed = pool(th).slice(0, limit + 3);
+          if (th === "errors") { var errs2 = Track.errors(); fixed = fixed.filter(function (q) { return errs2[q.id]; }); }
+          if (pool(th).length > limit) msg = t("lockMore").replace("%n", limit);
+          qs = shuffle(fixed).slice(0, limit);
+        }
+        if (exam) qs = qs.slice(0, 30);
+        lockBox.hidden = !msg; $(".lock-msg", lockBox).textContent = msg;
+        trainer.classList.toggle("is-exam", exam);
+        current = Quiz(trainer, qs.map(mix), exam, qs.length * 30, { track: true, theme: th });
+        current.start();
+      }
+      function fromHash() {
+        var h = (location.hash || "").replace("#", "");
+        if (h === "examen-blanc") { var ex = $("#modeExam"); if (ex) ex.checked = true; }
+        else if (h && $("option[value=\"" + h + "\"]", sel)) sel.value = h;
+      }
+      fromHash();
+      window.addEventListener("hashchange", function () { fromHash(); launch(); closeSubs(null); });
+      startBtn.addEventListener("click", launch);
+      listeners.push(function () { if (!lockBox.hidden) launch(); });
+      launch();
+    }
+  }
+
+  /* ---------- activation code & payment ---------- */
+  var codeBtn = $("#codeBtn");
+  if (codeBtn) {
+    var PASS = JSON.parse(document.getElementById("passData").textContent);
+    var devEl = $("#devId"); if (devEl) devEl.textContent = DEV;
+    var devCopy = $("#devCopy");
+    if (devCopy) devCopy.addEventListener("click", function () {
+      try { navigator.clipboard.writeText(DEV).then(function () { devCopy.textContent = "✓"; }, function () {}); } catch (e) {}
+      var r = document.createRange(); r.selectNodeContents(devEl); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    });
+    function showPass() {
+      var p = pass(), m = $("#passState");
+      m.hidden = !p; if (p) m.textContent = t("active").replace("%d", fmtDate(p.until));
+    }
+    codeBtn.addEventListener("click", function () {
+      var raw = $("#codeIn").value || "";
+      var msg = $("#codeMsg"); msg.hidden = false;
+      msg.dataset.state = ""; msg.textContent = t("codeWait"); codeBtn.disabled = true;
+      var ctl = window.AbortController ? new AbortController() : null, tm = setTimeout(function () { if (ctl) ctl.abort(); }, 15000);
+      var qs = "?d=" + encodeURIComponent(DEV) + "&c=" + encodeURIComponent(raw.trim().slice(0, 30)), opts = ctl ? { signal: ctl.signal, cache: "no-store" } : { cache: "no-store" };
+      var apis = [].concat(PASS.api);
+      function ask(i) { return fetch(apis[i] + qs, opts).then(function (res) { return res.json(); }).catch(function (e) { if (i + 1 < apis.length) return ask(i + 1); throw e; }); }
+      ask(0)
+        .then(function (r) {
+          var p = r && r.ok ? { plan: "code", until: r.until, dev: DEV, t: r.t } : null;
+          return (p ? verifyPass(p) : Promise.resolve(false)).then(function (ok) {
+            if (ok) {
+              try { localStorage.setItem("rokhssati-pass", JSON.stringify(p)); } catch (e) {}
+              msg.dataset.state = "ok"; msg.textContent = t("codeOk").replace("%d", fmtDate(p.until));
+            } else if (r && r.err === "exp") { msg.dataset.state = "ko"; msg.textContent = t("codeExp"); }
+            else if (r && (r.err === "code" || r.err === "dev")) { msg.dataset.state = "ko"; msg.textContent = t("codeKo"); }
+            else { msg.dataset.state = "ko"; msg.textContent = t("codeNet"); }
+          });
+        })
+        .catch(function () { msg.dataset.state = "ko"; msg.textContent = t("codeNet"); })
+        .then(function () { clearTimeout(tm); codeBtn.disabled = false; showPass(); });
+    });
+    listeners.push(showPass);
+    var payForm = $("#payForm");
+    if (payForm) payForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var m = $("#payMsg"); m.hidden = false;
+      if (!payForm.checkValidity()) { m.dataset.state = "ko"; m.textContent = t("formKo"); return; }
+      fetch("/", { method: "POST", body: new FormData(payForm) }).then(function (r) {
+        m.dataset.state = r.ok ? "ok" : "ko"; m.textContent = r.ok ? t("payOk") : t("payKo");
+      }).catch(function () { m.dataset.state = "ko"; m.textContent = t("payKo"); });
+    });
+  }
+
+  /* ---------- speed calculator ---------- */
+  var limitIn = $("#limitIn"), speedIn = $("#speedIn");
+  function calc() {
+    if (!limitIn) return;
+    var L = parseFloat(limitIn.value), V = parseFloat(speedIn.value), out = $("#calcOut");
+    $$("#presets button").forEach(function (b) { b.setAttribute("aria-pressed", String(parseFloat(b.dataset.v) === L)); });
+    if (!(L > 0) || !(V >= 0)) { out.dataset.level = ""; $("#calcPct").textContent = "—"; $("#calcVerdict").textContent = t("check"); $("#calcFine").textContent = ""; return; }
+    var pct = (V - L) / L * 100, level, fine;
+    if (pct <= 0) { level = "ok"; fine = t("inLimit"); }
+    else if (pct <= 10) { level = "d2"; fine = fmt(4000) + " " + t("cur"); }
+    else if (pct <= 20) { level = "d3"; fine = fmt(6000) + " " + t("cur"); }
+    else if (pct <= 30) { level = "d4"; fine = fmt(10000) + " " + t("cur"); }
+    else { level = "delit"; fine = fmt(25000) + " – " + fmt(80000) + " " + t("cur"); }
+    out.dataset.level = level;
+    $("#calcPct").textContent = pct > 0 ? "+" + pct.toFixed(1).replace(".", lang === "fr" ? "," : ".") + " %" : "0 %";
+    $("#calcVerdict").textContent = t(level);
+    $("#calcFine").textContent = fine;
+  }
+  if (limitIn) {
+    limitIn.addEventListener("input", calc); speedIn.addEventListener("input", calc);
+    $$("#presets button").forEach(function (b) { b.addEventListener("click", function () { limitIn.value = b.dataset.v; calc(); }); });
+    listeners.push(calc);
+  }
+
+  /* ---------- contact forms (activation code, auto-écoles, other): POST to /api/contact ---------- */
+  $$(".rk-contact").forEach(function (f) {
+    var api = []; try { api = JSON.parse(f.getAttribute("data-api") || "[]"); } catch (e) {}
+    var m = f.querySelector(".form-msg"), busy = false;
+    function show(k) { m.hidden = false; m.dataset.state = k === "cOk" ? "ok" : "ko"; m.dataset.k = k; m.textContent = t(k); }
+    function opts() { $$("option[data-fr]", f).forEach(function (o) { o.textContent = o.getAttribute("data-" + lang) || o.getAttribute("data-fr"); }); }
+    opts();
+    listeners.push(function () { opts(); if (!m.hidden && m.dataset.k) m.textContent = t(m.dataset.k); });
+    f.addEventListener("submit", function (e) {
+      e.preventDefault(); if (busy) return;
+      var d = { kind: f.getAttribute("data-kind") || "autre", dev: DEV, lang: document.documentElement.lang || "" };
+      Array.prototype.forEach.call(f.elements, function (el) { if (el.name) d[el.name === "message" ? "msg" : el.name] = el.value.trim(); });
+      if (!f.checkValidity() || (!d.phone && !d.email)) { show("formKo"); return; }
+      busy = true; show("cSend");
+      (function ask(i) {
+        if (i >= api.length) { busy = false; show("cNet"); return; }
+        fetch(api[i], { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(d) })
+          .then(function (r) { return r.json(); })
+          .then(function (j) { busy = false; if (j.ok) { f.reset(); show("cOk"); } else show(j.err === "contact" || j.err === "msg" ? "formKo" : "cNet"); })
+          .catch(function () { ask(i + 1); });
+      })(0);
+    });
+  });
+
+  /* ---------- course: chapters, slide viewer, progress, stats ---------- */
+  var CU = {
+    ar: { prev: "السابق", next: "التالي", finish: "إنهاء الفصل", check: "تحقق", done: "انتهى الفصل!", doneTxt: "أحسنت. يمكنك المرور إلى الفصل الموالي.",
+          nextChap: "الفصل الموالي", nextTheme: "المحور الموالي", back: "العودة إلى الفصول", train: "تدرّب على هذا المحور", right: "إجابة صحيحة", wrong: "ليس تمامًا",
+          start: "ابدأ الدرس", resume: "واصل الدرس", review: "راجع من البداية", readOf: "%a من %b فصول منتهية", cont: "واصل: %t", startCourse: "ابدأ الدروس",
+          k_ch: "فصول منتهية", k_tests: "اختبارات", k_avg: "المعدل", k_best: "أفضل نتيجة", k_err: "أخطاء للمراجعة", histEmpty: "لم تجر أي اختبار بعد. ابدأ سلسلة من صفحة التدريب.",
+          h_date: "التاريخ", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
+          all: "كل المحاور", signs: "الإشارات", situations: "ترتيب المرور", errors: "أخطائي", reset: "مسح كل التقدم", resetSure: "متأكد؟ اضغط مرة أخرى",
+          noErr: "لا توجد أخطاء للمراجعة.", days: ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"], step: "بطاقة" },
+    fr: { prev: "Précédent", next: "Suivant", finish: "Terminer le chapitre", check: "Vérifier", done: "Chapitre terminé !", doneTxt: "Bravo. Vous pouvez passer au chapitre suivant.",
+          nextChap: "Chapitre suivant", nextTheme: "Thème suivant", back: "Retour aux chapitres", train: "S'entraîner sur ce thème", right: "Bonne réponse", wrong: "Pas tout à fait",
+          start: "Commencer le cours", resume: "Reprendre le cours", review: "Revoir depuis le début", readOf: "%a sur %b chapitres terminés", cont: "Reprendre : %t", startCourse: "Commencer les cours",
+          k_ch: "Chapitres terminés", k_tests: "Tests passés", k_avg: "Moyenne", k_best: "Meilleur score", k_err: "Erreurs à revoir", histEmpty: "Aucun test pour l'instant. Lancez une série depuis la page Entraînement.",
+          h_date: "Date", h_type: "Type", h_theme: "Thème", h_score: "Score", t_train: "Entraînement", t_exam: "Examen blanc", t_livre: "Test du livre",
+          all: "Tous les thèmes", signs: "Panneaux", situations: "Ordre de passage", errors: "Mes erreurs", reset: "Effacer ma progression", resetSure: "Sûr ? Cliquez encore",
+          noErr: "Aucune erreur à revoir.", days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"], step: "Fiche" },
+    dz: { prev: "اللي قبل", next: "اللي بعد", finish: "كمّل الفصل", check: "شوف", done: "كملت الفصل!", doneTxt: "برافو. تقدر تفوت للفصل اللي جاي.",
+          nextChap: "الفصل اللي جاي", nextTheme: "المحور اللي جاي", back: "ارجع للفصول", train: "تدرّب على هاد المحور", right: "صحيح!", wrong: "ماشي هاكا",
+          start: "ابدا الدرس", resume: "كمّل الدرس", review: "عاود من الأول", readOf: "%a من %b فصول كملتهم", cont: "كمّل: %t", startCourse: "ابدا الدروس",
+          k_ch: "فصول كملتهم", k_tests: "الاختبارات", k_avg: "المعدل", k_best: "أحسن نتيجة", k_err: "غلطات تعاودهم", histEmpty: "مازال ما درت حتى اختبار. ابدا سلسلة من صفحة التدريب.",
+          h_date: "النهار", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
+          all: "كامل المحاور", signs: "البانوات", situations: "شكون يفوت الأول", errors: "الغلطات تاعي", reset: "امسح كلش", resetSure: "متأكد؟ اضغط مرة أخرى",
+          noErr: "ما كانش غلطات تعاودهم.", days: ["حد", "تنين", "ثلاث", "ربع", "خميس", "جمعة", "سبت"], step: "بطاقة" }
+  };
+  var u = function (k) { return CU[lang][k]; };
+  var CI = null;
+  try { CI = JSON.parse(document.getElementById("courseIndex").textContent); } catch (e) { CI = null; }
+  function chapInfo(id) {
+    if (!CI) return null;
+    for (var i = 0; i < CI.length; i++) for (var j = 0; j < CI[i].chapters.length; j++)
+      if (CI[i].chapters[j].id === id) return { theme: CI[i], ti: i, c: CI[i].chapters[j], ci: j };
+    return null;
+  }
+  function frac(p, c) { return p.done[c.id] ? 1 : Math.min(1, (p.read[c.id] || 0) / c.n); }
+  function themeStats(th, p) {
+    var done = 0, f = 0;
+    th.chapters.forEach(function (c) { if (p.done[c.id]) done++; f += frac(p, c); });
+    return { done: done, total: th.chapters.length, pct: th.chapters.length ? f / th.chapters.length : 0 };
+  }
+  function globalStats(p) {
+    var done = 0, tot = 0, f = 0;
+    (CI || []).forEach(function (th) { th.chapters.forEach(function (c) { tot++; if (p.done[c.id]) done++; f += frac(p, c); }); });
+    return { done: done, total: tot, pct: tot ? f / tot : 0 };
+  }
+  function nextChapter(p) {
+    if (p.last) {
+      var inf = chapInfo(p.last.chap);
+      if (inf && !p.done[inf.c.id] && !lockedId(inf.c.id)) return inf;
+    }
+    if (!CI) return null;
+    for (var i = 0; i < CI.length; i++) for (var j = 0; j < CI[i].chapters.length; j++)
+      if (!p.done[CI[i].chapters[j].id] && !lockedId(CI[i].chapters[j].id)) return { theme: CI[i], ti: i, c: CI[i].chapters[j], ci: j };
+    return null;
+  }
+  function chapHref(inf) { return inf.theme.url + "#c=" + inf.c.id; }
+  /* free version: the first FREE_CHAPS chapters of each theme; the next ones open with an activation code */
+  var FREE_CHAPS = 6;
+  function lockedId(id) { var inf = chapInfo(id); return !!inf && inf.ci >= FREE_CHAPS && !pass(); }
+  var LKU = {
+    ar: { t: "هذا الفصل يُفتح برمز التفعيل", p: "الفصول الستة الأولى من كل محور مجانية. أدخل رمز التفعيل لفتح باقي الفصول." },
+    fr: { t: "Ce chapitre s'ouvre avec un code d'activation", p: "Les 6 premiers chapitres de chaque thème sont gratuits. Activez un code pour ouvrir les suivants." },
+    dz: { t: "هاد الفصل يتحل بكود التفعيل", p: "الفصول الستة الأولين من كل محور بلاش. فعّل الكود باش تحل الباقي." }
+  };
+  function setRing(el, pct) {
+    if (!el) return;
+    var v = Math.round(pct * 100);
+    el.style.setProperty("--p", v);
+    var b = el.querySelector("b"); if (b) b.textContent = v + "%";
+  }
+  function themeName(slug) {
+    if (CI) for (var i = 0; i < CI.length; i++) if (CI[i].slug === slug) return CI[i].name[lang];
+    return u(slug) || slug;
+  }
+  function streakCount(days) {
+    var set = {}; days.forEach(function (d) { set[d] = 1; });
+    var d = new Date(), n = 0;
+    if (!set[Track.day(d)]) d.setDate(d.getDate() - 1);
+    while (set[Track.day(d)]) { n++; d.setDate(d.getDate() - 1); }
+    return n;
+  }
+  function drawStreak(box) {
+    if (!box) return;
+    var days = Track.days(), set = {}; days.forEach(function (x) { set[x] = 1; });
+    var ol = $(".st-days", box); ol.innerHTML = "";
+    for (var k = 5; k >= -1; k--) {
+      var d = new Date(); d.setDate(d.getDate() - k);
+      var li = document.createElement("li");
+      if (set[Track.day(d)]) li.className = "on";
+      if (k === 0) li.className += " today";
+      li.innerHTML = "<i></i><span></span>";
+      li.querySelector("span").textContent = u("days")[d.getDay()];
+      ol.appendChild(li);
+    }
+    $(".st-count b", box).textContent = streakCount(days);
+  }
+
+  /* theme cards on home / hub */
+  function drawCards() {
+    var p = Track.prog();
+    $$(".tc-prog").forEach(function (el) {
+      if (!CI) return;
+      var th = CI.filter(function (x) { return x.slug === el.dataset.theme; })[0]; if (!th) return;
+      var st = themeStats(th, p);
+      el.querySelector("i").style.width = Math.round(st.pct * 100) + "%";
+      el.classList.toggle("full", st.done === st.total);
+      el.setAttribute("title", st.done + "/" + st.total);
+    });
+  }
+  drawCards();
+
+  /* hub dashboard */
+  var hubRing = $("#hubRing");
+  function drawHub() {
+    if (!hubRing) return;
+    var p = Track.prog(), g = globalStats(p), nx = nextChapter(p), btn = $("#hubResume"), last = $("#hubLast");
+    setRing(hubRing, g.pct);
+    if (nx) {
+      btn.href = chapHref(nx);
+      var started = Object.keys(p.read).length > 0;
+      btn.textContent = started ? u("resume") : u("startCourse");
+      last.hidden = !started;
+      last.textContent = (nx.ti + 1) + "." + (nx.ci + 1) + " · " + nx.c.t[lang];
+    } else { btn.href = "entrainement.html#examen-blanc"; btn.textContent = u("t_exam"); last.hidden = true; }
+    drawStreak($("#streak"));
+  }
+  if (hubRing) { drawHub(); listeners.push(drawHub); }
+
+  /* theme page: chapter list + viewer */
+  var viewer = $("#viewer");
+  if (viewer) {
+    app.classList.add("has-viewer");
+    var chaps = $$(".chap");
+    var stage = $(".v-stage", viewer), steps = $(".v-steps", viewer), vPrev = $(".v-prev", viewer), vNext = $(".v-next", viewer);
+    var cur = { li: null, slides: [], i: 0, opener: null };
+    function drawList() {
+      var p = Track.prog(), doneN = 0;
+      chaps.forEach(function (li) {
+        var id = li.dataset.chap, n = +li.dataset.n, r = p.done[id] ? n : Math.min(n, p.read[id] || 0);
+        if (p.done[id]) doneN++;
+        li.classList.toggle("is-done", !!p.done[id]);
+        li.classList.toggle("is-started", !p.done[id] && r > 0);
+        $(".cbar i", li).style.width = Math.round(r / n * 100) + "%";
+        $(".cstate", li).textContent = p.done[id] ? "✓" : r > 0 ? Math.round(r / n * 100) + "%" : "";
+        var lk = lockedId(id);
+        li.classList.toggle("is-locked", lk);
+        if (lk) $(".cstate", li).textContent = "🔒";
+        var ob = $(".chap-open", li); if (ob) { if (lk) ob.setAttribute("aria-description", LKU[lang].t); else ob.removeAttribute("aria-description"); }
+      });
+      var tp = $(".th-progress");
+      if (tp) {
+        $(".pbar i", tp).style.width = Math.round(doneN / chaps.length * 100) + "%";
+        $(".tp-txt", tp).textContent = u("readOf").replace("%a", doneN).replace("%b", chaps.length);
+        var started = chaps.some(function (li) { return (p.read[li.dataset.chap] || 0) > 0; });
+        $(".tp-resume", tp).textContent = doneN === chaps.length ? u("review") : started ? u("resume") : u("start");
+      }
+    }
+    function open(li, i, opener) {
+      cur.li = li; cur.opener = opener || null;
+      cur.locked = lockedId(li.dataset.chap);
+      cur.slides = cur.locked ? [] : $$(".slide", li);
+      var n = cur.slides.length;
+      cur.i = Math.max(0, Math.min(i || 0, n));
+      steps.innerHTML = "";
+      for (var k = 0; k < n; k++) steps.appendChild(document.createElement("i"));
+      $(".v-num", viewer).textContent = $(".cnum", li).textContent;
+      $(".v-title", viewer).innerHTML = $(".ctitle", li).innerHTML;
+      viewer.hidden = false; document.documentElement.classList.add("v-open");
+      try { history.replaceState(null, "", "#c=" + li.dataset.chap); } catch (e) {}
+      render(); vNext.focus();
+    }
+    function close() {
+      viewer.hidden = true; document.documentElement.classList.remove("v-open");
+      try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+      drawList();
+      if (cur.li) { var b = $(".chap-open", cur.li); if (b) b.focus(); }
+    }
+    function save() {
+      if (cur.locked) return;
+      var n = cur.slides.length;
+      Track.read(cur.li.dataset.theme, cur.li.dataset.chap, Math.min(n, cur.i + 1), n);
+    }
+    function wireQ(node) {
+      var ok = +node.dataset.ok, qid = node.dataset.qid;
+      $$(".cq-opt", node).forEach(function (b) {
+        b.addEventListener("click", function () {
+          if (node.classList.contains("answered")) return;
+          node.classList.add("answered");
+          var k = +b.dataset.k, good = k === ok;
+          $$(".cq-opt", node).forEach(function (o) {
+            o.disabled = true;
+            if (+o.dataset.k === ok) o.classList.add("is-correct");
+            else if (o === b) o.classList.add("is-wrong");
+          });
+          var fb = $(".cq-fb", node); fb.hidden = false;
+          $(".cq-res", node).textContent = good ? u("right") : u("wrong");
+          Track.chapQ(qid, good);
+          vNext.focus();
+        });
+      });
+    }
+    function endCard() {
+      var li = cur.li, idx = chaps.indexOf(li), nxt = chaps[idx + 1];
+      var inf = chapInfo(li.dataset.chap), nextTh = inf && CI[inf.ti + 1];
+      var box = document.createElement("div"); box.className = "v-end";
+      box.innerHTML = '<div class="v-badge">✓</div><h3></h3><p class="muted"></p><div class="v-end-btns"></div>';
+      $("h3", box).textContent = u("done"); $("p", box).textContent = u("doneTxt");
+      var btns = $(".v-end-btns", box);
+      if (nxt) {
+        var b1 = document.createElement("button"); b1.type = "button"; b1.className = "btn btn-primary"; b1.textContent = u("nextChap");
+        b1.addEventListener("click", function () { open(nxt, 0); }); btns.appendChild(b1);
+      } else if (nextTh) {
+        var a1 = document.createElement("a"); a1.className = "btn btn-primary"; a1.href = nextTh.url + "#c=" + nextTh.chapters[0].id; a1.textContent = u("nextTheme"); btns.appendChild(a1);
+      }
+      var a2 = document.createElement("a"); a2.className = "btn btn-ghost"; a2.href = "entrainement.html#" + li.dataset.theme; a2.textContent = u("train"); btns.appendChild(a2);
+      var b3 = document.createElement("button"); b3.type = "button"; b3.className = "btn btn-ghost"; b3.textContent = u("back");
+      b3.addEventListener("click", close); btns.appendChild(b3);
+      return box;
+    }
+    function lockCard() {
+      var box = document.createElement("div");
+      box.className = "v-end v-lock";
+      box.innerHTML = '<div class="v-badge" aria-hidden="true">🔒</div><h3></h3><p class="muted"></p><div class="v-end-btns"></div>';
+      $("h3", box).textContent = LKU[lang].t;
+      $("p", box).textContent = LKU[lang].p;
+      var btns = $(".v-end-btns", box);
+      var a = document.createElement("a"); a.className = "btn btn-primary"; a.href = "activer.html"; a.textContent = t("unlock"); btns.appendChild(a);
+      var b = document.createElement("button"); b.type = "button"; b.className = "btn btn-ghost"; b.textContent = u("back"); b.addEventListener("click", close); btns.appendChild(b);
+      return box;
+    }
+    function render() {
+      if (cur.locked) {
+        stage.innerHTML = ""; stage.appendChild(lockCard()); stage.scrollTop = 0;
+        $(".v-count", viewer).textContent = "🔒";
+        vPrev.textContent = u("prev"); vPrev.disabled = true; vNext.hidden = true;
+        var al = $(".v-lock .btn-primary", stage); if (al) al.focus();
+        return;
+      }
+      var n = cur.slides.length, end = cur.i >= n;
+      stage.innerHTML = "";
+      if (end) stage.appendChild(endCard());
+      else { var node = cur.slides[cur.i].cloneNode(true); stage.appendChild(node); if (node.classList.contains("slide-q")) wireQ(node); }
+      stage.scrollTop = 0;
+      $$("i", steps).forEach(function (s, k) { s.className = k < cur.i ? "seen" : k === cur.i ? "now" : ""; });
+      $(".v-count", viewer).textContent = end ? n + " / " + n : (cur.i + 1) + " / " + n;
+      vPrev.textContent = u("prev"); vPrev.disabled = cur.i === 0;
+      vNext.hidden = end;
+      vNext.textContent = cur.i === n - 1 ? u("finish") : u("next");
+      save();
+    }
+    function go(d) {
+      var n = cur.slides.length;
+      cur.i = Math.max(0, Math.min(n, cur.i + d));
+      render();
+    }
+    vNext.addEventListener("click", function () { go(1); });
+    vPrev.addEventListener("click", function () { go(-1); });
+    $(".v-close", viewer).addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (viewer.hidden) return;
+      var rtl = app.getAttribute("dir") === "rtl";
+      if (e.key === "Escape") close();
+      else if (e.key === (rtl ? "ArrowLeft" : "ArrowRight")) go(1);
+      else if (e.key === (rtl ? "ArrowRight" : "ArrowLeft")) go(-1);
+    });
+    var tx = null, ty = null;
+    stage.addEventListener("touchstart", function (e) { var t0 = e.changedTouches[0]; tx = t0.clientX; ty = t0.clientY; }, { passive: true });
+    stage.addEventListener("touchend", function (e) {
+      if (tx === null) return;
+      var t1 = e.changedTouches[0], dx = t1.clientX - tx, dy = t1.clientY - ty; tx = null;
+      if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      var rtl = app.getAttribute("dir") === "rtl";
+      go((dx < 0) !== rtl ? 1 : -1);
+    }, { passive: true });
+    chaps.forEach(function (li) {
+      $(".chap-open", li).addEventListener("click", function () {
+        var p = Track.prog(), n = +li.dataset.n, r = p.read[li.dataset.chap] || 0;
+        open(li, p.done[li.dataset.chap] || r >= n ? 0 : Math.max(0, r - 1));
+      });
+    });
+    var tpBtn = $(".tp-resume");
+    if (tpBtn) tpBtn.addEventListener("click", function () {
+      var p = Track.prog();
+      var li = chaps.filter(function (c) { return !p.done[c.dataset.chap] && !lockedId(c.dataset.chap); })[0] || chaps[0];
+      var r = p.read[li.dataset.chap] || 0;
+      open(li, p.done[li.dataset.chap] ? 0 : Math.max(0, r - 1));
+    });
+    function fromHash() {
+      var m = /^#c=([\w-]+)/.exec(location.hash || "");
+      if (!m) return;
+      var li = document.getElementById(m[1]);
+      if (li && li.classList.contains("chap")) {
+        var p = Track.prog(), r = p.read[m[1]] || 0;
+        open(li, p.done[m[1]] ? 0 : Math.max(0, r - 1));
+      }
+    }
+    window.addEventListener("hashchange", fromHash);
+    drawList(); fromHash();
+    listeners.push(function () {
+      drawList();
+      if (!viewer.hidden) { $(".v-title", viewer).innerHTML = $(".ctitle", cur.li).innerHTML; var keepI = cur.i; cur.i = keepI; render(); }
+    });
+  }
+
+  /* progression page */
+  var pgRing = $("#pgRing");
+  function drawStats() {
+    if (!pgRing) return;
+    var p = Track.prog(), g = globalStats(p), h = Track.history(), errs = Object.keys(Track.errors()).length;
+    setRing(pgRing, g.pct);
+    var pcts = h.map(function (x) { return x.score / x.total; });
+    var avg = pcts.length ? pcts.reduce(function (a, b) { return a + b; }, 0) / pcts.length : 0;
+    var best = pcts.length ? Math.max.apply(null, pcts) : 0;
+    var k = [[u("k_ch"), g.done + " / " + g.total], [u("k_tests"), h.length], [u("k_avg"), pcts.length ? Math.round(avg * 100) + "%" : "—"],
+             [u("k_best"), pcts.length ? Math.round(best * 100) + "%" : "—"], [u("k_err"), errs]];
+    var dl = $("#pgKpis"); dl.innerHTML = "";
+    k.forEach(function (x) { var d = document.createElement("div"); d.innerHTML = "<dt></dt><dd dir=\"ltr\"></dd>"; d.querySelector("dt").textContent = x[0]; d.querySelector("dd").textContent = x[1]; dl.appendChild(d); });
+    var box = $("#pgThemes"); box.innerHTML = "";
+    (CI || []).forEach(function (th, i) {
+      var st = themeStats(th, p), a = document.createElement("a");
+      a.className = "pg-th"; a.href = th.url;
+      a.innerHTML = '<span class="tcode" aria-hidden="true"></span><span class="pg-name"></span><span class="pbar"><i></i></span><span class="pg-n" dir="ltr"></span>';
+      a.querySelector(".tcode").textContent = i + 1;
+      a.querySelector(".pg-name").textContent = th.name[lang];
+      a.querySelector(".pbar i").style.width = Math.round(st.pct * 100) + "%";
+      a.querySelector(".pg-n").textContent = st.done + "/" + st.total;
+      box.appendChild(a);
+    });
+    var hist = $("#pgHist"); hist.innerHTML = "";
+    if (!h.length) { var pe = document.createElement("p"); pe.className = "muted"; pe.textContent = u("histEmpty"); hist.appendChild(pe); }
+    else {
+      var tbl = document.createElement("div"); tbl.className = "tbl-wrap";
+      tbl.innerHTML = '<table class="tbl"><thead><tr><th scope="col"></th><th scope="col"></th><th scope="col"></th><th scope="col"></th></tr></thead><tbody></tbody></table>';
+      var ths = $$("th", tbl); [u("h_date"), u("h_type"), u("h_theme"), u("h_score")].forEach(function (x, i) { ths[i].textContent = x; });
+      var tb = $("tbody", tbl);
+      h.slice().reverse().slice(0, 40).forEach(function (x) {
+        var d = new Date(x.ts), tr = document.createElement("tr"), r = x.score / x.total;
+        tr.innerHTML = '<td dir="ltr"></td><td></td><td></td><td dir="ltr"><b></b> <span class="sc"></span></td>';
+        var c = tr.children;
+        c[0].textContent = fmtDate(x.ts) + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+        c[1].textContent = x.kind === "exam" ? u("t_exam") : x.kind === "livre" ? u("t_livre") : u("t_train");
+        c[2].textContent = /^livre-/.test(x.theme) ? (u("t_livre") + " " + x.theme.slice(6)) : themeName(x.theme);
+        $("b", c[3]).textContent = x.score + "/" + x.total;
+        var sc = $(".sc", c[3]); sc.textContent = Math.round(r * 100) + "%"; sc.dataset.level = r >= 0.85 ? "ok" : r >= 0.5 ? "mid" : "low";
+        tb.appendChild(tr);
+      });
+      hist.appendChild(tbl);
+    }
+    var eb = $("#pgErrBtn"); if (eb) eb.hidden = !errs;
+    drawStreak($("#streak2"));
+    var rs = $("#pgReset"); if (rs && !rs.dataset.armed) rs.textContent = u("reset");
+  }
+  if (pgRing) {
+    var rs = $("#pgReset");
+    if (rs) rs.addEventListener("click", function () {
+      if (rs.dataset.armed) { Track.reset(); delete rs.dataset.armed; drawStats(); return; }
+      rs.dataset.armed = "1"; rs.textContent = u("resetSure");
+      setTimeout(function () { if (rs.dataset.armed) { delete rs.dataset.armed; rs.textContent = u("reset"); } }, 4000);
+    });
+    drawStats(); listeners.push(drawStats);
+  }
+  listeners.push(drawCards);
+
+  /* ---------- book tests: reveal, self-mark, score ---------- */
+  (function () {
+    var LK = "rokhssati-livre";
+    function all() { try { return JSON.parse(localStorage.getItem(LK) || "{}"); } catch (e) { return {}; } }
+    function save(o) { try { localStorage.setItem(LK, JSON.stringify(o)); } catch (e) {} }
+    var box = $("#lt");
+    if (box) {
+      var n = box.dataset.test, total = +box.dataset.total;
+      if (box.dataset.locked === "1" && !pass()) { box.dataset.lockedOn = "1"; var lk = $(".lt-lock", box); if (lk) lk.hidden = false; }
+      var items = $$(".lt-item", box);
+      function paint() {
+        var st = all()[n] || {}, ok = 0, done = 0;
+        items.forEach(function (it) {
+          var v = st[it.dataset.id];
+          if (v === 1 || v === 0) { it.dataset.v = String(v); done++; if (v === 1) ok++; } else delete it.dataset.v;
+        });
+        var fin = done >= total, w = $(".lt-wait", box), f = $(".lt-final", box);
+        $(".lt-done", box).textContent = done + "/" + total;
+        if (w) w.hidden = fin;
+        if (f) {
+          f.hidden = !fin;
+          $(".lt-score-n", f).textContent = ok + "/" + total;
+          var v = $(".lt-verdict", f), good = ok / total >= 0.8;
+          v.dataset.ok = good ? "1" : "0";
+          v.textContent = t(good ? "ltPass" : "ltFail");
+        }
+        return { ok: ok, done: done };
+      }
+      items.forEach(function (it) {
+        $$(".lt-mark button", it).forEach(function (b) {
+          b.addEventListener("click", function () {
+            var o = all(), st = o[n] || {};
+            var before = Object.keys(st).length;
+            st[it.dataset.id] = +b.dataset.v; o[n] = st; save(o);
+            var r = paint();
+            if (r.done === total && before < total) Track.test("livre", "livre-" + n, r.ok, total);
+          });
+        });
+      });
+      var rs = $(".lt-reset", box);
+      if (rs) rs.addEventListener("click", function () { var o = all(); delete o[n]; save(o); items.forEach(function (it) { var d = $("details", it); if (d) d.open = false; }); paint(); });
+      paint();
+    }
+    var cards = $$(".lt-card");
+    if (cards.length) {
+      var o = all(), p = pass();
+      cards.forEach(function (c) {
+        var st = o[c.dataset.test] || {}, ks = Object.keys(st), ok = ks.filter(function (k) { return st[k] === 1; }).length;
+        var s = $(".lt-card-s", c); if (s && ks.length) s.textContent = ok + "/" + ks.length;
+        if (ks.length >= 30) c.dataset.done = "1";
+        var l = $(".lt-card-lock", c); if (l && p) l.hidden = true;
+      });
+    }
+  })();
+
+  /* offline bar: visible only while the device has no connection */
+  (function () {
+    var bar = document.getElementById("offlineBar");
+    if (!bar) return;
+    function upd() { bar.hidden = navigator.onLine !== false; }
+    window.addEventListener("online", upd); window.addEventListener("offline", upd); upd();
+  })();
+
+  var saved = null;
+  try { saved = localStorage.getItem("rokhssati-lang"); } catch (e) {}
+  applyLang(saved || "ar");
+})();
