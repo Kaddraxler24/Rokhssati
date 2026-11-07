@@ -68,7 +68,7 @@ document.getElementById('gs').onclick=function(){
     Object.keys(E).forEach(function(d){rows[d]=rows[d]||{};for(var e in E[d]){rows[d][e]=E[d][e];tot[e]=(tot[e]||0)+E[d][e]}});
     (W.days||[]).forEach(function(x){rows[x.d]=rows[x.d]||{};rows[x.d].visits=x.visits;rows[x.d].views=x.views;tot.visits=(tot.visits||0)+x.visits;tot.views=(tot.views||0)+x.views});
     function per(re,from){var t=0;Object.keys(rows).forEach(function(d){if(d>=from)for(var e in rows[d])if(re.test(e))t+=rows[d][e]});return t}
-    var K=[['Visites',/^visits$/],['Pages vues',/^views$/],['Téléchargements de l’appli',/^dl_/],['Messages envoyés',/^contact_(code|autoecole|autre)$/],['Tentatives de contact',/^contact_try$/],['Codes activés',/^act_ok$/]];
+    var K=[['Visites',/^visits$/],['Pages vues',/^views$/],['Téléchargements de l’appli',/^dl_/],['Messages envoyés',/^contact_(code|autoecole|autre)$/],['Tentatives de contact',/^contact_try$/],['Codes activés',/^act_ok$/],['Essais gratuits offerts (max 10)',/^essai_ok$/]];
     var h='<div class="kpis">'+K.map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+n(per(x[1],'0'))+'</b><small>7 j : '+n(per(x[1],d7))+' · aujourd’hui : '+n(per(x[1],today))+'</small></div>'}).join('')+'</div>';
     if(!W.ok)h+='<div class="note"><b>Visites et pages vues non branchées.</b> '+(W.err==='not_configured'?'Elles sont mesurées par Cloudflare Web Analytics (dashboard Cloudflare → Analytics &amp; Logs → Web Analytics). Pour les voir ici, ajoutez CF_API_TOKEN, CF_ACCOUNT_ID et CF_SITE_TAG dans Cloudflare Pages → Settings → Variables and Secrets, puis redéployez.':'Erreur Cloudflare : '+esc(W.err))+'</div>';
     var ds=Object.keys(rows).sort().reverse();
