@@ -84,17 +84,17 @@ var RokhCode = (function () {
           score: "نتيجتك", restart: "أعد السلسلة", great: "ممتاز! أنت تعرف القانون جيدًا.", mid: "بداية جيدة. راجع الدروس المعنية.", low: "الوقت مناسب للمراجعة.",
           time: "الوقت", recap: "التصحيح", yours: "إجابتك", none: "بدون إجابة", correct: "الإجابة الصحيحة", pick: "اختر إجابة.", examNote: "التصحيح في نهاية الامتحان.",
           ok: "لا توجد مخالفة", d2: "مخالفة من الدرجة الثانية", d3: "مخالفة من الدرجة الثالثة", d4: "مخالفة من الدرجة الرابعة", delit: "جنحة تُحال على القضاء", cur: "دج", inLimit: "سرعتك ضمن الحد المسموح.", check: "أدخل أرقامًا صحيحة.",
-          formOk: "شكرًا!", formKo: "يرجى كتابة رسالتك وترك رقم هاتف أو بريد.", cSend: "جارٍ الإرسال…", cOk: "وصلتنا رسالتك، سنرد عليك قريبًا.", cNet: "تعذر الإرسال. تحقق من الإنترنت وأعد المحاولة.", empty: "لا توجد أسئلة لهذا المحور بعد.", sig: "⚑ أبلغ عن خطأ", sigWhy: "ما المشكلة؟", sigR: ["الجواب خاطئ", "خطأ في الترجمة", "الصورة غير واضحة", "شيء آخر"], sigNote: "تفاصيل (اختياري)", sigSend: "أرسل", sigOk: "شكرًا! سنراجع هذا السؤال.", inNew: "ردّت عليك رخصتي.", inSee: "اقرأ الرد", inMe: "أنت", inR: "رخصتي", inEmpty: "لم ترسل أي رسالة من هذا الجهاز بعد.", inNet: "تعذر تحميل الرسائل. تحقق من الإنترنت.", favAdd: "أضف إلى المفضلة", favDel: "احذف من المفضلة", favMax: "النسخة المجانية: 20 سؤالًا في المفضلة كحد أقصى. فعّل رمزًا لمفضلة غير محدودة.", favEmpty: "لا توجد أسئلة في المفضلة بعد. اضغط على النجمة ☆ أثناء التدريب لإضافة سؤال." },
+          formOk: "شكرًا!", formKo: "يرجى كتابة رسالتك وترك رقم هاتف أو بريد.", cSend: "جارٍ الإرسال…", cOk: "وصلتنا رسالتك، سنرد عليك قريبًا.", cNet: "تعذر الإرسال. تحقق من الإنترنت وأعد المحاولة.", empty: "لا توجد أسئلة لهذا المحور بعد.", sig: "⚑ أبلغ عن خطأ", sigWhy: "ما المشكلة؟", sigR: ["الجواب خاطئ", "خطأ في الترجمة", "الصورة غير واضحة", "شيء آخر"], sigNote: "تفاصيل (اختياري)", sigSend: "أرسل", sigOk: "شكرًا! سنراجع هذا السؤال.", inNew: "ردّت عليك رخصتي.", inSee: "اقرأ الرد", inMe: "أنت", inR: "رخصتي", inEmpty: "لم ترسل أي رسالة من هذا الجهاز بعد.", inNet: "تعذر تحميل الرسائل. تحقق من الإنترنت.", resume: "عندك امتحان تجريبي لم يكتمل: السؤال %i من %n، بقي %t.", resumeGo: "أكمل الامتحان", resumeNew: "امتحان جديد", favAdd: "أضف إلى المفضلة", favDel: "احذف من المفضلة", favMax: "النسخة المجانية: 20 سؤالًا في المفضلة كحد أقصى. فعّل رمزًا لمفضلة غير محدودة.", favEmpty: "لا توجد أسئلة في المفضلة بعد. اضغط على النجمة ☆ أثناء التدريب لإضافة سؤال." },
     fr: { codeNet: "Une connexion internet est nécessaire pour activer le code. Réessayez.", codeWait: "Vérification…", ltPass: "Bravo, vous êtes prêt pour ce test.", ltFail: "Revoyez vos erreurs et refaites le test.", lockExam: "L'examen blanc s'ouvre avec un code d'activation.", lockMore: "Version gratuite : %n questions d'essai, toujours les mêmes. Activez un code pour tout l'entraînement et les examens blancs.", unlock: "Activer un code", codeOk: "Activé jusqu'au %d.", codeKo: "Code incorrect, ou il n'est pas fait pour cet appareil.", codeExp: "Ce code a expiré.", payOk: "Reçu envoyé. Vous recevrez votre code par SMS après vérification.", payKo: "Envoi impossible ici. Envoyez la photo du reçu par WhatsApp ou SMS.", active: "Activation valable jusqu'au %d.", sitQ: "Dans quel ordre les véhicules passent-ils ?", signQ: "Que signifie ce panneau ?", right: "✓ Bonne réponse", wrong: "✗ Pas tout à fait", markRight: "Correct", markWrong: "Votre choix", next: "Question suivante", last: "Voir mon score", validate: "Valider",
           score: "Votre score", restart: "Recommencer", great: "Excellent ! Vous connaissez bien le code.", mid: "Bon début. Revoyez les leçons concernées.", low: "C'est le moment de réviser.",
           time: "Temps", recap: "Correction", yours: "Votre réponse", none: "Sans réponse", correct: "Bonne réponse", pick: "Choisissez une réponse.", examNote: "Correction à la fin de l'examen.",
           ok: "Pas d'infraction", d2: "Contravention du 2e degré", d3: "Contravention du 3e degré", d4: "Contravention du 4e degré", delit: "Délit jugé par le tribunal", cur: "DA", inLimit: "Vous êtes dans la limite.", check: "Entrez des valeurs valides.",
-          formOk: "Merci !", formKo: "Écrivez votre message et laissez un téléphone ou un e-mail.", cSend: "Envoi…", cOk: "Message reçu, nous vous répondons bientôt.", cNet: "Envoi impossible. Vérifiez votre connexion et réessayez.", empty: "Pas encore de questions pour ce thème.", sig: "⚑ Signaler une erreur", sigWhy: "Quel est le problème ?", sigR: ["La réponse est fausse", "Erreur de traduction", "Image peu claire", "Autre chose"], sigNote: "Détails (facultatif)", sigSend: "Envoyer", sigOk: "Merci ! Nous allons vérifier cette question.", inNew: "Rokhssati vous a répondu.", inSee: "Lire la réponse", inMe: "Vous", inR: "Rokhssati", inEmpty: "Aucun message envoyé depuis cet appareil pour l'instant.", inNet: "Impossible de charger vos messages. Vérifiez votre connexion.", favAdd: "Ajouter aux favoris", favDel: "Retirer des favoris", favMax: "Version gratuite : 20 favoris au maximum. Activez un code pour des favoris illimités.", favEmpty: "Aucun favori pour l'instant. Touchez l'étoile ☆ pendant l'entraînement pour garder une question." },
+          formOk: "Merci !", formKo: "Écrivez votre message et laissez un téléphone ou un e-mail.", cSend: "Envoi…", cOk: "Message reçu, nous vous répondons bientôt.", cNet: "Envoi impossible. Vérifiez votre connexion et réessayez.", empty: "Pas encore de questions pour ce thème.", sig: "⚑ Signaler une erreur", sigWhy: "Quel est le problème ?", sigR: ["La réponse est fausse", "Erreur de traduction", "Image peu claire", "Autre chose"], sigNote: "Détails (facultatif)", sigSend: "Envoyer", sigOk: "Merci ! Nous allons vérifier cette question.", inNew: "Rokhssati vous a répondu.", inSee: "Lire la réponse", inMe: "Vous", inR: "Rokhssati", inEmpty: "Aucun message envoyé depuis cet appareil pour l'instant.", inNet: "Impossible de charger vos messages. Vérifiez votre connexion.", resume: "Vous avez un examen blanc en cours : question %i sur %n, il reste %t.", resumeGo: "Reprendre l'examen", resumeNew: "Nouvel examen", favAdd: "Ajouter aux favoris", favDel: "Retirer des favoris", favMax: "Version gratuite : 20 favoris au maximum. Activez un code pour des favoris illimités.", favEmpty: "Aucun favori pour l'instant. Touchez l'étoile ☆ pendant l'entraînement pour garder une question." },
     dz: { codeNet: "لازم الأنترنت باش تفعّل الكود. عاود جرّب.", codeWait: "راهو يتحقق…", ltPass: "مليح بزاف! راك واجد.", ltFail: "عاود شوف الغلطات وعاود الاختبار.", lockExam: "الامتحان التجريبي يتحل بكود التفعيل.", lockMore: "النسخة بلاش: %n أسئلة باش تجرّب، ديما هوما. فعّل كود باش تحل كامل التدريب والامتحانات التجريبية.", unlock: "فعّل الكود", codeOk: "تفعّل حتى %d.", codeKo: "الكود غالط ولا ماشي تاع هاد التيليفون.", codeExp: "هاد الكود فات وقتو.", payOk: "الوصل تبعث. يجيك الكود في ميساج من بعد ما نتأكدو.", payKo: "ما قدرناش نبعثو من هنا. ابعث تصويرة الوصل في واتساب ولا ميساج.", active: "التفعيل يخدم حتى %d.", sitQ: "شكون يفوت الأول؟", signQ: "واش معناه هاد البانو؟", right: "✓ صحيح!", wrong: "✗ ماشي هاكا", markRight: "صحيح", markWrong: "اخترت هادي", next: "السؤال اللي بعدو", last: "شوف النتيجة", validate: "أكّد",
           score: "النتيجة تاعك", restart: "عاود من الأول", great: "برافو! راك تعرف القانون مليح.", mid: "مليح، راجع الدروس اللي غلطت فيهم.", low: "لازم تراجع شوية.",
           time: "الوقت", recap: "التصحيح", yours: "الجواب تاعك", none: "ما جاوبتش", correct: "الجواب الصحيح", pick: "اختار جواب.", examNote: "التصحيح في اللخر تاع الامتحان.",
           ok: "ما كانش خطية", d2: "خطية من الدرجة الثانية", d3: "خطية من الدرجة الثالثة", d4: "خطية من الدرجة الرابعة", delit: "جنحة تروح للمحكمة", cur: "دج", inLimit: "راك في الحد المسموح.", check: "دخّل أرقام صحاح.",
-          formOk: "يعطيك الصحة!", formKo: "اكتب الميساج وخلّي نيمرو ولا إيميل.", cSend: "راهو يتبعث…", cOk: "وصلنا الميساج، نردو عليك قريب.", cNet: "ما تبعثش. شوف الأنترنت وعاود.", empty: "مازال ما كانش أسئلة لهاد المحور.", sig: "⚑ بلّغ على غلطة", sigWhy: "واش هو المشكل؟", sigR: ["الجواب غالط", "غلطة في الترجمة", "التصويرة ماشي واضحة", "حاجة أخرى"], sigNote: "تفاصيل (إذا حبيت)", sigSend: "ابعث", sigOk: "يعطيك الصحة! راح نشوفو هاد السؤال.", inNew: "رخصتي ردّت عليك.", inSee: "اقرا الرد", inMe: "أنت", inR: "رخصتي", inEmpty: "مازال ما بعثت حتى ميساج من هاد الجهاز.", inNet: "ما قدرناش نجيبو الميساجات. شوف الأنترنت.", favAdd: "زيد للمفضلة", favDel: "نحّي من المفضلة", favMax: "النسخة بلاش: 20 سؤال في المفضلة ماكسيموم. فعّل كود باش تولي بلا حدود.", favEmpty: "مازال ما كانش أسئلة في المفضلة. اضغط على النجمة ☆ وقت التدريب باش تخبّي سؤال." }
+          formOk: "يعطيك الصحة!", formKo: "اكتب الميساج وخلّي نيمرو ولا إيميل.", cSend: "راهو يتبعث…", cOk: "وصلنا الميساج، نردو عليك قريب.", cNet: "ما تبعثش. شوف الأنترنت وعاود.", empty: "مازال ما كانش أسئلة لهاد المحور.", sig: "⚑ بلّغ على غلطة", sigWhy: "واش هو المشكل؟", sigR: ["الجواب غالط", "غلطة في الترجمة", "التصويرة ماشي واضحة", "حاجة أخرى"], sigNote: "تفاصيل (إذا حبيت)", sigSend: "ابعث", sigOk: "يعطيك الصحة! راح نشوفو هاد السؤال.", inNew: "رخصتي ردّت عليك.", inSee: "اقرا الرد", inMe: "أنت", inR: "رخصتي", inEmpty: "مازال ما بعثت حتى ميساج من هاد الجهاز.", inNet: "ما قدرناش نجيبو الميساجات. شوف الأنترنت.", resume: "عندك امتحان تجريبي ما كمّلتوش: السؤال %i من %n، بقات %t.", resumeGo: "كمّل الامتحان", resumeNew: "امتحان جديد", favAdd: "زيد للمفضلة", favDel: "نحّي من المفضلة", favMax: "النسخة بلاش: 20 سؤال في المفضلة ماكسيموم. فعّل كود باش تولي بلا حدود.", favEmpty: "مازال ما كانش أسئلة في المفضلة. اضغط على النجمة ☆ وقت التدريب باش تخبّي سؤال." }
   };
   var t = function (k) { return UI[lang][k]; };
   var fmt = function (n) { return lang === "fr" ? n.toLocaleString("fr-FR").replace(/ | /g, " ") : String(n); };
@@ -238,6 +238,7 @@ var RokhCode = (function () {
       if (!exam) return;
       left--; drawClock();
       if (left <= 0) { stop(); idx = questions.length; render(); }
+      else if (meta.onSave && left % 5 === 0) meta.onSave({ idx: idx, answers: answers, left: left });
     }
     function drawClock() {
       if (!els.clock) return;
@@ -249,6 +250,7 @@ var RokhCode = (function () {
     var recorded = false;
     function start() {
       stop(); idx = 0; picked = null; answers = []; left = seconds || 0; recorded = false;
+      if (meta.resume) { idx = meta.resume.idx || 0; answers = meta.resume.answers || []; left = meta.resume.left || left; meta.resume = null; }
       if (exam && questions.length) timer = setInterval(tick, 1000);
       drawClock(); render();
     }
@@ -374,6 +376,7 @@ var RokhCode = (function () {
         recorded = true;
         if (exam) questions.forEach(function (q, i) { if (answers[i] !== undefined) Track.answer(q.id, answers[i] === q.ok); });
         Track.test(exam ? "exam" : "train", meta.theme, score, questions.length);
+        if (meta.onDone) meta.onDone();
       }
       els.num.textContent = score + " / " + questions.length;
       var r = score / questions.length;
@@ -399,6 +402,7 @@ var RokhCode = (function () {
     els.next.addEventListener("click", function () {
       if (exam) answers[idx] = picked;
       idx++; picked = null; render();
+      if (exam && meta.onSave && idx < questions.length) meta.onSave({ idx: idx, answers: answers, left: left });
       var f = $(".opt", root); if (f && idx < questions.length) f.focus();
     });
     els.restart.addEventListener("click", start);
@@ -480,6 +484,60 @@ var RokhCode = (function () {
         }
         return DATA.questions.filter(function (q) { return q.theme === th; });
       }
+      /* lot 4 (cahier v2 § 8): mock exam balanced across themes, avoiding the last exams' questions; resumable */
+      var EXK = "rokhssati-exam-run", RECENT = "rokhssati-exam-recent";
+      function lsJ(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v === null || v === undefined ? d : v; } catch (e) { return d; } }
+      function lsW(k, v) { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+      function buildExam(th, n) {
+        var recent = {}; lsJ(RECENT, []).forEach(function (id) { recent[id] = 1; });
+        function pick(list, k) {
+          return shuffle(list.filter(function (q) { return !recent[q.id]; })).concat(shuffle(list.filter(function (q) { return recent[q.id]; }))).slice(0, k);
+        }
+        if (th !== "all") return pick(pool(th), n);
+        var nSign = Math.round(n * 0.2), nSit = Math.min(DATA.situations.length, Math.round(n * 0.1)), rest = n - nSign - nSit;
+        var groups = {}; DATA.questions.forEach(function (q) { (groups[q.theme] = groups[q.theme] || []).push(q); });
+        var names = Object.keys(groups), total = DATA.questions.length, quota = {}, used = 0;
+        names.forEach(function (k) { quota[k] = Math.min(groups[k].length, 1); used += quota[k]; });
+        var extra = Math.max(0, rest - used);
+        var share = names.map(function (k) { var x = extra * groups[k].length / total; return { k: k, f: x - Math.floor(x), n: Math.floor(x) }; });
+        share.forEach(function (o) { quota[o.k] += o.n; used += o.n; });
+        share.sort(function (a, b) { return b.f - a.f; }).forEach(function (o) { if (used < rest) { quota[o.k]++; used++; } });
+        var out = pick(signQuestions(), nSign).concat(pick(DATA.situations, nSit));
+        names.forEach(function (k) { out = out.concat(pick(groups[k], Math.min(quota[k], groups[k].length))); });
+        return shuffle(out).slice(0, n);
+      }
+      function fmtLeft(sec) { var m = Math.floor(sec / 60), x = sec % 60; return m + ":" + (x < 10 ? "0" : "") + x; }
+      var resumeBox = document.createElement("div"); resumeBox.className = "lock resume-box"; resumeBox.hidden = true;
+      resumeBox.innerHTML = '<p class="lock-msg"></p><p class="pg-actions"><button type="button" class="btn btn-primary rs-go"></button> <button type="button" class="btn btn-ghost rs-new"></button></p>';
+      var tw = trainer.closest(".trainer-wrap") || trainer.parentNode; tw.insertBefore(resumeBox, tw.firstChild);
+      function drawResume() {
+        var run = lsJ(EXK, null);
+        if (!run || !run.qs || Date.now() - run.at > 2 * 86400000 || !pass()) { resumeBox.hidden = true; return false; }
+        resumeBox.hidden = false;
+        $(".lock-msg", resumeBox).textContent = t("resume").replace("%i", run.idx + 1).replace("%n", run.qs.length).replace("%t", fmtLeft(run.left));
+        $(".rs-go", resumeBox).textContent = t("resumeGo"); $(".rs-new", resumeBox).textContent = t("resumeNew");
+        return true;
+      }
+      function examMeta(th, qs, resume) {
+        return { track: true, theme: th, resume: resume || null,
+          onSave: function (st) { lsW(EXK, { qs: qs, th: th, idx: st.idx, answers: st.answers, left: st.left, at: Date.now() }); },
+          onDone: function () {
+            lsW(EXK, null); resumeBox.hidden = true;
+            var r = qs.map(function (q) { return q.id; }).concat(lsJ(RECENT, [])); lsW(RECENT, r.slice(0, 90));
+          } };
+      }
+      $(".rs-go", resumeBox).addEventListener("click", function () {
+        var run = lsJ(EXK, null); if (!run) return;
+        if (current) current.kill();
+        resumeBox.hidden = true; lockBox.hidden = true;
+        var ex = $("#modeExam"); if (ex) ex.checked = true;
+        trainer.classList.add("is-exam");
+        current = Quiz(trainer, run.qs, true, run.qs.length * 30, examMeta(run.th, run.qs, { idx: run.idx, answers: run.answers, left: run.left }));
+        current.start();
+      });
+      $(".rs-new", resumeBox).addEventListener("click", function () { lsW(EXK, null); resumeBox.hidden = true; var ex = $("#modeExam"); if (ex) ex.checked = true; launch(); });
+      listeners.push(function () { if (!resumeBox.hidden) drawResume(); });
+
       function launch() {
         if (current) current.kill();
         var th = sel.value;
@@ -495,10 +553,12 @@ var RokhCode = (function () {
           if (pool(th).length > limit) msg = t("lockMore").replace("%n", limit);
           qs = shuffle(fixed);
         }
-        if (exam) qs = qs.slice(0, 30);
+        var meta = { track: true, theme: th };
+        if (exam && premium) { qs = buildExam(th, 30).map(mix); meta = examMeta(th, qs, null); lsW(EXK, null); resumeBox.hidden = true; }
+        else { if (exam) qs = qs.slice(0, 30); qs = qs.map(mix); }
         lockBox.hidden = !msg; $(".lock-msg", lockBox).textContent = msg;
         trainer.classList.toggle("is-exam", exam);
-        current = Quiz(trainer, qs.map(mix), exam, qs.length * 30, { track: true, theme: th });
+        current = Quiz(trainer, qs, exam, qs.length * 30, meta);
         current.start();
       }
       function fromHash() {
@@ -510,6 +570,8 @@ var RokhCode = (function () {
       window.addEventListener("hashchange", function () { fromHash(); launch(); closeSubs(null); });
       startBtn.addEventListener("click", launch);
       listeners.push(function () { if (!lockBox.hidden) launch(); });
+      // an unfinished mock exam: offer to resume it instead of starting a new one over it
+      if (drawResume()) { var ex0 = $("#modeExam"), tr0 = $("#modePractice"); if (ex0 && ex0.checked && tr0) tr0.checked = true; }
       launch();
     }
   }
