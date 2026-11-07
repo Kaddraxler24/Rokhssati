@@ -845,4 +845,26 @@ html.news-open { overflow: hidden; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .trial-box { background: #3A2E12; color: #FBE7B5; } }
 .news-list li.news-offer { font-weight: 700; }
 
-.apk-offer { display: inline-block; margin-top: 8px; color: #F2C230; }
+.btn-xl { font-size: 19px; padding: 16px 28px; min-height: 58px; border-radius: 14px; font-weight: 800; }
+.hero-ctas .btn-xl { flex: 1 1 220px; justify-content: center; }
+.hero-ctas .btn-alt { background: #F2B11B; color: #15201A; border-color: #F2B11B; }
+.offer-hero { margin: 14px 0 18px; display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 16px; background: linear-gradient(135deg, #F2B11B, #F7D046); color: #15201A; text-decoration: none; box-shadow: 0 8px 24px rgba(242,177,27,.35); border: 2px solid #15201A; max-width: 640px; }
+.offer-hero[hidden], .apk-offer-card[hidden] { display: none; }
+.offer-hero:hover { transform: translateY(-1px); }
+.oh-gift { font-size: 40px; line-height: 1; animation: oh-pop 2.4s ease-in-out infinite; }
+@keyframes oh-pop { 0%, 80%, 100% { transform: scale(1); } 90% { transform: scale(1.18) rotate(-8deg); } }
+@media (prefers-reduced-motion: reduce) { .oh-gift { animation: none; } }
+.oh-txt { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.oh-txt b { font-size: 22px; line-height: 1.2; }
+.oh-left { display: inline-block; margin-top: 4px; font-weight: 800; color: #C8102E; }
+.oh-go { font-weight: 800; white-space: nowrap; background: #15201A; color: #F7D046; padding: 10px 14px; border-radius: 10px; }
+@media (max-width: 520px) { .offer-hero { flex-wrap: wrap; } .oh-go { flex-basis: 100%; text-align: center; } .oh-txt b { font-size: 20px; } }
+.apk-offer-card { flex-basis: 100%; background: #F7D046; color: #15201A; border-radius: 16px; padding: 18px 20px; border: 2px solid #15201A; }
+.apk-offer-card p, .apk-offer-card li { color: #15201A !important; }
+.apk-offer-card .oh-left { color: #C8102E !important; }
+.aoc-title { font-size: 22px; font-weight: 800; margin: 0 0 8px; }
+.aoc-title .oh-left { display: block; font-size: 17px; }
+.aoc-steps { margin: 0 0 8px; padding-inline-start: 24px; font-size: 17px; display: grid; gap: 4px; }
+.aoc-note { margin: 0; font-size: 15px; }
+.app-band h2 { font-size: clamp(26px, 3.4vw, 36px); }
+.app-band .btn-apk.btn-xl { font-size: 21px; padding: 18px 32px; }

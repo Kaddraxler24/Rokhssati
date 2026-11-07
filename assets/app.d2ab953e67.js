@@ -1309,6 +1309,17 @@ var RokhCode = (function () {
     listeners.push(function () { $$(".is-zoomable").forEach(function (f) { f.setAttribute("aria-label", t("zoom")); }); });
   })();
 
+  /* home: launch offer, live count of remaining trial places (functions/api/essai.js?info=1) */
+  (function () {
+    var h = $("#offerHero"), c = $(".apk-offer-card"); if (!h && !c) return;
+    fetch((window.RokhNative ? "https://rokhssati.com" : "") + "/api/essai?info=1", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
+      var n = +j.left; if (isNaN(n)) return;
+      if (n <= 0) { if (h) h.hidden = true; if (c) c.hidden = true; return; }
+      var html = '<span class="l-ar">بقيت ' + n + ' أماكن فقط</span><span class="l-fr" lang="fr">Plus que ' + n + ' place' + (n > 1 ? "s" : "") + '</span><span class="l-dz" lang="ar-DZ">بقاو غير ' + n + ' بلايص</span>';
+      $$("#offerLeft, #offerLeft2").forEach(function (e) { e.innerHTML = html; e.hidden = false; });
+    }).catch(function () {});
+  })();
+
   /* panneaux: fiche of a sign (signification, réaction, situation, confusion) — build/signs_info.py */
   (function () {
     var figs = $$(".sg"); if (!figs.length) return;
