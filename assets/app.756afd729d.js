@@ -99,6 +99,38 @@ var RokhCode = (function () {
   var t = function (k) { return UI[lang][k]; };
   var fmt = function (n) { return lang === "fr" ? n.toLocaleString("fr-FR").replace(/ | /g, " ") : String(n); };
 
+  /* ---------- anonymous product measurement (functions/api/ev.js) ----------
+     Counters only (no identifier, no cookie). Off when: opted out on the Confidentialité page or owner switch
+     ("rokhssati-notrack"), Do Not Track / Global Privacy Control. Queue kept in localStorage, sent in one batch. */
+  var Measure = (function () {
+    var QK = "rokhssati-evq", SK = "rokhssati-evseen";
+    function off() { try { if (localStorage.getItem("rokhssati-notrack") === "1") return true; } catch (e) { return true; } return navigator.doNotTrack === "1" || window.doNotTrack === "1" || navigator.globalPrivacyControl === true; }
+    function jget(k) { try { return JSON.parse(localStorage.getItem(k) || "{}") || {}; } catch (e) { return {}; } }
+    function jset(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+    function add(name, n) { if (n === undefined) n = 1; if (off() || !(n > 0)) return; var q = jget(QK); q[name] = Math.min(200, (q[name] || 0) + n); jset(QK, q); }
+    function once(name) { if (off()) return; var s = jget(SK); if (s[name]) return; s[name] = 1; jset(SK, s); add(name); }
+    function flush() {
+      if (off()) { try { localStorage.removeItem(QK); } catch (e) {} return; }
+      var q = jget(QK); if (!Object.keys(q).length) return;
+      var url = (window.RokhNative ? "https://rokhssati.com" : "") + "/api/ev", body = JSON.stringify(q), sent = false;
+      try { sent = navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type: "text/plain" })); } catch (e) {}
+      if (!sent) { try { fetch(url, { method: "POST", body: body, keepalive: true }); } catch (e) {} }
+      try { localStorage.removeItem(QK); } catch (e) {}
+    }
+    (function visit() {   // new visitor / came back after 1 day / after 7 days (each counted once per browser)
+      if (off()) return;
+      var f = null; try { f = localStorage.getItem("rokhssati-first"); } catch (e) { return; }
+      var today = Math.floor(Date.now() / 86400000);
+      if (!f) { try { localStorage.setItem("rokhssati-first", String(today)); } catch (e) {} once("v_new"); return; }
+      var d = today - (+f || today);
+      if (d >= 1) once("r1"); if (d >= 7) once("r7");
+    })();
+    document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") flush(); });
+    window.addEventListener("pagehide", flush);
+    setTimeout(flush, 4000);
+    return { add: add, once: once, flush: flush };
+  })();
+
   /* ---------- progress & history store (this device only) ---------- */
   var Track = (function () {
     var PK = "rokhssati-progress", HK = "rokhssati-history", EK = "rokhssati-errors", DK = "rokhssati-days", FK = "rokhssati-favs", TK = "rokhssati-tstats";
@@ -115,7 +147,7 @@ var RokhCode = (function () {
         var p = prog();
         if ((p.read[chap] || 0) < step) p.read[chap] = Math.min(step, n);
         p.last = { theme: theme, chap: chap, step: step, ts: Date.now() };
-        if (step >= n && !p.done[chap]) p.done[chap] = Date.now();
+        if (step >= n && !p.done[chap]) { p.done[chap] = Date.now(); Measure.add("c_done"); Measure.once("cd:" + chap); Measure.once("a1"); }
         set(PK, p); markDay();
       },
       chapQ: function (qid, ok) { var p = prog(); p.qs[qid] = ok ? 1 : 0; set(PK, p); this.answer(qid, ok); },
@@ -123,7 +155,7 @@ var RokhCode = (function () {
         if (!qid) return;
         if (theme) { var ts = get(TK, {}), x = ts[theme] || (ts[theme] = { r: 0, w: 0 }); if (ok) x.r++; else x.w++; set(TK, ts); }
         var e = get(EK, {});
-        if (ok) delete e[qid]; else e[qid] = (e[qid] || 0) + 1;
+        if (ok) delete e[qid]; else { e[qid] = (e[qid] || 0) + 1; Measure.once("qko:" + qid); }
         set(EK, e); markDay();
       },
       errors: function () { return get(EK, {}); },
@@ -131,6 +163,8 @@ var RokhCode = (function () {
         if (!total) return;
         var h = get(HK, []);
         h.push({ ts: Date.now(), kind: kind, theme: theme || "all", score: score, total: total });
+        Measure.add(kind === "exam" ? "e_end" : "t_end"); Measure.once("a1");
+        if (kind === "exam") { Measure.add("e_pts", score); Measure.add("e_tot", total); }
         set(HK, h.slice(-200)); markDay();
       },
       history: function () { return get(HK, []); },
@@ -249,9 +283,10 @@ var RokhCode = (function () {
       els.clock.textContent = t("time") + " " + m + ":" + (s < 10 ? "0" : "") + s;
     }
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
-    var recorded = false;
+    var recorded = false, begun = false;
     function start() {
       stop(); idx = 0; picked = null; answers = []; left = seconds || 0; recorded = false;
+      begun = !!meta.resume;   // a series counts as "started" at its first answer (not when the page merely shows it)
       if (meta.resume) { idx = meta.resume.idx || 0; answers = meta.resume.answers || []; left = meta.resume.left || left; meta.resume = null; }
       if (exam && questions.length) timer = setInterval(tick, 1000);
       drawClock(); render();
@@ -355,6 +390,7 @@ var RokhCode = (function () {
         b.setAttribute("aria-pressed", String(picked === i));
         b.addEventListener("click", function () {
           if (!exam && picked !== null) return;
+          if (!begun && meta.track) { begun = true; Measure.add(exam ? "e_start" : "t_start"); }
           picked = i; if (!exam) { answers[idx] = i; if (meta.track) Track.answer(q.id, i === q.ok, q.theme); } render();
           if (!exam) els.next.focus();
         });
@@ -901,6 +937,7 @@ var RokhCode = (function () {
     function open(li, i, opener) {
       cur.li = li; cur.opener = opener || null;
       cur.locked = lockedId(li.dataset.chap);
+      if (!cur.locked) Measure.once("co:" + li.dataset.chap);
       cur.slides = cur.locked ? [] : $$(".slide", li);
       var n = cur.slides.length;
       cur.i = Math.max(0, Math.min(i || 0, n));
@@ -1307,6 +1344,17 @@ var RokhCode = (function () {
     document.addEventListener("keydown", function (e) { if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("is-zoomable")) { e.preventDefault(); openZoom(e.target); } });
     prep(); new MutationObserver(function () { prep(); }).observe(document.getElementById("app"), { childList: true, subtree: true });
     listeners.push(function () { $$(".is-zoomable").forEach(function (f) { f.setAttribute("aria-label", t("zoom")); }); });
+  })();
+
+  /* Confidentialité: opt out / back in of the anonymous measurement (same switch as the owner's, "rokhssati-notrack") */
+  (function () {
+    var b = $("#mOpt"), st = $("#mOptState"); if (!b) return;
+    var M = { ar: ["أنت تشارك في القياس المجهول.", "أنت لا تشارك في القياس (على هذا المتصفح).", "عدم المشاركة", "المشاركة من جديد"],
+              fr: ["Vous participez à la mesure anonyme.", "Vous ne participez pas à la mesure (sur ce navigateur).", "Ne pas participer", "Participer de nouveau"],
+              dz: ["راك تشارك في القياس المجهول.", "ما راكش تشارك في القياس (في هاد المتصفح).", "ما نحبش نشارك", "نشارك عاوتاني"] };
+    function draw() { var off = false; try { off = localStorage.getItem("rokhssati-notrack") === "1"; } catch (e) {} var m = M[lang] || M.fr; st.textContent = off ? m[1] : m[0]; b.textContent = off ? m[3] : m[2]; }
+    b.addEventListener("click", function () { try { if (localStorage.getItem("rokhssati-notrack") === "1") localStorage.removeItem("rokhssati-notrack"); else { localStorage.setItem("rokhssati-notrack", "1"); localStorage.removeItem("rokhssati-evq"); } } catch (e) {} draw(); });
+    listeners.push(draw); draw();
   })();
 
   /* APK download: owner's browsers not counted (&me=1) + install guide shown right after the tap */

@@ -97,6 +97,35 @@ document.getElementById('gm').onclick=function(){
 function n(x){return (x||0).toLocaleString('fr-FR')}
 function sum(o,re){var t=0;for(var k in o)if(re.test(k))t+=o[k];return t}
 var SRC={popup:'Fenêtre « Nouveauté »',page:'Section Android (accueil)',autre:'Autre lien'};
+// ---- product measurement (functions/api/ev.js): funnel, retention, engagement, weak chapters/questions
+var NAMES=null;
+function names(){if(NAMES)return Promise.resolve(NAMES);return fetch(BASE+'/entrainement.html',{cache:'no-store'}).then(function(r){return r.text()}).then(function(t){var d=new DOMParser().parseFromString(t,'text/html'),q={},c={};try{JSON.parse(d.getElementById('quizData').textContent).questions.forEach(function(x){if(x.id)q[x.id]=x.fr.q})}catch(e){}try{JSON.parse(d.getElementById('courseIndex').textContent).forEach(function(th){th.chapters.forEach(function(ch){c[ch.id]=th.name.fr+' · '+ch.t.fr})})}catch(e){}NAMES={q:q,c:c};return NAMES}).catch(function(){return {q:{},c:{}}})}
+function pct(a,b){return b?Math.round(100*a/b)+' %':'–'}
+function product(P,tot){
+  var T={};Object.keys(P).forEach(function(d){for(var e in P[d])T[e]=(T[e]||0)+P[d][e]});
+  var g=function(k){return T[k]||0};
+  if(!Object.keys(T).length)return '<h2>Mesure produit</h2><div class="note">Pas encore de données : la mesure anonyme a démarré le 08/11/2026. Les premiers chiffres arrivent avec les prochaines visites.</div>';
+  var inst=0,dl=0;for(var e in tot){if(/^inst_/.test(e)||/^maj_/.test(e))inst+=tot[e];if(/^dl_/.test(e))dl+=tot[e]}
+  var steps=[['Visites (Cloudflare)',tot.visits||0],['Nouveaux visiteurs',g('v_new')],['Activés (1er chapitre ou 1re série terminés)',g('a1')],['Revenus après 1 jour',g('r1')],['Revenus après 7 jours',g('r7')]];
+  var mx=Math.max.apply(null,steps.map(function(x){return x[1]}))||1;
+  var h='<h2>Entonnoir produit</h2><table>'+steps.map(function(x,i){return '<tr><td>'+x[0]+'</td><td style="width:45%"><span class="bar" style="width:'+Math.max(2,Math.round(100*x[1]/mx))+'%"></span> '+n(x[1])+(i>=2?' <span class="muted">('+pct(x[1],g('v_new'))+' des nouveaux)</span>':'')+'</td></tr>'}).join('')+'</table>';
+  h+='<div class="kpis">'+[
+    ['Activation',pct(g('a1'),g('v_new')),'objectif > 25 %'],
+    ['Retour à J+1',pct(g('r1'),g('v_new')),'des nouveaux visiteurs'],
+    ['Retour à J+7',pct(g('r7'),g('v_new')),'objectif > 15 %'],
+    ['Séries terminées',pct(g('t_end'),g('t_start')),n(g('t_end'))+' / '+n(g('t_start'))+' commencées'],
+    ['Examens blancs terminés',pct(g('e_end'),g('e_start')),n(g('e_end'))+' / '+n(g('e_start'))+' · objectif > 60 %'],
+    ['Score moyen aux examens',g('e_tot')?Math.round(100*g('e_pts')/g('e_tot'))+' %':'–','sur '+n(g('e_end'))+' examen(s)'],
+    ['Téléchargement → installation',pct(inst,dl),n(inst)+' / '+n(dl)+' · objectif > 30 %'],
+    ['Chapitres terminés',n(g('c_done')),'au total']
+  ].map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small></div>'}).join('')+'</div>';
+  var ch=Object.keys(T).filter(function(k){return /^co:/.test(k)&&T[k]>=3}).map(function(k){var id=k.slice(3),o=T[k],d=T['cd:'+id]||0;return {id:id,o:o,d:d,a:1-d/o}}).sort(function(a,b){return b.a-a.a||b.o-a.o}).slice(0,10);
+  if(ch.length)h+='<h2>Chapitres les plus abandonnés</h2><table><tr><th>Chapitre</th><th>Ouverts</th><th>Terminés</th><th>Abandon</th></tr>'+ch.map(function(x){return '<tr><td data-c="'+esc(x.id)+'">'+esc(x.id)+'</td><td>'+n(x.o)+'</td><td>'+n(x.d)+'</td><td>'+Math.round(100*x.a)+' %</td></tr>'}).join('')+'</table><p class="muted">Chapitres ouverts au moins 3 fois. Ouvert / terminé = navigateurs différents, comptés une fois chacun.</p>';
+  var qk=Object.keys(T).filter(function(k){return /^qko:/.test(k)}).map(function(k){return {id:k.slice(4),v:T[k]}}).sort(function(a,b){return b.v-a.v}).slice(0,10);
+  if(qk.length)h+='<h2>Questions les plus ratées</h2><table><tr><th>Question</th><th>Navigateurs qui se sont trompés</th></tr>'+qk.map(function(x){return '<tr><td data-q="'+esc(x.id)+'">'+esc(x.id)+'</td><td>'+n(x.v)+'</td></tr>'}).join('')+'</table><p class="muted">Une question très ratée est soit mal formulée, soit une notion à mieux expliquer dans le cours.</p>';
+  setTimeout(function(){names().then(function(N){[].forEach.call(document.querySelectorAll('[data-q]'),function(td){var t=N.q[td.dataset.q];if(t)td.textContent=t});[].forEach.call(document.querySelectorAll('[data-c]'),function(td){var t=N.c[td.dataset.c];if(t)td.textContent=t})})},0);
+  return h;
+}
 document.getElementById('gs').onclick=function(){
   msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
   var days=document.getElementById('per').value;
@@ -109,6 +138,7 @@ document.getElementById('gs').onclick=function(){
     function per(re,from){var t=0;Object.keys(rows).forEach(function(d){if(d>=from)for(var e in rows[d])if(re.test(e))t+=rows[d][e]});return t}
     var K=[['Visites',/^visits$/],['Pages vues',/^views$/],['Téléchargements de l’appli (téléphones Android)',/^dl_/],['Messages envoyés',/^contact_(code|autoecole|autre)$/],['Tentatives de contact',/^contact_try$/],['Codes activés',/^act_ok$/],['Essais gratuits offerts (max 10)',/^essai_ok$/]];
     var h='<div class="kpis">'+K.map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+n(per(x[1],'0'))+'</b><small>7 j : '+n(per(x[1],d7))+' · aujourd’hui : '+n(per(x[1],today))+'</small></div>'}).join('')+'</div>';
+    h+=product(j.product||{},tot);
     if(!W.ok)h+='<div class="note"><b>Visites et pages vues non branchées.</b> '+(W.err==='not_configured'?'Elles sont mesurées par Cloudflare Web Analytics (dashboard Cloudflare → Analytics &amp; Logs → Web Analytics). Pour les voir ici, ajoutez CF_API_TOKEN, CF_ACCOUNT_ID et CF_SITE_TAG dans Cloudflare Pages → Settings → Variables and Secrets, puis redéployez.':'Erreur Cloudflare : '+esc(W.err))+'</div>';
     var ds=Object.keys(rows).sort().reverse();
     h+='<h2>Jour par jour</h2><table><tr><th>Jour</th><th>Visites</th><th>Pages vues</th><th>Téléch.</th><th>Contact (envoyés / tentatives)</th><th>Activations (ok / code faux / expiré)</th></tr>';

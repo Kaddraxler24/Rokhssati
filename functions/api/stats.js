@@ -53,11 +53,19 @@ async function web(env, from, to) {
   } catch (e) { return { ok: false, err: String(e).slice(0, 200) }; }
 }
 
+// anonymous product counters (functions/api/ev.js): one JSON value per day "ag:<day>"
+async function product(kv, from) {
+  if (!kv) return {};
+  const r = await kv.list({ prefix: "ag:" }), out = {};
+  await Promise.all(r.keys.filter((k) => k.name.slice(3) >= from).map(async (k) => { out[k.name.slice(3)] = (await kv.get(k.name, "json")) || {}; }));
+  return out;
+}
+
 export async function onRequest({ request, env }) {
   if (request.method === "OPTIONS") return preflight("GET");
   const no = admin(request, env); if (no) return no;
   const days = Math.min(90, Math.max(7, parseInt(new URL(request.url).searchParams.get("days") || "30", 10) || 30));
   const to = day(), from = day(Date.now() - (days - 1) * 86400000);
-  const [ev, w] = await Promise.all([counters(env.ROKH_KV, from), web(env, from, to)]);
-  return out({ ok: true, from, to, events: ev, web: w });
+  const [ev, w, ag] = await Promise.all([counters(env.ROKH_KV, from), web(env, from, to), product(env.ROKH_KV, from)]);
+  return out({ ok: true, from, to, events: ev, web: w, product: ag });
 }
