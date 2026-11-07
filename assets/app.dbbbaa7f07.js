@@ -80,17 +80,17 @@ var RokhCode = (function () {
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
   var UI = {
-    ar: { codeNet: "يلزم الاتصال بالإنترنت لتفعيل الرمز. حاول مرة أخرى.", codeWait: "جارٍ التحقق…", ltPass: "ممتاز! أنت جاهز لهذا الاختبار.", ltFail: "راجع الأخطاء وأعد الاختبار.", lockExam: "الامتحان التجريبي يُفتح برمز التفعيل.", lockMore: "النسخة المجانية: %n أسئلة في كل سلسلة.", unlock: "تفعيل رمز", codeOk: "تم التفعيل حتى %d.", codeKo: "الرمز غير صحيح أو لا يخص هذا الجهاز.", codeExp: "انتهت صلاحية هذا الرمز.", payOk: "تم إرسال الوصل. ستصلك رسالة برمز التفعيل بعد التحقق.", payKo: "تعذّر الإرسال من هنا. أرسل صورة الوصل عبر واتساب أو رسالة نصية.", active: "التفعيل صالح حتى %d.", sitQ: "ما هو ترتيب المرور؟", signQ: "ماذا تعني هذه الإشارة؟", right: "✓ إجابة صحيحة", wrong: "✗ ليس تمامًا", markRight: "صحيح", markWrong: "اختيارك", next: "السؤال التالي", last: "عرض النتيجة", validate: "تأكيد",
+    ar: { codeNet: "يلزم الاتصال بالإنترنت لتفعيل الرمز. حاول مرة أخرى.", codeWait: "جارٍ التحقق…", ltPass: "ممتاز! أنت جاهز لهذا الاختبار.", ltFail: "راجع الأخطاء وأعد الاختبار.", lockExam: "الامتحان التجريبي يُفتح برمز التفعيل.", lockMore: "النسخة المجانية: %n أسئلة تجريبية، دائمًا نفسها. فعّل رمزًا لكل التدريب والامتحانات التجريبية.", unlock: "تفعيل رمز", codeOk: "تم التفعيل حتى %d.", codeKo: "الرمز غير صحيح أو لا يخص هذا الجهاز.", codeExp: "انتهت صلاحية هذا الرمز.", payOk: "تم إرسال الوصل. ستصلك رسالة برمز التفعيل بعد التحقق.", payKo: "تعذّر الإرسال من هنا. أرسل صورة الوصل عبر واتساب أو رسالة نصية.", active: "التفعيل صالح حتى %d.", sitQ: "ما هو ترتيب المرور؟", signQ: "ماذا تعني هذه الإشارة؟", right: "✓ إجابة صحيحة", wrong: "✗ ليس تمامًا", markRight: "صحيح", markWrong: "اختيارك", next: "السؤال التالي", last: "عرض النتيجة", validate: "تأكيد",
           score: "نتيجتك", restart: "أعد السلسلة", great: "ممتاز! أنت تعرف القانون جيدًا.", mid: "بداية جيدة. راجع الدروس المعنية.", low: "الوقت مناسب للمراجعة.",
           time: "الوقت", recap: "التصحيح", yours: "إجابتك", none: "بدون إجابة", correct: "الإجابة الصحيحة", pick: "اختر إجابة.", examNote: "التصحيح في نهاية الامتحان.",
           ok: "لا توجد مخالفة", d2: "مخالفة من الدرجة الثانية", d3: "مخالفة من الدرجة الثالثة", d4: "مخالفة من الدرجة الرابعة", delit: "جنحة تُحال على القضاء", cur: "دج", inLimit: "سرعتك ضمن الحد المسموح.", check: "أدخل أرقامًا صحيحة.",
           formOk: "شكرًا!", formKo: "يرجى كتابة رسالتك وترك رقم هاتف أو بريد.", cSend: "جارٍ الإرسال…", cOk: "وصلتنا رسالتك، سنرد عليك قريبًا.", cNet: "تعذر الإرسال. تحقق من الإنترنت وأعد المحاولة.", empty: "لا توجد أسئلة لهذا المحور بعد." },
-    fr: { codeNet: "Une connexion internet est nécessaire pour activer le code. Réessayez.", codeWait: "Vérification…", ltPass: "Bravo, vous êtes prêt pour ce test.", ltFail: "Revoyez vos erreurs et refaites le test.", lockExam: "L'examen blanc s'ouvre avec un code d'activation.", lockMore: "Version gratuite : %n questions par série.", unlock: "Activer un code", codeOk: "Activé jusqu'au %d.", codeKo: "Code incorrect, ou il n'est pas fait pour cet appareil.", codeExp: "Ce code a expiré.", payOk: "Reçu envoyé. Vous recevrez votre code par SMS après vérification.", payKo: "Envoi impossible ici. Envoyez la photo du reçu par WhatsApp ou SMS.", active: "Activation valable jusqu'au %d.", sitQ: "Dans quel ordre les véhicules passent-ils ?", signQ: "Que signifie ce panneau ?", right: "✓ Bonne réponse", wrong: "✗ Pas tout à fait", markRight: "Correct", markWrong: "Votre choix", next: "Question suivante", last: "Voir mon score", validate: "Valider",
+    fr: { codeNet: "Une connexion internet est nécessaire pour activer le code. Réessayez.", codeWait: "Vérification…", ltPass: "Bravo, vous êtes prêt pour ce test.", ltFail: "Revoyez vos erreurs et refaites le test.", lockExam: "L'examen blanc s'ouvre avec un code d'activation.", lockMore: "Version gratuite : %n questions d'essai, toujours les mêmes. Activez un code pour tout l'entraînement et les examens blancs.", unlock: "Activer un code", codeOk: "Activé jusqu'au %d.", codeKo: "Code incorrect, ou il n'est pas fait pour cet appareil.", codeExp: "Ce code a expiré.", payOk: "Reçu envoyé. Vous recevrez votre code par SMS après vérification.", payKo: "Envoi impossible ici. Envoyez la photo du reçu par WhatsApp ou SMS.", active: "Activation valable jusqu'au %d.", sitQ: "Dans quel ordre les véhicules passent-ils ?", signQ: "Que signifie ce panneau ?", right: "✓ Bonne réponse", wrong: "✗ Pas tout à fait", markRight: "Correct", markWrong: "Votre choix", next: "Question suivante", last: "Voir mon score", validate: "Valider",
           score: "Votre score", restart: "Recommencer", great: "Excellent ! Vous connaissez bien le code.", mid: "Bon début. Revoyez les leçons concernées.", low: "C'est le moment de réviser.",
           time: "Temps", recap: "Correction", yours: "Votre réponse", none: "Sans réponse", correct: "Bonne réponse", pick: "Choisissez une réponse.", examNote: "Correction à la fin de l'examen.",
           ok: "Pas d'infraction", d2: "Contravention du 2e degré", d3: "Contravention du 3e degré", d4: "Contravention du 4e degré", delit: "Délit jugé par le tribunal", cur: "DA", inLimit: "Vous êtes dans la limite.", check: "Entrez des valeurs valides.",
           formOk: "Merci !", formKo: "Écrivez votre message et laissez un téléphone ou un e-mail.", cSend: "Envoi…", cOk: "Message reçu, nous vous répondons bientôt.", cNet: "Envoi impossible. Vérifiez votre connexion et réessayez.", empty: "Pas encore de questions pour ce thème." },
-    dz: { codeNet: "لازم الأنترنت باش تفعّل الكود. عاود جرّب.", codeWait: "راهو يتحقق…", ltPass: "مليح بزاف! راك واجد.", ltFail: "عاود شوف الغلطات وعاود الاختبار.", lockExam: "الامتحان التجريبي يتحل بكود التفعيل.", lockMore: "النسخة بلاش: %n أسئلة في كل سلسلة.", unlock: "فعّل الكود", codeOk: "تفعّل حتى %d.", codeKo: "الكود غالط ولا ماشي تاع هاد التيليفون.", codeExp: "هاد الكود فات وقتو.", payOk: "الوصل تبعث. يجيك الكود في ميساج من بعد ما نتأكدو.", payKo: "ما قدرناش نبعثو من هنا. ابعث تصويرة الوصل في واتساب ولا ميساج.", active: "التفعيل يخدم حتى %d.", sitQ: "شكون يفوت الأول؟", signQ: "واش معناه هاد البانو؟", right: "✓ صحيح!", wrong: "✗ ماشي هاكا", markRight: "صحيح", markWrong: "اخترت هادي", next: "السؤال اللي بعدو", last: "شوف النتيجة", validate: "أكّد",
+    dz: { codeNet: "لازم الأنترنت باش تفعّل الكود. عاود جرّب.", codeWait: "راهو يتحقق…", ltPass: "مليح بزاف! راك واجد.", ltFail: "عاود شوف الغلطات وعاود الاختبار.", lockExam: "الامتحان التجريبي يتحل بكود التفعيل.", lockMore: "النسخة بلاش: %n أسئلة باش تجرّب، ديما هوما. فعّل كود باش تحل كامل التدريب والامتحانات التجريبية.", unlock: "فعّل الكود", codeOk: "تفعّل حتى %d.", codeKo: "الكود غالط ولا ماشي تاع هاد التيليفون.", codeExp: "هاد الكود فات وقتو.", payOk: "الوصل تبعث. يجيك الكود في ميساج من بعد ما نتأكدو.", payKo: "ما قدرناش نبعثو من هنا. ابعث تصويرة الوصل في واتساب ولا ميساج.", active: "التفعيل يخدم حتى %d.", sitQ: "شكون يفوت الأول؟", signQ: "واش معناه هاد البانو؟", right: "✓ صحيح!", wrong: "✗ ماشي هاكا", markRight: "صحيح", markWrong: "اخترت هادي", next: "السؤال اللي بعدو", last: "شوف النتيجة", validate: "أكّد",
           score: "النتيجة تاعك", restart: "عاود من الأول", great: "برافو! راك تعرف القانون مليح.", mid: "مليح، راجع الدروس اللي غلطت فيهم.", low: "لازم تراجع شوية.",
           time: "الوقت", recap: "التصحيح", yours: "الجواب تاعك", none: "ما جاوبتش", correct: "الجواب الصحيح", pick: "اختار جواب.", examNote: "التصحيح في اللخر تاع الامتحان.",
           ok: "ما كانش خطية", d2: "خطية من الدرجة الثانية", d3: "خطية من الدرجة الثالثة", d4: "خطية من الدرجة الرابعة", delit: "جنحة تروح للمحكمة", cur: "دج", inLimit: "راك في الحد المسموح.", check: "دخّل أرقام صحاح.",
@@ -414,11 +414,10 @@ var RokhCode = (function () {
         var premium = !!pass(), limit = DATA.free[th] || DATA.free.default, msg = "";
         if (!premium && exam) { qs = []; msg = t("lockExam"); }
         else if (!premium) {
-          // free: always the same short list (the first limit+3 questions, fixed order); each try shows `limit` of them at random
-          var fixed = pool(th).slice(0, limit + 3);
-          if (th === "errors") { var errs2 = Track.errors(); fixed = fixed.filter(function (q) { return errs2[q.id]; }); }
+          // free (owner 07/11/2026): a short trial, always the same `limit` questions per category, in a random order
+          var fixed = pool(th).slice(0, limit);
           if (pool(th).length > limit) msg = t("lockMore").replace("%n", limit);
-          qs = shuffle(fixed).slice(0, limit);
+          qs = shuffle(fixed);
         }
         if (exam) qs = qs.slice(0, 30);
         lockBox.hidden = !msg; $(".lock-msg", lockBox).textContent = msg;
@@ -544,21 +543,24 @@ var RokhCode = (function () {
           k_ch: "فصول منتهية", k_tests: "اختبارات", k_avg: "المعدل", k_best: "أفضل نتيجة", k_err: "أخطاء للمراجعة", histEmpty: "لم تجر أي اختبار بعد. ابدأ سلسلة من صفحة التدريب.",
           h_date: "التاريخ", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
           all: "كل المحاور", signs: "الإشارات", situations: "ترتيب المرور", errors: "أخطائي", reset: "مسح كل التقدم", resetSure: "متأكد؟ اضغط مرة أخرى",
-          noErr: "لا توجد أخطاء للمراجعة.", days: ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"], step: "بطاقة" },
+          noErr: "لا توجد أخطاء للمراجعة.", days: ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"], step: "بطاقة",
+          k_more: "إحصائيات مفصّلة", prem: "برمز التفعيل", histFree: "النسخة المجانية: آخر 3 نتائج فقط. فعّل رمزًا لرؤية كل السجل والمعدل وأفضل نتيجة." },
     fr: { prev: "Précédent", next: "Suivant", finish: "Terminer le chapitre", check: "Vérifier", done: "Chapitre terminé !", doneTxt: "Bravo. Vous pouvez passer au chapitre suivant.",
           nextChap: "Chapitre suivant", nextTheme: "Thème suivant", back: "Retour aux chapitres", train: "S'entraîner sur ce thème", right: "Bonne réponse", wrong: "Pas tout à fait",
           start: "Commencer le cours", resume: "Reprendre le cours", review: "Revoir depuis le début", readOf: "%a sur %b chapitres terminés", cont: "Reprendre : %t", startCourse: "Commencer les cours",
           k_ch: "Chapitres terminés", k_tests: "Tests passés", k_avg: "Moyenne", k_best: "Meilleur score", k_err: "Erreurs à revoir", histEmpty: "Aucun test pour l'instant. Lancez une série depuis la page Entraînement.",
           h_date: "Date", h_type: "Type", h_theme: "Thème", h_score: "Score", t_train: "Entraînement", t_exam: "Examen blanc", t_livre: "Test du livre",
           all: "Tous les thèmes", signs: "Panneaux", situations: "Ordre de passage", errors: "Mes erreurs", reset: "Effacer ma progression", resetSure: "Sûr ? Cliquez encore",
-          noErr: "Aucune erreur à revoir.", days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"], step: "Fiche" },
+          noErr: "Aucune erreur à revoir.", days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"], step: "Fiche",
+          k_more: "Statistiques détaillées", prem: "Avec un code", histFree: "Version gratuite : seulement les 3 derniers résultats. Activez un code pour tout l'historique, la moyenne et le meilleur score." },
     dz: { prev: "اللي قبل", next: "اللي بعد", finish: "كمّل الفصل", check: "شوف", done: "كملت الفصل!", doneTxt: "برافو. تقدر تفوت للفصل اللي جاي.",
           nextChap: "الفصل اللي جاي", nextTheme: "المحور اللي جاي", back: "ارجع للفصول", train: "تدرّب على هاد المحور", right: "صحيح!", wrong: "ماشي هاكا",
           start: "ابدا الدرس", resume: "كمّل الدرس", review: "عاود من الأول", readOf: "%a من %b فصول كملتهم", cont: "كمّل: %t", startCourse: "ابدا الدروس",
           k_ch: "فصول كملتهم", k_tests: "الاختبارات", k_avg: "المعدل", k_best: "أحسن نتيجة", k_err: "غلطات تعاودهم", histEmpty: "مازال ما درت حتى اختبار. ابدا سلسلة من صفحة التدريب.",
           h_date: "النهار", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
           all: "كامل المحاور", signs: "البانوات", situations: "شكون يفوت الأول", errors: "الغلطات تاعي", reset: "امسح كلش", resetSure: "متأكد؟ اضغط مرة أخرى",
-          noErr: "ما كانش غلطات تعاودهم.", days: ["حد", "تنين", "ثلاث", "ربع", "خميس", "جمعة", "سبت"], step: "بطاقة" }
+          noErr: "ما كانش غلطات تعاودهم.", days: ["حد", "تنين", "ثلاث", "ربع", "خميس", "جمعة", "سبت"], step: "بطاقة",
+          k_more: "إحصائيات مفصّلة", prem: "بكود التفعيل", histFree: "النسخة بلاش: غير آخر 3 نتائج. فعّل كود باش تشوف كامل التاريخ، المعدل وأحسن نتيجة." }
   };
   var u = function (k) { return CU[lang][k]; };
   var CI = null;
@@ -592,7 +594,7 @@ var RokhCode = (function () {
   }
   function chapHref(inf) { return inf.theme.url + "#c=" + inf.c.id; }
   /* free version: the first FREE_CHAPS chapters of each theme; the next ones open with an activation code */
-  var FREE_CHAPS = 6;
+  var FREE_CHAPS = Infinity;   // owner 07/11/2026: every course chapter is free (the lock code stays, unused)
   function lockedId(id) { var inf = chapInfo(id); return !!inf && inf.ci >= FREE_CHAPS && !pass(); }
   var LKU = {
     ar: { t: "هذا الفصل يُفتح برمز التفعيل", p: "الفصول الستة الأولى من كل محور مجانية. أدخل رمز التفعيل لفتح باقي الفصول." },
@@ -848,10 +850,13 @@ var RokhCode = (function () {
     var pcts = h.map(function (x) { return x.score / x.total; });
     var avg = pcts.length ? pcts.reduce(function (a, b) { return a + b; }, 0) / pcts.length : 0;
     var best = pcts.length ? Math.max.apply(null, pcts) : 0;
-    var k = [[u("k_ch"), g.done + " / " + g.total], [u("k_tests"), h.length], [u("k_avg"), pcts.length ? Math.round(avg * 100) + "%" : "—"],
-             [u("k_best"), pcts.length ? Math.round(best * 100) + "%" : "—"], [u("k_err"), errs]];
+    var premium = !!pass();   // owner 07/11/2026: detailed stats and the full history are premium
+    var k = premium ? [[u("k_ch"), g.done + " / " + g.total], [u("k_tests"), h.length], [u("k_avg"), pcts.length ? Math.round(avg * 100) + "%" : "—"],
+             [u("k_best"), pcts.length ? Math.round(best * 100) + "%" : "—"], [u("k_err"), errs]]
+           : [[u("k_ch"), g.done + " / " + g.total], [u("k_tests"), h.length], [u("k_err"), errs], [u("k_more"), u("prem")]];
     var dl = $("#pgKpis"); dl.innerHTML = "";
     k.forEach(function (x) { var d = document.createElement("div"); d.innerHTML = "<dt></dt><dd dir=\"ltr\"></dd>"; d.querySelector("dt").textContent = x[0]; d.querySelector("dd").textContent = x[1]; dl.appendChild(d); });
+    if (!premium) { var lastDd = dl.lastChild.querySelector("dd"); lastDd.className = "is-prem"; lastDd.removeAttribute("dir"); lastDd.innerHTML = '<a href="activer.html"></a>'; lastDd.firstChild.textContent = u("prem"); }
     var box = $("#pgThemes"); box.innerHTML = "";
     (CI || []).forEach(function (th, i) {
       var st = themeStats(th, p), a = document.createElement("a");
@@ -870,7 +875,7 @@ var RokhCode = (function () {
       tbl.innerHTML = '<table class="tbl"><thead><tr><th scope="col"></th><th scope="col"></th><th scope="col"></th><th scope="col"></th></tr></thead><tbody></tbody></table>';
       var ths = $$("th", tbl); [u("h_date"), u("h_type"), u("h_theme"), u("h_score")].forEach(function (x, i) { ths[i].textContent = x; });
       var tb = $("tbody", tbl);
-      h.slice().reverse().slice(0, 40).forEach(function (x) {
+      h.slice().reverse().slice(0, premium ? 500 : 3).forEach(function (x) {
         var d = new Date(x.ts), tr = document.createElement("tr"), r = x.score / x.total;
         tr.innerHTML = '<td dir="ltr"></td><td></td><td></td><td dir="ltr"><b></b> <span class="sc"></span></td>';
         var c = tr.children;
@@ -882,6 +887,8 @@ var RokhCode = (function () {
         tb.appendChild(tr);
       });
       hist.appendChild(tbl);
+      if (!premium && h.length > 3) { var hf = document.createElement("p"); hf.className = "muted hist-free"; hf.innerHTML = '<span></span> <a href="activer.html"></a>';
+        hf.firstChild.textContent = u("histFree"); hf.lastChild.textContent = t("unlock"); hist.appendChild(hf); }
     }
     var eb = $("#pgErrBtn"); if (eb) eb.hidden = !errs;
     drawStreak($("#streak2"));
