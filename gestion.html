@@ -25,7 +25,7 @@ document.getElementById('go').onclick=function(){
   }).catch(function(){msg.className='err';msg.textContent='Pas de réponse (connexion, ou page ouverte hors navigateur). Ouvrez-la dans Chrome : rokhssati.com/gestion.html'});
 };
 function esc(x){return String(x||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-var KIND={code:'Code d’activation','auto-ecole':'Auto-école',autre:'Autre'};
+var KIND={code:'Code d’activation','auto-ecole':'Auto-école',autre:'Autre',signal:'Signalement de question'};
 document.getElementById('gm').onclick=function(){
   msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
   fetch(BASE+'/api/messages',{headers:{'x-admin-key':k.value},cache:'no-store'}).then(rd).then(function(j){
@@ -62,7 +62,7 @@ document.getElementById('gs').onclick=function(){
     function list(title,arr,lab,val){if(!arr||!arr.length)return '';var mx=Math.max.apply(null,arr.map(val))||1;return '<h2>'+title+'</h2><table>'+arr.map(function(x){return '<tr><td>'+esc(lab(x))+'</td><td style="width:55%"><span class="bar" style="width:'+Math.round(val(x)/mx*80)+'%"></span>'+n(val(x))+'</td></tr>'}).join('')+'</table>'}
     var srcs=Object.keys(tot).filter(function(e){return /^dl_/.test(e)}).map(function(e){return {s:e.slice(3),v:tot[e]}}).sort(function(a,b){return b.v-a.v});
     h+=list('Téléchargements par bouton',srcs,function(x){return SRC[x.s]||x.s},function(x){return x.v});
-    var kinds=[['code','Question sur un code'],['autoecole','Auto-école'],['autre','Autre sujet'],['incomplet','Formulaire sans téléphone ni e-mail']].map(function(x){return {s:x[1],v:tot['contact_'+x[0]]||0}}).filter(function(x){return x.v});
+    var kinds=[['code','Question sur un code'],['autoecole','Auto-école'],['autre','Autre sujet'],['signal','Signalement de question'],['incomplet','Formulaire sans téléphone ni e-mail']].map(function(x){return {s:x[1],v:tot['contact_'+x[0]]||0}}).filter(function(x){return x.v});
     h+=list('Contact par sujet',kinds,function(x){return x.s},function(x){return x.v});
     if(W.ok){h+=list('Pages les plus vues',W.pages,function(x){return x.p},function(x){return x.views});
       h+=list('Pays des visiteurs',W.countries,function(x){return x.c},function(x){return x.visits});

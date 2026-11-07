@@ -749,3 +749,12 @@ html.news-open { overflow: hidden; }
 [data-theme="dark"] .quiz-head .q-fav[aria-pressed="true"] { background: #3A2E12; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .quiz-head .q-fav[aria-pressed="true"] { background: #3A2E12; } }
 .q-fav-msg { font-size: 14px; margin: 6px 0 0; }
+
+/* report a question */
+.q-sig { margin-top: 10px; }
+.q-sig-btn { background: none; border: 0; padding: 6px 0; color: var(--muted, #666); font: inherit; font-size: 14px; text-decoration: underline; cursor: pointer; min-height: 32px; }
+.q-sig-form { display: grid; gap: 8px; margin-top: 6px; }
+.q-sig-form label { font-size: 14px; font-weight: 600; }
+.q-sig-form select, .q-sig-form textarea { font: inherit; font-size: 15px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); width: 100%; box-sizing: border-box; }
+.q-sig-form .btn { justify-self: start; }
+.q-sig-msg { font-size: 14px; margin: 6px 0 0; }
