@@ -1320,34 +1320,39 @@ var RokhCode = (function () {
     }).catch(function () {});
   })();
 
-  /* panneaux: fiche of a sign (signification, réaction, situation, confusion) — build/signs_info.py */
+  /* fiche of a sign (signification, réaction, situation, confusion) — build/signs_info.py
+     panneaux.html: every .sg figure; course pages: every .s-sign[data-k] outside quiz slides (#sgData holds the cards) */
   (function () {
-    var figs = $$(".sg"); if (!figs.length) return;
+    var onGuide = !!$(".sg"), data = $("#sgData"); if (!onGuide && !data) return;
+    function card(k) { return onGuide ? $("#p-" + k + " .sg-card") : data.querySelector('.sg-card[data-k="' + k + '"]'); }
+    function pic(k) { var e = document.getElementById("p-" + k) || $('.s-sign[data-k="' + k + '"]'); return e && e.querySelector("svg"); }
     var ov = document.createElement("div"); ov.className = "sg-ov"; ov.hidden = true; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
     ov.innerHTML = '<div class="sg-box"><button type="button" class="sg-x" aria-label="×">×</button><div class="sg-big"></div><div class="sg-body"></div></div>';
     document.getElementById("app").appendChild(ov);
     var last = null;
-    function close() { if (ov.hidden) return; ov.hidden = true; document.documentElement.classList.remove("news-open"); if (location.hash.indexOf("#p-") === 0) history.replaceState(null, "", location.pathname + location.search); if (last && last.focus) last.focus(); }
-    function open(f) {
-      last = document.activeElement;
-      $(".sg-big", ov).innerHTML = ""; $(".sg-big", ov).appendChild(f.querySelector("svg").cloneNode(true));
-      var c = f.querySelector(".sg-card").cloneNode(true); c.hidden = false;
-      $$(".sg-mini", c).forEach(function (m) { var o = document.getElementById("p-" + m.getAttribute("data-k")); if (o) m.appendChild(o.querySelector("svg").cloneNode(true)); });
+    function close() { if (ov.hidden) return; ov.hidden = true; if (!$(".viewer:not([hidden])")) document.documentElement.classList.remove("news-open"); if (onGuide && location.hash.indexOf("#p-") === 0) history.replaceState(null, "", location.pathname + location.search); if (last && last.focus) last.focus(); }
+    function open(k) {
+      var src = card(k), sv = pic(k); if (!src || !sv) return;
+      if (ov.hidden) last = document.activeElement;
+      $(".sg-big", ov).innerHTML = ""; $(".sg-big", ov).appendChild(sv.cloneNode(true));
+      var c = src.cloneNode(true); c.hidden = false;
+      $$(".sg-mini", c).forEach(function (m) { var o = pic(m.getAttribute("data-k")); if (o) m.appendChild(o.cloneNode(true)); else m.remove(); });
       $(".sg-body", ov).innerHTML = ""; $(".sg-body", ov).appendChild(c);
       ov.setAttribute("aria-label", (c.querySelector("h3") || {}).textContent || "");
       ov.hidden = false; document.documentElement.classList.add("news-open"); $(".sg-x", ov).focus();
-      if (history.replaceState) history.replaceState(null, "", "#" + f.id);
+      if (onGuide && history.replaceState) history.replaceState(null, "", "#p-" + k);
     }
     ov.addEventListener("click", function (e) {
       if (e.target === ov || e.target.classList.contains("sg-x")) return close();
-      var m = e.target.closest && e.target.closest(".sg-mini"); if (m) { e.preventDefault(); var o = document.getElementById("p-" + m.getAttribute("data-k")); if (o) open(o); }
+      var m = e.target.closest && e.target.closest(".sg-mini"); if (m) { e.preventDefault(); open(m.getAttribute("data-k")); }
     });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
-    figs.forEach(function (f) {
-      f.addEventListener("click", function () { open(f); });
-      f.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(f); } });
-    });
-    var h = location.hash.slice(1); if (h.indexOf("p-") === 0) { var f0 = document.getElementById(h); if (f0 && f0.classList.contains("sg")) open(f0); }
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !ov.hidden) { e.stopImmediatePropagation(); close(); } }, true);
+    function target(e) { var f = e.target.closest && e.target.closest(".sg, .s-sign[data-k]"); return f && !f.closest(".slide-q") && !f.closest(".sg-ov") && card(f.getAttribute("data-k")) ? f : null; }
+    document.addEventListener("click", function (e) { var f = target(e); if (f) open(f.getAttribute("data-k")); });
+    document.addEventListener("keydown", function (e) { if (e.key !== "Enter" && e.key !== " ") return; var f = target(e); if (f) { e.preventDefault(); open(f.getAttribute("data-k")); } });
+    function prep() { $$(".s-sign[data-k]").forEach(function (f) { if (f.dataset.sg || f.closest(".slide-q")) return; f.dataset.sg = "1"; f.classList.add("is-sg"); f.tabIndex = 0; f.setAttribute("role", "button"); }); }
+    if (data) { prep(); new MutationObserver(prep).observe(document.getElementById("app"), { childList: true, subtree: true }); }
+    var h = location.hash.slice(1); if (onGuide && h.indexOf("p-") === 0) open(h.slice(2));
   })();
 
   /* app: report installs and updates once per version (functions/api/maj.js) — no personal data */
