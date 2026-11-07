@@ -787,3 +787,25 @@ html.news-open { overflow: hidden; }
 .inbox-bar a { color: #fff; text-decoration: underline; margin-inline-start: 6px; }
 
 .btn-apk.is-soon { opacity: .85; cursor: default; pointer-events: none; }
+
+/* weak points */
+.pg-weak { display: grid; gap: 14px; max-width: 760px; }
+.wk-row { border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; background: var(--surface); }
+.wk-row.is-low { border-color: #E0A43A; }
+.wk-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.wk-pct { font-weight: 800; }
+.wk-row .bar { height: 8px; border-radius: 6px; background: var(--line); overflow: hidden; margin: 8px 0 6px; }
+.wk-row .bar i { display: block; height: 100%; background: var(--sign); }
+.wk-row.is-low .bar i { background: #E0A43A; }
+.wk-meta { margin: 0; font-size: 14px; }
+
+/* custom exam */
+.cx { margin-top: 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.cx summary { cursor: pointer; padding: 12px 14px; font-weight: 700; min-height: 44px; }
+.cx-tag { font-size: 12px; font-weight: 700; background: #FFF6E0; color: #7A4B00; border-radius: 999px; padding: 2px 8px; margin-inline-start: 6px; }
+.cx-body { padding: 0 14px 14px; display: grid; gap: 12px; }
+.cx-themes { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px 14px; }
+.cx-themes legend { font-weight: 600; margin-bottom: 6px; }
+.cx-th { display: flex; gap: 8px; align-items: center; min-height: 32px; font-size: 15px; }
+.cx-th input { width: 18px; height: 18px; }
+.cx .btn { justify-self: start; }
