@@ -68,7 +68,7 @@ document.getElementById('gs').onclick=function(){
     Object.keys(E).forEach(function(d){rows[d]=rows[d]||{};for(var e in E[d]){rows[d][e]=E[d][e];tot[e]=(tot[e]||0)+E[d][e]}});
     (W.days||[]).forEach(function(x){rows[x.d]=rows[x.d]||{};rows[x.d].visits=x.visits;rows[x.d].views=x.views;tot.visits=(tot.visits||0)+x.visits;tot.views=(tot.views||0)+x.views});
     function per(re,from){var t=0;Object.keys(rows).forEach(function(d){if(d>=from)for(var e in rows[d])if(re.test(e))t+=rows[d][e]});return t}
-    var K=[['Visites',/^visits$/],['Pages vues',/^views$/],['Téléchargements de l’appli',/^dl_/],['Messages envoyés',/^contact_(code|autoecole|autre)$/],['Tentatives de contact',/^contact_try$/],['Codes activés',/^act_ok$/],['Essais gratuits offerts (max 10)',/^essai_ok$/]];
+    var K=[['Visites',/^visits$/],['Pages vues',/^views$/],['Téléchargements de l’appli (téléphones Android)',/^dl_/],['Messages envoyés',/^contact_(code|autoecole|autre)$/],['Tentatives de contact',/^contact_try$/],['Codes activés',/^act_ok$/],['Essais gratuits offerts (max 10)',/^essai_ok$/]];
     var h='<div class="kpis">'+K.map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+n(per(x[1],'0'))+'</b><small>7 j : '+n(per(x[1],d7))+' · aujourd’hui : '+n(per(x[1],today))+'</small></div>'}).join('')+'</div>';
     if(!W.ok)h+='<div class="note"><b>Visites et pages vues non branchées.</b> '+(W.err==='not_configured'?'Elles sont mesurées par Cloudflare Web Analytics (dashboard Cloudflare → Analytics &amp; Logs → Web Analytics). Pour les voir ici, ajoutez CF_API_TOKEN, CF_ACCOUNT_ID et CF_SITE_TAG dans Cloudflare Pages → Settings → Variables and Secrets, puis redéployez.':'Erreur Cloudflare : '+esc(W.err))+'</div>';
     var ds=Object.keys(rows).sort().reverse();
@@ -79,6 +79,8 @@ document.getElementById('gs').onclick=function(){
     function list(title,arr,lab,val){if(!arr||!arr.length)return '';var mx=Math.max.apply(null,arr.map(val))||1;return '<h2>'+title+'</h2><table>'+arr.map(function(x){return '<tr><td>'+esc(lab(x))+'</td><td style="width:55%"><span class="bar" style="width:'+Math.round(val(x)/mx*80)+'%"></span>'+n(val(x))+'</td></tr>'}).join('')+'</table>'}
     var srcs=Object.keys(tot).filter(function(e){return /^dl_/.test(e)}).map(function(e){return {s:e.slice(3),v:tot[e]}}).sort(function(a,b){return b.v-a.v});
     h+=list('Téléchargements par bouton',srcs,function(x){return SRC[x.s]||x.s},function(x){return x.v});
+    var pcs=Object.keys(tot).filter(function(e){return /^dlpc_/.test(e)}).map(function(e){return {s:e.slice(5),v:tot[e]}}).sort(function(a,b){return b.v-a.v});
+    if(pcs.length) h+=list('Téléchargements depuis un ordinateur (non installables, non comptés au-dessus)',pcs,function(x){return SRC[x.s]||x.s},function(x){return x.v});
     var VER={34:'1.4.17',35:'1.4.18',36:'1.4.19',37:'1.4.20',38:'1.4.21',39:'1.4.22',40:'1.4.23'};
     var apps=Object.keys(tot).filter(function(e){return /^app_v\d+$/.test(e)}).map(function(e){return {c:+e.slice(5),v:tot[e]}}).sort(function(a,b){return b.c-a.c});
     var vn=function(c){return c==='old'?'ancienne (≤ 1.4.22)':'v'+(VER[c]||('code '+c))};

@@ -1309,6 +1309,35 @@ var RokhCode = (function () {
     listeners.push(function () { $$(".is-zoomable").forEach(function (f) { f.setAttribute("aria-label", t("zoom")); }); });
   })();
 
+  /* APK download: owner's browsers not counted (&me=1) + install guide shown right after the tap */
+  (function () {
+    if (window.RokhNative) return;
+    var G = {
+      ar: { t: "ثبّت التطبيق في 3 خطوات", s: ["عند التحميل، إذا ظهر «قد يكون الملف ضارًا»: اضغط «تحميل على أي حال». الملف آمن (البصمة SHA-256 في الصفحة).", "افتح الملف rokhssati.apk من الإشعارات أو من «التنزيلات». إذا طلب أندرويد: «الإعدادات» ← «السماح من هذا المصدر».", "اضغط «تثبيت». إذا ظهر Play Protect: «التفاصيل» ← «التثبيت على أي حال». ثم افتح التطبيق مع الإنترنت مرة واحدة."], pc: "ملف APK لا يُثبَّت على الحاسوب: افتح rokhssati.com على هاتف أندرويد وحمّل التطبيق منه.", ok: "فهمت" },
+      fr: { t: "Installer l'appli en 3 étapes", s: ["Si Chrome affiche « Ce fichier peut être dangereux » : touchez « Télécharger quand même ». Le fichier est sûr (empreinte SHA-256 sur la page).", "Ouvrez rokhssati.apk depuis la notification ou « Téléchargements ». Si Android le demande : « Paramètres » → « Autoriser cette source ».", "Touchez « Installer ». Si Play Protect s'affiche : « Plus de détails » → « Installer quand même ». Puis ouvrez l'appli une fois avec Internet."], pc: "Un fichier APK ne s'installe pas sur un ordinateur : ouvrez rokhssati.com sur votre téléphone Android et téléchargez l'appli depuis celui-ci.", ok: "Compris" },
+      dz: { t: "ثبّت التطبيق في 3 خطوات", s: ["إلا Chrome قالك «الفيشي يقدر يكون خطير»: اضغط «تحميل على كل حال». الفيشي آمن (البصمة SHA-256 في الصفحة).", "حل rokhssati.apk من النوتيفيكاسيون ولا من «التنزيلات». إلا أندرويد طلب: «الإعدادات» ← «اسمح من هاد المصدر».", "اضغط «تثبيت». إلا خرج Play Protect: «التفاصيل» ← «ثبّت على كل حال». ومن بعد حل التطبيق مرة بالأنترنت."], pc: "الـ APK ما يتثبتش في البيسي: حل rokhssati.com في تيليفون أندرويد وحمّل منو.", ok: "فهمت" }
+    };
+    var ov = null;
+    function guide() {
+      var g = G[lang] || G.fr, android = /android/i.test(navigator.userAgent);
+      if (!ov) { ov = document.createElement("div"); ov.className = "sg-ov dl-guide"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); document.getElementById("app").appendChild(ov);
+        ov.addEventListener("click", function (e) { if (e.target === ov || e.target.closest(".dg-ok")) { ov.hidden = true; document.documentElement.classList.remove("news-open"); } }); }
+      ov.setAttribute("dir", lang === "fr" ? "ltr" : "rtl");
+      ov.innerHTML = '<div class="sg-box"><h3></h3>' + (android ? '<ol class="dg-steps"></ol>' : '<p class="dg-pc"></p>') + '<button type="button" class="btn btn-primary dg-ok"></button></div>';
+      $("h3", ov).textContent = android ? g.t : "💻 → 📱";
+      if (android) g.s.forEach(function (x, i) { var li = document.createElement("li"); li.innerHTML = '<span class="dg-n">' + (i + 1) + '</span><span></span>'; li.lastChild.textContent = x; $(".dg-steps", ov).appendChild(li); });
+      else $(".dg-pc", ov).textContent = g.pc;
+      $(".dg-ok", ov).textContent = g.ok;
+      ov.hidden = false; document.documentElement.classList.add("news-open"); $(".dg-ok", ov).focus();
+    }
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest('a[href*="api/dl"]'); if (!a) return;
+      var me = false; try { me = localStorage.getItem("rokhssati-notrack") === "1"; } catch (x) {}
+      if (me && a.href.indexOf("me=1") < 0) a.href += (a.href.indexOf("?") < 0 ? "?" : "&") + "me=1";
+      setTimeout(guide, 300);
+    }, true);
+  })();
+
   /* home: launch offer, live count of remaining trial places (functions/api/essai.js?info=1) */
   (function () {
     var h = $("#offerHero"), c = $(".apk-offer-card"); if (!h && !c) return;
