@@ -345,8 +345,21 @@ ul.ticks{padding-inline-start:1.2em;margin:0 0 1.2em}ul.ticks li{margin:.35em 0}
   .sub .wrap { padding: 12px; grid-template-columns: minmax(0, 1fr); }
   .mega-themes { grid-column: auto; }
   .mega-themes ul { grid-template-columns: minmax(0, 1fr); }
-  .nav-actions { padding-top: 8px; border-top: 1px solid var(--line); }
+  /* languages + CTA stay in the top bar, next to the burger (not inside the folded menu) */
+  .top-row > .brand { order: 0; }
+  .top-row > .nav-actions { order: 1; margin-inline-start: auto; padding: 0; border: 0; }
+  .top-row > .burger { order: 2; }
+  .top-row > .mainnav { order: 3; }
 }
+.nav-actions { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
+@media (max-width: 560px) {
+  .nav-actions { gap: 6px; }
+  .langs button { min-height: 34px; padding-inline: 8px; font-size: 14px; }
+  .nav-actions .btn { min-height: 38px; padding: 6px 12px; font-size: 14px; }
+  .top-row { gap: 8px; }
+  .brand svg { width: 42px; height: 42px; }
+}
+@media (max-width: 374px) { .nav-actions .btn { display: none; } }
 
 /* ===== Page hero ===== */
 .page-hero .wrap { padding-block: 48px 36px; display: flex; flex-direction: column; gap: 12px; }
