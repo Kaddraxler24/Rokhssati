@@ -132,7 +132,7 @@ document.getElementById('gs').onclick=function(){
   var days=document.getElementById('per').value;
   fetch(BASE+'/api/stats?days='+days,{headers:{'x-admin-key':k.value},cache:'no-store'}).then(rd).then(function(j){
     if(!j.ok){msg.className='err';msg.textContent=j.err==='key'?'Clé admin incorrecte.':'Erreur : '+j.err;out.innerHTML='';return}
-    msg.textContent='Du '+new Date(j.from).toLocaleDateString('fr-FR')+' au '+new Date(j.to).toLocaleDateString('fr-FR');
+    msg.textContent='Du '+new Date(j.from).toLocaleDateString('fr-FR')+' au '+new Date(j.to).toLocaleDateString('fr-FR')+(j.web&&j.web.ok?(j.web.src==='all'?' · visites : toutes les entrées Web Analytics de rokhssati.com':' · visites : une seule entrée Web Analytics (CF_SITE_TAG)'):'');
     var E=j.events||{},W=j.web||{},rows={},tot={},today=j.to,d7=new Date(Date.parse(j.to)-6*864e5).toISOString().slice(0,10);
     Object.keys(E).forEach(function(d){rows[d]=rows[d]||{};for(var e in E[d]){rows[d][e]=E[d][e];tot[e]=(tot[e]||0)+E[d][e]}});
     (W.days||[]).forEach(function(x){rows[x.d]=rows[x.d]||{};rows[x.d].visits=x.visits;rows[x.d].views=x.views;tot.visits=(tot.visits||0)+x.visits;tot.views=(tot.views||0)+x.views});
