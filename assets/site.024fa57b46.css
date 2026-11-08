@@ -910,6 +910,13 @@ html.news-open { overflow: hidden; }
 .aoc-note { margin: 0; font-size: 15px; }
 .app-band h2 { font-size: clamp(26px, 3.4vw, 36px); }
 .app-band .btn-apk.btn-xl { font-size: 21px; padding: 18px 32px; }
+/* fiche détaillée (distances, panonceaux, balises) */
+.s-sheet { margin: 14px 0 0; }
+.s-sheet a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+.sheet-figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; margin: 0 0 16px; }
+.sheet-figs .s-fig svg { width: 100%; height: auto; border-radius: 12px; display: block; }
+.sheet-sec .s-signs { margin: 0 0 16px; }
+.sheet-back { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0 10px; }
 /* fiches courtes : détails repliés */
 .s-more { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 8px; }
 .s-more summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; gap: 8px; color: var(--ink); }
