@@ -1502,6 +1502,88 @@ var RokhCode = (function () {
     window.addEventListener("online", upd); window.addEventListener("offline", upd); upd();
   })();
 
+  /* ---------- Trouver une auto-école (owner 08/11/2026) ----------
+     Data: OpenStreetMap contributors (ODbL), refreshed monthly (tools/osm). The list loads when a wilaya is chosen;
+     the map (Leaflet + OSM tiles) only after a tap on "Afficher la carte", so nothing third-party loads before that. */
+  (function aeFinder() {
+    var box = document.getElementById("aeFinder"); if (!box) return;
+    var W = { ar: { pick: "اختر ولايتك لعرض مدارس السياقة.", none: "لا توجد مدرسة سياقة مسجّلة في هذه الولاية بعد.", n: "%n مدرسة سياقة", n1: "مدرسة سياقة واحدة", f: "%f من %n",
+                    call: "اتصال", map: "على الخريطة", net: "تعذّر تحميل القائمة. تحقق من الإنترنت وأعد المحاولة.", load: "جارٍ التحميل…", q: "البلدية أو الاسم", mapBtn: "اعرض الخريطة", mapHide: "أخفِ الخريطة", mapNet: "تعذّر تحميل الخريطة.", noname: "مدرسة سياقة (الاسم غير مُدرج)", nofilter: "لا نتيجة لهذا البحث." },
+             fr: { pick: "Choisissez votre wilaya pour voir les auto-écoles.", none: "Aucune auto-école répertoriée dans cette wilaya pour l'instant.", n: "%n auto-écoles", n1: "1 auto-école", f: "%f sur %n",
+                    call: "Appeler", map: "Sur la carte", net: "Impossible de charger la liste. Vérifiez votre connexion et réessayez.", load: "Chargement…", q: "Commune ou nom", mapBtn: "Afficher la carte", mapHide: "Masquer la carte", mapNet: "Impossible de charger la carte.", noname: "Auto-école (nom non renseigné)", nofilter: "Aucun résultat pour cette recherche." },
+             dz: { pick: "اختار الولاية تاعك باش تشوف الأوطو إيكول.", none: "مازال ما كاين حتى أوطو إيكول مسجّلة في هاد الولاية.", n: "%n أوطو إيكول", n1: "أوطو إيكول وحدة", f: "%f من %n",
+                    call: "عيّط", map: "في الخريطة", net: "ما قدرناش نحمّلو الليستة. شوف الأنترنت وعاود.", load: "راه يحمّل…", q: "البلدية ولا الاسم", mapBtn: "ورّي الخريطة", mapHide: "خبّي الخريطة", mapNet: "ما قدرناش نحمّلو الخريطة.", noname: "أوطو إيكول (الاسم ماكانش)", nofilter: "ما كاين حتى نتيجة." } };
+    var w = function (k) { return W[lang][k]; };
+    var sel = $("#aefW", box), q = $("#aefQ", box), list = $("#aefList", box), cnt = $("#aefCount", box), mapBtn = $("#aefMapBtn", box), mapEl = $("#aefMap", box);
+    var data = null, rows = [], map = null, layer = null, wanting = false;
+    function esc(x) { return String(x == null ? "" : x).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    function opts() { $$("option", sel).forEach(function (o) { var v = o.getAttribute("data-" + lang); if (v) o.textContent = v; }); q.placeholder = w("q"); }
+    function nameOf(s) { return (lang === "fr" ? (s.nf || s.n || s.na) : (s.na || s.n || s.nf)) || w("noname"); }
+    function load(cb) {
+      if (data) return cb();
+      cnt.textContent = w("load");
+      fetch(box.getAttribute("data-src")).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (d) { data = d; cb(); })
+        .catch(function () { cnt.textContent = w("net"); });
+    }
+    function phones(p) { return (p || []).map(function (x) { var tel = x.replace(/[^+\d]/g, ""); return '<a class="btn btn-ghost btn-sm" href="tel:' + esc(tel) + '" dir="ltr">' + esc(x) + "</a>"; }).join(""); }
+    function render() {
+      var code = +sel.value; if (!code) { list.innerHTML = ""; cnt.textContent = w("pick"); mapBtn.hidden = true; return; }
+      var all = data.s.filter(function (s) { return s.wl === code; }), f = (q.value || "").trim().toLowerCase();
+      rows = f ? all.filter(function (s) { return [s.n, s.na, s.nf, s.c, s.s].join(" ").toLowerCase().indexOf(f) >= 0; }) : all;
+      var total = all.length === 1 ? w("n1") : w("n").replace("%n", fmt(all.length));
+      cnt.textContent = !all.length ? w("none") : (f ? (rows.length ? w("f").replace("%f", fmt(rows.length)).replace("%n", total) : w("nofilter")) : total);
+      list.innerHTML = rows.map(function (s, i) {
+        var addr = [s.s, s.c].filter(Boolean).join(" · ");
+        return '<li class="aef-item"><div class="aef-main"><h3>' + esc(nameOf(s)) + "</h3>" + (addr ? '<p class="aef-addr">' + esc(addr) + "</p>" : "") + "</div>" +
+          '<div class="aef-act">' + phones(s.p) + '<button type="button" class="btn btn-ghost btn-sm" data-aef="' + i + '">' + esc(w("map")) + "</button></div></li>";
+      }).join("");
+      mapBtn.hidden = !all.length; mapBtn.textContent = mapEl.hidden ? w("mapBtn") : w("mapHide");
+      if (map) draw();
+    }
+    function css(href) { var l = document.createElement("link"); l.rel = "stylesheet"; l.href = href; document.head.appendChild(l); }
+    function leaflet(cb) {
+      if (window.L && window.L.map) return cb();
+      css("https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css");
+      var sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
+      sc.onload = cb; sc.onerror = function () { cnt.textContent = w("mapNet"); mapEl.hidden = true; mapBtn.textContent = w("mapBtn"); }; document.head.appendChild(sc);
+    }
+    function draw(focus) {
+      if (!layer) return; layer.clearLayers();
+      var pts = rows.map(function (s, i) {
+        var m = window.L.circleMarker([s.la, s.lo], { radius: 8, color: "#0A4F32", weight: 2, fillColor: "#0E6A43", fillOpacity: 0.9 });
+        m.bindPopup("<b>" + esc(nameOf(s)) + "</b>" + (s.c ? "<br>" + esc(s.c) : "") + (s.p && s.p[0] ? '<br><a href="tel:' + esc(s.p[0].replace(/[^+\d]/g, "")) + '" dir="ltr">' + esc(s.p[0]) + "</a>" : ""));
+        m.addTo(layer); m._i = i; return m;
+      });
+      if (focus != null && pts[focus]) { map.setView(pts[focus].getLatLng(), 15); pts[focus].openPopup(); }
+      else if (pts.length) map.fitBounds(window.L.featureGroup(pts).getBounds().pad(0.15), { maxZoom: 14 });
+    }
+    function showMap(focus) {
+      mapEl.hidden = false; mapBtn.textContent = w("mapHide");
+      leaflet(function () {
+        if (!map) {
+          map = window.L.map(mapEl, { scrollWheelZoom: false });
+          map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+          window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
+          layer = window.L.layerGroup().addTo(map); Measure.add("ae_map");
+        }
+        map.invalidateSize(); draw(focus);
+        if (focus != null) mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    }
+    sel.addEventListener("change", function () {
+      try { localStorage.setItem("rokhssati-wilaya", sel.value); } catch (e) {}
+      if (sel.value) Measure.add("ae_w");
+      load(render);
+    });
+    q.addEventListener("input", function () { if (data) render(); });
+    mapBtn.addEventListener("click", function () { if (mapEl.hidden) showMap(); else { mapEl.hidden = true; mapBtn.textContent = w("mapBtn"); } });
+    list.addEventListener("click", function (e) { var b = e.target.closest("[data-aef]"); if (b) showMap(+b.getAttribute("data-aef")); });
+    opts(); cnt.textContent = w("pick");
+    listeners.push(function () { opts(); if (data && sel.value) render(); else cnt.textContent = w("pick"); });
+    var last = null; try { last = localStorage.getItem("rokhssati-wilaya"); } catch (e) {}
+    if (last && sel.querySelector('option[value="' + last + '"]')) { sel.value = last; load(render); }
+  })();
+
   var saved = null;
   try { saved = localStorage.getItem("rokhssati-lang"); } catch (e) {}
   applyLang(saved || "ar");

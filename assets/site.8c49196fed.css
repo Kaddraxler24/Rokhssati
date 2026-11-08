@@ -698,8 +698,8 @@ html.news-open { overflow: hidden; }
 .foot-cols{width:100%;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr)!important}
 @media (max-width:700px){.foot-cols{grid-template-columns:minmax(0,1fr)!important}}
 
-@media (min-width:1241px){.nav-actions{flex-wrap:nowrap}.nav-actions .btn{white-space:nowrap}.mainnav{margin-inline-start:14px;gap:10px}.nav-list>li>a,.nav-btn{padding-inline:9px}}
-@media (min-width:1241px){.nav-list>li>a,.nav-btn{font-size:15px;padding-inline:6px}.nav-actions .btn{padding-inline:12px}.mainnav{gap:8px}.nav-actions{gap:8px}}
+@media (min-width:1241px){.top-row{flex-wrap:nowrap}.nav-actions{flex-wrap:nowrap}.nav-actions .btn{white-space:nowrap}.mainnav{margin-inline-start:14px;gap:10px}.nav-list>li>a,.nav-btn{padding-inline:9px}}
+@media (min-width:1241px){.nav-list>li>a,.nav-btn{font-size:15px;padding-inline:4px}.nav-actions .btn{padding-inline:12px}.mainnav{gap:6px}.nav-actions{gap:8px}}
 
 /* book tests */
 .lt-cards{list-style:none;margin:0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
@@ -910,3 +910,22 @@ html.news-open { overflow: hidden; }
 .aoc-note { margin: 0; font-size: 15px; }
 .app-band h2 { font-size: clamp(26px, 3.4vw, 36px); }
 .app-band .btn-apk.btn-xl { font-size: 21px; padding: 18px 32px; }
+/* trouver une auto-école */
+.aef { display: flex; flex-direction: column; gap: 14px; }
+.aef-bar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+.aef-bar .field select, .aef-bar .field input { font-family: var(--body); font-size: 17px; font-weight: 400; height: auto; min-height: 50px; padding: 10px 14px; border: 1px solid var(--muted); border-radius: 12px; background: var(--bg); color: var(--ink); width: 100%; min-width: 0; box-sizing: border-box; }
+@media (max-width: 640px) { .aef-bar { grid-template-columns: minmax(0, 1fr); } }
+.aef-count { margin: 0; font-weight: 600; }
+#aefMapBtn { align-self: flex-start; }
+.aef-map { height: 380px; border-radius: 16px; border: 1px solid var(--line); overflow: hidden; z-index: 0; }
+.aef-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.aef-item { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.aef-main { min-width: 0; flex: 1 1 240px; }
+.aef-main h3 { margin: 0; font-size: 18px; overflow-wrap: anywhere; }
+.aef-addr { margin: 4px 0 0; font-size: 15px; opacity: .85; overflow-wrap: anywhere; }
+.aef-act { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-sm { min-height: 44px; padding: 8px 14px; font-size: 15px; }
+.aef-src { margin: 0; font-size: 14px; opacity: .85; }
+.aef-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.aef-note { margin: 18px 0 28px; }
+.leaflet-container a.btn { color: inherit; }
