@@ -15,9 +15,14 @@ export async function onRequest({ request, env }) {
   const sig = m.kind === "signal";                           // "report a question" from the trainer: no contact needed
   // phone/e-mail optional (replies go to "Mes messages"), except for driving schools
   if (m.kind === "auto-ecole" && !m.phone && !m.email) { await count(env, "contact_incomplet", request); return out({ ok: false, err: "contact" }, 400); }
+  // "prévenez-moi" list for the Premium release: e-mail only, nothing to pay, no pre-order (kept 12 months like every message)
+  if (m.kind === "premium") {
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m.email)) return out({ ok: false, err: "email" }, 400);
+    m.msg = "Prévenir à la sortie du Premium";
+  }
   if (!m.msg && m.kind !== "auto-ecole") return out({ ok: false, err: "msg" }, 400);
   if (!env.ROKH_KV) return out({ ok: false, err: "store" }, 500);
-  await count(env, "contact_" + (sig ? "signal" : m.kind === "auto-ecole" ? "autoecole" : m.kind === "code" ? "code" : "autre"), request);
+  await count(env, "contact_" + (sig ? "signal" : m.kind === "auto-ecole" ? "autoecole" : m.kind === "code" ? "code" : m.kind === "premium" ? "premium" : "autre"), request);
   m.bx = await bxOf(b.box);                                   // private thread for "Mes messages" (optional)
   await env.ROKH_KV.put("msg:" + m.at + "-" + Math.random().toString(36).slice(2, 8), JSON.stringify(m), { expirationTtl: 365 * 86400 });   // erased after 12 months
   if (m.bx && !sig) await addItem(env, m.bx, { from: "me", text: m.msg || "(" + m.kind + ")", at: m.at });
