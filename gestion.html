@@ -150,7 +150,7 @@ document.getElementById('gs').onclick=function(){
     h+=list('Téléchargements par bouton',srcs,function(x){return SRC[x.s]||x.s},function(x){return x.v});
     var pcs=Object.keys(tot).filter(function(e){return /^dlpc_/.test(e)}).map(function(e){return {s:e.slice(5),v:tot[e]}}).sort(function(a,b){return b.v-a.v});
     if(pcs.length) h+=list('Téléchargements depuis un ordinateur (non installables, non comptés au-dessus)',pcs,function(x){return SRC[x.s]||x.s},function(x){return x.v});
-    var VER={34:'1.4.17',35:'1.4.18',36:'1.4.19',37:'1.4.20',38:'1.4.21',39:'1.4.22',40:'1.4.23'};
+    var VER={34:'1.4.17',35:'1.4.18',36:'1.4.19',37:'1.4.20',38:'1.4.21',39:'1.4.22',40:'1.4.23',41:'1.4.24',42:'1.4.25'};
     var apps=Object.keys(tot).filter(function(e){return /^app_v\d+$/.test(e)}).map(function(e){return {c:+e.slice(5),v:tot[e]}}).sort(function(a,b){return b.c-a.c});
     var vn=function(c){return c==='old'?'ancienne (≤ 1.4.22)':'v'+(VER[c]||('code '+c))};
     var ins=Object.keys(tot).filter(function(e){return /^inst_\d+$/.test(e)}).map(function(e){return {c:e.slice(5),v:tot[e]}});
@@ -158,7 +158,7 @@ document.getElementById('gs').onclick=function(){
     var mj=Object.keys(tot).filter(function(e){return /^maj_[a-z0-9]+_\d+$/.test(e)}).map(function(e){var p=e.split('_');return {f:p[1],t:p[2],v:tot[e]}});
     h+=list('Mises à jour : version d’avant → nouvelle',mj,function(x){return vn(x.f)+' → '+vn(x.t)},function(x){return x.v});
     h+=list('Ouvertures de l’appli par version (avec Internet)',apps,function(x){return 'v'+(VER[x.c]||('code '+x.c))},function(x){return x.v});
-    var kinds=[['code','Question sur un code'],['autoecole','Auto-école'],['autre','Autre sujet'],['signal','Signalement de question'],['incomplet','Formulaire sans téléphone ni e-mail']].map(function(x){return {s:x[1],v:tot['contact_'+x[0]]||0}}).filter(function(x){return x.v});
+    var kinds=[['contact_code','Question ou demande de code (total)'],['code_dem_3j','dont demandes de code d’essai 3 jours'],['code_dem_mois','dont demandes de code d’un mois'],['contact_autoecole','Auto-école'],['contact_autre','Autre sujet'],['contact_signal','Signalement de question'],['contact_incomplet','Formulaire sans téléphone ni e-mail']].map(function(x){return {s:x[1],v:tot[x[0]]||0}}).filter(function(x){return x.v});
     h+=list('Contact par sujet',kinds,function(x){return x.s},function(x){return x.v});
     if(W.ok){h+=list('Pages les plus vues',W.pages,function(x){return x.p},function(x){return x.views});
       h+=list('Pays des visiteurs',W.countries,function(x){return x.c},function(x){return x.visits});

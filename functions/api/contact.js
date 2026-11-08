@@ -12,6 +12,10 @@ export async function onRequest({ request, env }) {
   const m = { kind: cut(b.kind, 20) || "autre", name: cut(b.name, 80), phone: cut(b.phone, 30), email: cut(b.email, 120),
               school: cut(b.school, 120), wilaya: cut(b.wilaya, 60), students: cut(b.students, 20),
               dev: cut(b.dev, 12), lang: cut(b.lang, 4), msg: cut(b.msg, 2000), at: new Date().toISOString() };
+  // "Votre demande" (page Premium / Contact): free codes only (3-day trial, one month for testers / audit / demos), never sold
+  const DEM = { "essai-3j": "Demande : code d'essai 3 jours", "mois": "Demande : code d'un mois (testeur, audit, démo)", "probleme": "Problème avec un code" };
+  const dem = m.kind === "code" ? DEM[cut(b.demande, 20)] : "";
+  if (dem) { m.demande = cut(b.demande, 20); m.msg = dem + (m.msg ? " — " + m.msg : ""); }
   const sig = m.kind === "signal";                           // "report a question" from the trainer: no contact needed
   // phone/e-mail optional (replies go to "Mes messages"), except for driving schools
   if (m.kind === "auto-ecole" && !m.phone && !m.email) { await count(env, "contact_incomplet", request); return out({ ok: false, err: "contact" }, 400); }
@@ -23,6 +27,7 @@ export async function onRequest({ request, env }) {
   if (!m.msg && m.kind !== "auto-ecole") return out({ ok: false, err: "msg" }, 400);
   if (!env.ROKH_KV) return out({ ok: false, err: "store" }, 500);
   await count(env, "contact_" + (sig ? "signal" : m.kind === "auto-ecole" ? "autoecole" : m.kind === "code" ? "code" : m.kind === "premium" ? "premium" : "autre"), request);
+  if (m.demande === "essai-3j" || m.demande === "mois") await count(env, m.demande === "mois" ? "code_dem_mois" : "code_dem_3j", request);
   m.bx = await bxOf(b.box);                                   // private thread for "Mes messages" (optional)
   await env.ROKH_KV.put("msg:" + m.at + "-" + Math.random().toString(36).slice(2, 8), JSON.stringify(m), { expirationTtl: 365 * 86400 });   // erased after 12 months
   if (m.bx && !sig) await addItem(env, m.bx, { from: "me", text: m.msg || "(" + m.kind + ")", at: m.at });

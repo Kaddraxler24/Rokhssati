@@ -572,6 +572,8 @@ html.v-open, html.v-open body { overflow: hidden; }
 html.news-open { overflow: hidden; }
 .news-pop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 16px; background: rgba(10,16,12,.62); }
 .news-pop[hidden] { display: none; }
+.dem-field[hidden], .req[hidden] { display: none !important; }
+.dem-field .muted { margin: 6px 0 0; font-size: .92em; }
 .news-card { position: relative; width: min(520px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: var(--surface); color: var(--ink); border-radius: 18px; padding: 28px 24px 22px; box-shadow: 0 24px 60px rgba(0,0,0,.35); border-top: 8px solid var(--amber); }
 .news-x { position: absolute; top: 10px; inset-inline-end: 10px; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--bg); color: var(--ink); font-size: 24px; line-height: 1; cursor: pointer; }
 .news-tag { display: inline-block; background: var(--amber); color: #2B1D00; font-weight: 800; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; border-radius: 999px; padding: 4px 12px; }

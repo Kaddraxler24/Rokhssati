@@ -759,10 +759,18 @@ var RokhCode = (function () {
     function opts() { $$("option[data-fr]", f).forEach(function (o) { o.textContent = o.getAttribute("data-" + lang) || o.getAttribute("data-fr"); }); }
     opts();
     listeners.push(function () { opts(); if (!m.hidden && m.dataset.k) m.textContent = t(m.dataset.k); });
+    var ks = f.querySelector("select[name=kind]"), dw = f.querySelector(".dem-field");
+    if (ks && dw) { var sync = function () { dw.hidden = ks.value !== "code"; }; ks.addEventListener("change", sync); sync(); }
+    var dsel = f.querySelector("select[name=demande]"), star = f.querySelector(".req");
+    function req() { var free = dsel && !(dw && dw.hidden) && (dsel.value === "essai-3j" || dsel.value === "mois"); if (star) star.hidden = !!free; }
+    if (dsel) dsel.addEventListener("change", req); if (ks) ks.addEventListener("change", req); req();
     f.addEventListener("submit", function (e) {
       e.preventDefault(); if (busy) return;
       var d = { kind: f.getAttribute("data-kind") || "autre", dev: DEV, lang: document.documentElement.lang || "", box: inboxBox(true) };
       Array.prototype.forEach.call(f.elements, function (el) { if (el.name) d[el.name === "message" ? "msg" : el.name] = el.value.trim(); });
+      var dm = f.querySelector("[name=demande]"), dmw = dm && dm.closest(".dem-field"), ta = f.querySelector("[name=message]");
+      if (dm && (d.kind !== "code" || (dmw && dmw.hidden))) delete d.demande;
+      if (ta) ta.required = !(d.demande === "essai-3j" || d.demande === "mois");   // a code request needs no message
       if (!f.checkValidity()) { show("formKo"); return; }
       if (d.kind === "auto-ecole" && !d.phone && !d.email) { show("formKoAE"); return; }   // phone/e-mail optional, except for driving schools
       busy = true; show("cSend");
