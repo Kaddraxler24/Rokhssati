@@ -790,6 +790,7 @@ html.news-open { overflow: hidden; }
 .soon-note { border: 1px solid #E0A43A; background: #FFF6E0; color: #4A3200; border-radius: 12px; padding: 12px 16px; margin: 0 0 18px; line-height: 1.5; }
 [data-theme="dark"] .soon-note { background: #3A2E12; color: #FBE7B5; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .soon-note { background: #3A2E12; color: #FBE7B5; } }
+.code-note { margin: 0 0 14px; font-weight: 600; line-height: 1.5; }
 
 /* Mes messages */
 #messages:has(#inbox[hidden]) { display: none; }
