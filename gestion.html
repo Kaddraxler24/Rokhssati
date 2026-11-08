@@ -150,7 +150,7 @@ document.getElementById('gs').onclick=function(){
     h+=list('Téléchargements par bouton',srcs,function(x){return SRC[x.s]||x.s},function(x){return x.v});
     var pcs=Object.keys(tot).filter(function(e){return /^dlpc_/.test(e)}).map(function(e){return {s:e.slice(5),v:tot[e]}}).sort(function(a,b){return b.v-a.v});
     if(pcs.length) h+=list('Téléchargements depuis un ordinateur (non installables, non comptés au-dessus)',pcs,function(x){return SRC[x.s]||x.s},function(x){return x.v});
-    var VER={34:'1.4.17',35:'1.4.18',36:'1.4.19',37:'1.4.20',38:'1.4.21',39:'1.4.22',40:'1.4.23',41:'1.4.24',42:'1.4.25'};
+    var VER={34:'1.4.17',35:'1.4.18',36:'1.4.19',37:'1.4.20',38:'1.4.21',39:'1.4.22',40:'1.4.23',41:'1.4.24',42:'1.4.25',43:'1.4.26'};
     var apps=Object.keys(tot).filter(function(e){return /^app_v\d+$/.test(e)}).map(function(e){return {c:+e.slice(5),v:tot[e]}}).sort(function(a,b){return b.c-a.c});
     var vn=function(c){return c==='old'?'ancienne (≤ 1.4.22)':'v'+(VER[c]||('code '+c))};
     var ins=Object.keys(tot).filter(function(e){return /^inst_\d+$/.test(e)}).map(function(e){return {c:e.slice(5),v:tot[e]}});
