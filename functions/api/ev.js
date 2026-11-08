@@ -5,7 +5,7 @@
 // or from the owner's browsers (gestion.html switch).
 import { out, preflight } from "../_lib/common.js";
 import { BOT, day } from "../_lib/stats.js";
-const OK = /^(v_new|r1|r7|a1|c_done|ae_w|ae_map|t_start|t_end|e_start|e_end|e_pts|e_tot|co:[a-z0-9-]{2,24}|cd:[a-z0-9-]{2,24}|qko:q[0-9a-f]{6,12})$/;
+const OK = /^(v_new|r1|r7|a1|c_done|ae_w|ae_map|qk_s|qk_e|t_start|t_end|e_start|e_end|e_pts|e_tot|co:[a-z0-9-]{2,24}|cd:[a-z0-9-]{2,24}|qko:q[0-9a-f]{6,12})$/;
 export async function onRequest({ request, env }) {
   if (request.method === "OPTIONS") return preflight("POST");
   if (request.method !== "POST") return out({ ok: false }, 405);
