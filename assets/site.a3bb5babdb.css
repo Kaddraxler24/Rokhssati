@@ -910,6 +910,15 @@ html.news-open { overflow: hidden; }
 .aoc-note { margin: 0; font-size: 15px; }
 .app-band h2 { font-size: clamp(26px, 3.4vw, 36px); }
 .app-band .btn-apk.btn-xl { font-size: 21px; padding: 18px 32px; }
+/* fiches courtes : détails repliés */
+.s-more { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 8px; }
+.s-more summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; gap: 8px; color: var(--ink); }
+.s-more summary { list-style: none; }
+.s-more summary::-webkit-details-marker { display: none; }
+.s-more summary::before { content: "+"; display: inline-block; width: 22px; height: 22px; line-height: 20px; text-align: center; border-radius: 50%; background: var(--soft); color: var(--ink); font-size: 18px; font-weight: 700; }
+.s-more[open] summary::before { content: "−"; }
+.s-more[open] summary { margin-bottom: 4px; }
+.s-more .s-list { font-size: .95em; opacity: .92; }
 /* trouver une auto-école */
 .aef { display: flex; flex-direction: column; gap: 14px; }
 .aef-bar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
@@ -930,4 +939,5 @@ html.news-open { overflow: hidden; }
 .aef-note { margin: 18px 0 28px; }
 .leaflet-container a.btn { color: inherit; }
 @media (min-width:1241px){.top-row{flex-wrap:nowrap}.nav-list>li>a,.nav-btn{padding-inline:4px}.mainnav{gap:6px}}
-body::after{content:'VERSION DE TEST · non publique';position:fixed;inset-inline-start:8px;bottom:8px;z-index:9999;background:#B42318;color:#fff;font:600 12px/1 system-ui,sans-serif;padding:6px 10px;border-radius:999px;pointer-events:none}
+body::after{content:'VERSION DE TEST';position:fixed;inset:0;z-index:9999;pointer-events:none;border:3px solid #B42318;display:flex;justify-content:center;align-items:flex-start;color:#fff;font:700 9px/1 system-ui,sans-serif;letter-spacing:.5px}
+body::before{content:'';position:fixed;top:0;left:50%;width:96px;height:13px;margin-left:-48px;background:#B42318;border-radius:0 0 6px 6px;z-index:9999;pointer-events:none}
