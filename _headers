@@ -30,6 +30,8 @@
   Cache-Control: public, max-age=0, must-revalidate
 /aide
   Cache-Control: public, max-age=0, must-revalidate
+/fiche-distances
+  Cache-Control: public, max-age=0, must-revalidate
 /auto-ecoles
   Cache-Control: public, max-age=0, must-revalidate
 /code-2026
