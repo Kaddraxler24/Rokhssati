@@ -698,8 +698,8 @@ html.news-open { overflow: hidden; }
 .foot-cols{width:100%;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr)!important}
 @media (max-width:700px){.foot-cols{grid-template-columns:minmax(0,1fr)!important}}
 
-@media (min-width:1241px){.top-row{flex-wrap:nowrap}.nav-actions{flex-wrap:nowrap}.nav-actions .btn{white-space:nowrap}.mainnav{margin-inline-start:14px;gap:10px}.nav-list>li>a,.nav-btn{padding-inline:9px}}
-@media (min-width:1241px){.nav-list>li>a,.nav-btn{font-size:15px;padding-inline:4px}.nav-actions .btn{padding-inline:12px}.mainnav{gap:6px}.nav-actions{gap:8px}}
+@media (min-width:1241px){.nav-actions{flex-wrap:nowrap}.nav-actions .btn{white-space:nowrap}.mainnav{margin-inline-start:14px;gap:10px}.nav-list>li>a,.nav-btn{padding-inline:9px}}
+@media (min-width:1241px){.nav-list>li>a,.nav-btn{font-size:15px;padding-inline:6px}.nav-actions .btn{padding-inline:12px}.mainnav{gap:8px}.nav-actions{gap:8px}}
 
 /* book tests */
 .lt-cards{list-style:none;margin:0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
