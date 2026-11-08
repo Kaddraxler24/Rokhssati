@@ -698,6 +698,7 @@ var RokhCode = (function () {
       };
       fetch(TB + "/api/essai?info=1", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
         if (j && j.ok) { tState = j; if (j.now > tmax()) { try { localStorage.setItem("rokhssati-tmax", String(j.now)); } catch (e) {} } } tDraw();
+        if (/[?&]essai=1/.test(location.search) && !tBtn.hidden && !pass()) tBtn.click();   // one tap from the welcome pop-up
       }).catch(tDraw);
       tBtn.addEventListener("click", function () {
         tBtn.disabled = true;
@@ -1384,6 +1385,29 @@ var RokhCode = (function () {
       if (me && a.href.indexOf("me=1") < 0) a.href += (a.href.indexOf("?") < 0 ? "?" : "&") + "me=1";
       setTimeout(guide, 300);
     }, true);
+  })();
+
+  /* app (1.4.24+): offer the 3-day trial once, at the first opening, if places are left and no pass yet */
+  (function () {
+    if (!window.RokhNative || /activer\.html/.test(location.pathname)) return;
+    var K = "rokhssati-trialpop"; try { if (localStorage.getItem(K)) return; } catch (e) { return; }
+    if (pass()) return;
+    fetch("https://rokhssati.com/api/essai?info=1", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
+      if (!j || !(j.left > 0) || pass()) return;
+      try { localStorage.setItem(K, "1"); } catch (e) {}
+      var M = { ar: ["🎁 أيامك الثلاثة من بريميوم تنتظرك", "مجانًا لأول 10 تثبيتات، بقي %n أماكن. بدون رمز وبدون دفع: امتحانات تجريبية، إحصائيات وسجل كامل.", "فعّل أيامي الثلاثة", "لاحقًا"],
+                fr: ["🎁 Tes 3 jours de Premium t'attendent", "Offerts aux 10 premières installations, plus que %n places. Sans code, sans paiement : examens blancs, statistiques et historique complet.", "Activer mes 3 jours", "Plus tard"],
+                dz: ["🎁 الثلاث أيام بريميوم تاعك راهم يستناو", "بلاش للعشرة الأوائل، بقاو %n بلايص. بلا كود وبلا دراهم: امتحانات تجريبية، إحصائيات والسجل كامل.", "فعّل الثلاث أيام تاعي", "من بعد"] };
+      var m = M[lang] || M.fr, ov = document.createElement("div");
+      ov.className = "sg-ov trial-pop"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("dir", lang === "fr" ? "ltr" : "rtl");
+      ov.innerHTML = '<div class="sg-box"><h3></h3><p></p><a class="btn btn-primary btn-xl" href="activer.html?essai=1#trialBox"></a><button type="button" class="btn btn-ghost tp-later"></button></div>';
+      $("h3", ov).textContent = m[0]; $("p", ov).textContent = m[1].replace("%n", j.left); $("a", ov).textContent = m[2]; $(".tp-later", ov).textContent = m[3];
+      ov.addEventListener("click", function (e) { if (e.target === ov || e.target.classList.contains("tp-later")) { ov.remove(); document.documentElement.classList.remove("news-open"); } });
+      (function show() {   // wait until the "what's new" window is closed: one window at a time
+        if (document.documentElement.classList.contains("news-open")) return setTimeout(show, 800);
+        document.getElementById("app").appendChild(ov); document.documentElement.classList.add("news-open");
+      })();
+    }).catch(function () {});
   })();
 
   /* home: launch offer, live count of remaining trial places (functions/api/essai.js?info=1) */

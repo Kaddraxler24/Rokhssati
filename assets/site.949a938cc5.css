@@ -846,6 +846,9 @@ html.news-open { overflow: hidden; }
 .vy-ic svg { width: 40px; height: 40px; }
 .vy-red .vy-ic { color: #FF3B30; } .vy-orange .vy-ic { color: #FFA81C; } .vy-green .vy-ic { color: #34C759; } .vy-blue .vy-ic { color: #3B8BFF; }
 .vy-red { border-inline-start: 4px solid #C8102E; } .vy-orange { border-inline-start: 4px solid #E08A00; } .vy-green { border-inline-start: 4px solid #2E9E4F; } .vy-blue { border-inline-start: 4px solid #1D5FA8; }
+.trial-pop .sg-box { text-align: center; display: grid; gap: 12px; }
+.trial-pop h3 { margin: 0; font-size: 22px; }
+.trial-pop p { margin: 0; }
 .sg-hint { margin: 0 0 12px; padding: 12px 16px; border-radius: 12px; background: #F7D046; color: #15201A; font-weight: 700; font-size: 17px; }
 .sg { cursor: pointer; border-radius: 12px; transition: background .15s; }
 .sg:hover, .sg:focus-visible { background: rgba(14,106,67,.08); outline: none; }
