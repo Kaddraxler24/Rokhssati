@@ -536,15 +536,12 @@ var RokhCode = (function () {
         }
         return DATA.questions.filter(function (q) { return q.theme === th; });
       }
-      /* « Teste-toi en 2 minutes » (owner 08/11/2026): 5 practice questions, one per category, taken from what is free
-         anyway (the first DATA.free questions of each category); Premium draws from the whole bank. Counts as a series. */
+      /* « Teste-toi en 2 minutes » (owner 08/11/2026): always the SAME 5 questions, for everyone (owner: « pas de truc
+         aléatoire qui donne accès à tous »), all already free: the 1st question of 3 themes + the 1st sign + the 1st situation. */
+      var QUICK_TH = ["circulation", "conducteur", "usagers"];
       function quick() {
-        var lim = pass() ? 1e9 : (DATA.free.default || 3), groups = {};
-        DATA.questions.forEach(function (q) { (groups[q.theme] = groups[q.theme] || []).push(q); });
-        var lists = Object.keys(groups).map(function (k) { return groups[k].slice(0, lim); });
-        var head = [signQuestions().slice(0, pass() ? 1e9 : (DATA.free.signs || lim)), DATA.situations.slice(0, pass() ? 1e9 : (DATA.free.situations || lim))];
-        var picked = head.concat(shuffle(lists)).filter(function (l) { return l.length; }).slice(0, 5).map(function (l) { return shuffle(l)[0]; });
-        return shuffle(picked);
+        var first = function (th) { for (var i = 0; i < DATA.questions.length; i++) if (DATA.questions[i].theme === th) return DATA.questions[i]; return null; };
+        return [first(QUICK_TH[0]), signQuestions()[0], first(QUICK_TH[1]), DATA.situations[0], first(QUICK_TH[2])].filter(Boolean);
       }
       /* lot 4 (cahier v2 § 8): mock exam balanced across themes, avoiding the last exams' questions; resumable */
       var EXK = "rokhssati-exam-run", RECENT = "rokhssati-exam-recent";

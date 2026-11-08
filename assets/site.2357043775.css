@@ -889,11 +889,13 @@ html.news-open { overflow: hidden; }
 .hero .wrap { grid-template-columns: minmax(0, 1fr); }   /* single column: every hero block uses the full width */
 .hero .disclaimer { max-width: none; }
 .hero-ctas .btn-xl { flex: 1 1 220px; justify-content: center; }
-.hero-ctas .btn-alt { background: #F2B11B; color: #15201A; border-color: #F2B11B; }
+.hero-ctas .btn-alt { background: var(--line); color: var(--ink); border-color: var(--line); }   /* owner 08/11: grey */
 .hero-quick { margin: 14px 0 0; }
-.hero-quick .btn-quick { display: flex; width: 100%; max-width: 520px; flex-direction: column; align-items: center; gap: 2px; line-height: 1.2; background: #0E6A43; color: #fff; border-color: #0E6A43; }
+.hero-quick .btn-quick { display: flex; width: 100%; box-sizing: border-box; min-height: 0; padding: 12px 18px; flex-direction: column; align-items: center; gap: 2px; line-height: 1.2; background: #0E6A43; color: #fff; border-color: #0E6A43; }
 .hero-quick .btn-quick small { font-size: .74em; font-weight: 600; opacity: .9; }
-.offer-hero { margin: 14px 0 18px; display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 16px; background: linear-gradient(135deg, #F2B11B, #F7D046); color: #15201A; text-decoration: none; box-shadow: 0 8px 24px rgba(242,177,27,.35); border: 2px solid #15201A; }
+.offer-hero { margin: 14px 0 18px; display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 16px; background: #E6E9E4; color: var(--ink); text-decoration: none; box-shadow: none; border: 1px solid var(--line); }   /* owner 08/11: grey */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .offer-hero { background: #252D28; } }
+:root[data-theme="dark"] .offer-hero { background: #252D28; }
 .offer-hero[hidden], .apk-offer-card[hidden] { display: none; }
 .offer-hero:hover { transform: translateY(-1px); }
 .oh-gift { font-size: 40px; line-height: 1; animation: oh-pop 2.4s ease-in-out infinite; }
@@ -902,9 +904,11 @@ html.news-open { overflow: hidden; }
 .oh-txt { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .oh-txt b { font-size: 22px; line-height: 1.2; }
 .oh-left { display: inline-block; margin-top: 4px; font-weight: 800; color: #C8102E; }
-.oh-go { font-weight: 800; white-space: nowrap; background: #15201A; color: #F7D046; padding: 10px 14px; border-radius: 10px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .offer-hero .oh-left { color: #FF8A8A; } }
+:root[data-theme="dark"] .offer-hero .oh-left { color: #FF8A8A; }
+.oh-go { font-weight: 800; white-space: nowrap; background: var(--ink); color: var(--surface); padding: 10px 14px; border-radius: 10px; }
 @media (max-width: 520px) { .offer-hero { flex-wrap: wrap; } .oh-go { flex-basis: 100%; text-align: center; } .oh-txt b { font-size: 20px; } }
-.apk-offer-card { flex-basis: 100%; background: #F7D046; color: #15201A; border-radius: 16px; padding: 18px 20px; border: 2px solid #15201A; }
+.apk-offer-card { flex-basis: 100%; background: #F6E3A1; color: #15201A; border-radius: 16px; padding: 18px 20px; border: 2px solid #15201A; }
 .apk-offer-card p, .apk-offer-card li { color: #15201A !important; }
 .apk-offer-card .oh-left { color: #C8102E !important; }
 .aoc-title { font-size: 22px; font-weight: 800; margin: 0 0 8px; }
