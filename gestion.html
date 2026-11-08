@@ -96,7 +96,7 @@ document.getElementById('gm').onclick=function(){
 /* ---------- statistiques ---------- */
 function n(x){return (x||0).toLocaleString('fr-FR')}
 function sum(o,re){var t=0;for(var k in o)if(re.test(k))t+=o[k];return t}
-var SRC={popup:'Fenêtre « Nouveauté »',page:'Section Android (accueil)',autre:'Autre lien'};
+var SRC={popup:'Fenêtre « Nouveauté » (direct)',page:'Section Android (direct)',apkpure:'APKPure · section Android',apkpurepop:'APKPure · fenêtre « Nouveauté »',autre:'Autre lien'};
 // ---- product measurement (functions/api/ev.js): funnel, retention, engagement, weak chapters/questions
 var NAMES=null;
 function names(){if(NAMES)return Promise.resolve(NAMES);return fetch(BASE+'/entrainement.html',{cache:'no-store'}).then(function(r){return r.text()}).then(function(t){var d=new DOMParser().parseFromString(t,'text/html'),q={},c={};try{JSON.parse(d.getElementById('quizData').textContent).questions.forEach(function(x){if(x.id)q[x.id]=x.fr.q})}catch(e){}try{JSON.parse(d.getElementById('courseIndex').textContent).forEach(function(th){th.chapters.forEach(function(ch){c[ch.id]=th.name.fr+' · '+ch.t.fr})})}catch(e){}NAMES={q:q,c:c};return NAMES}).catch(function(){return {q:{},c:{}}})}

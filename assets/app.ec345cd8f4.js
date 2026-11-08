@@ -1409,6 +1409,7 @@ var RokhCode = (function () {
       var a = e.target.closest && e.target.closest('a[href*="api/dl"]'); if (!a) return;
       var me = false; try { me = localStorage.getItem("rokhssati-notrack") === "1"; } catch (x) {}
       if (me && a.href.indexOf("me=1") < 0) a.href += (a.href.indexOf("?") < 0 ? "?" : "&") + "me=1";
+      if (a.href.indexOf("to=apkpure") >= 0) return;   // APKPure page: its own install flow, no guide
       setTimeout(guide, 300);
     }, true);
   })();
