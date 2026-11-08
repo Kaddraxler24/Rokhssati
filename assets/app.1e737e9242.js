@@ -390,7 +390,7 @@ var RokhCode = (function () {
         b.setAttribute("aria-pressed", String(picked === i));
         b.addEventListener("click", function () {
           if (!exam && picked !== null) return;
-          if (!begun && meta.track) { begun = true; Measure.add(exam ? "e_start" : "t_start"); }
+          if (!begun && meta.track) { begun = true; Measure.add(exam ? "e_start" : "t_start"); if (meta.quick) Measure.add("qk_s"); }
           picked = i; if (!exam) { answers[idx] = i; if (meta.track) Track.answer(q.id, i === q.ok, q.theme); } render();
           if (!exam) els.next.focus();
         });
@@ -414,6 +414,7 @@ var RokhCode = (function () {
         recorded = true;
         if (exam) questions.forEach(function (q, i) { if (answers[i] !== undefined) Track.answer(q.id, answers[i] === q.ok, q.theme); });
         Track.test(exam ? "exam" : "train", meta.theme, score, questions.length);
+        if (meta.quick) Measure.add("qk_e");
         if (meta.onDone) meta.onDone();
       }
       els.num.textContent = score + " / " + questions.length;
@@ -526,6 +527,7 @@ var RokhCode = (function () {
       function pool(th) {
         if (th === "signs") return signQuestions();
         if (th === "situations") return DATA.situations.slice();
+        if (th === "rapide") return quick();
         if (th === "favs") { var fv = Track.favs(); return DATA.questions.concat(DATA.situations, signQuestions()).filter(function (q) { return fv[q.id]; }); }
         if (th === "all") return DATA.questions.concat(DATA.situations);
         if (th === "errors") {
@@ -533,6 +535,16 @@ var RokhCode = (function () {
           return DATA.questions.concat(DATA.situations, signQuestions()).filter(function (q) { return errs[q.id]; });
         }
         return DATA.questions.filter(function (q) { return q.theme === th; });
+      }
+      /* « Teste-toi en 2 minutes » (owner 08/11/2026): 5 practice questions, one per category, taken from what is free
+         anyway (the first DATA.free questions of each category); Premium draws from the whole bank. Counts as a series. */
+      function quick() {
+        var lim = pass() ? 1e9 : (DATA.free.default || 3), groups = {};
+        DATA.questions.forEach(function (q) { (groups[q.theme] = groups[q.theme] || []).push(q); });
+        var lists = Object.keys(groups).map(function (k) { return groups[k].slice(0, lim); });
+        var head = [signQuestions().slice(0, pass() ? 1e9 : (DATA.free.signs || lim)), DATA.situations.slice(0, pass() ? 1e9 : (DATA.free.situations || lim))];
+        var picked = head.concat(shuffle(lists)).filter(function (l) { return l.length; }).slice(0, 5).map(function (l) { return shuffle(l)[0]; });
+        return shuffle(picked);
       }
       /* lot 4 (cahier v2 § 8): mock exam balanced across themes, avoiding the last exams' questions; resumable */
       var EXK = "rokhssati-exam-run", RECENT = "rokhssati-exam-recent";
@@ -613,18 +625,20 @@ var RokhCode = (function () {
         if (current) current.kill();
         var th = sel.value;
         var exam = (modes.filter(function (m) { return m.checked; })[0] || {}).value === "exam";
+        if (th === "rapide" && exam) { exam = false; var pr = $("#modePractice"); if (pr) pr.checked = true; }
         var qs = pool(th);
         if (exam || th === "signs" || th === "all" || th === "errors" || th === "favs") qs = shuffle(qs);
         var premium = !!pass(), limit = DATA.free[th] || DATA.free.default, msg = "";
         if (!premium && exam) { qs = []; msg = t("lockExam"); }
         else if (th === "favs" && !qs.length) msg = t("favEmpty");
+        else if (th === "rapide") { /* already limited to the free questions (quick()) */ }
         else if (!premium && th !== "favs") {
           // free (owner 07/11/2026): a short trial, always the same `limit` questions per category, in a random order
           var fixed = pool(th).slice(0, limit);
           if (pool(th).length > limit) msg = t("lockMore").replace("%n", limit);
           qs = shuffle(fixed);
         }
-        var meta = { track: true, theme: th };
+        var meta = { track: true, theme: th, quick: th === "rapide" };
         if (exam && premium) { qs = buildExam(th, 30).map(mix); meta = examMeta(th, qs, null); lsW(EXK, null); resumeBox.hidden = true; }
         else { if (exam) qs = qs.slice(0, 30); qs = qs.map(mix); }
         lockBox.hidden = !msg; $(".lock-msg", lockBox).textContent = msg;
@@ -791,7 +805,7 @@ var RokhCode = (function () {
           start: "ابدأ الدرس", resume: "واصل الدرس", review: "راجع من البداية", readOf: "%a من %b فصول منتهية", cont: "واصل: %t", startCourse: "ابدأ الدروس",
           k_ch: "فصول منتهية", k_tests: "اختبارات", k_avg: "المعدل", k_best: "أفضل نتيجة", k_err: "أخطاء للمراجعة", histEmpty: "لم تجر أي اختبار بعد. ابدأ سلسلة من صفحة التدريب.",
           h_date: "التاريخ", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
-          all: "كل المحاور", custom: "امتحان مخصّص", favs: "مفضلتي", signs: "الإشارات", situations: "ترتيب المرور", errors: "أخطائي", reset: "مسح كل التقدم", resetSure: "متأكد؟ اضغط مرة أخرى",
+          all: "كل المحاور", rapide: "اختبار دقيقتين", custom: "امتحان مخصّص", favs: "مفضلتي", signs: "الإشارات", situations: "ترتيب المرور", errors: "أخطائي", reset: "مسح كل التقدم", resetSure: "متأكد؟ اضغط مرة أخرى",
           noErr: "لا توجد أخطاء للمراجعة.", days: ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "أنهيت هذا المحور!", thDoneTxt: "اختبر نفسك الآن على أسئلته.", thFree: "3 أسئلة تجريبية مجانية؛ كل الأسئلة والامتحانات التجريبية في البريميوم، متوفر قريبًا.",
           wk_t: "نقاط الضعف", wk_none: "أجب على 5 أسئلة على الأقل في محور لنحلّل نتائجك.", wk_rev: "راجع الدرس", wk_tr: "تدرّب", wk_q: "أجوبة", wk_free: "النسخة المجانية: المحور الأضعف فقط. تحليل كل المحاور في البريميوم، متوفر قريبًا.", wk_first: "للمراجعة أولًا", k_more: "إحصائيات مفصّلة", prem: "بريميوم (قريبًا)", bkCopied: "تم نسخ الرمز. احفظه في مكان آمن (رسالة لنفسك مثلًا).", bkSure: "سيُستبدل تقدمك الحالي. اضغط مرة أخرى للتأكيد.", bkOk: "تم استرجاع تقدمك.", bkBad: "هذا الرمز غير صالح. انسخه كاملًا.", histFree: "النسخة المجانية: آخر 3 نتائج فقط. السجل الكامل والمعدل وأفضل نتيجة في البريميوم، متوفر قريبًا." },
     fr: { prev: "Précédent", next: "Suivant", finish: "Terminer le chapitre", check: "Vérifier", done: "Chapitre terminé !", doneTxt: "Bravo. Vous pouvez passer au chapitre suivant.",
@@ -799,7 +813,7 @@ var RokhCode = (function () {
           start: "Commencer le cours", resume: "Reprendre le cours", review: "Revoir depuis le début", readOf: "%a sur %b chapitres terminés", cont: "Reprendre : %t", startCourse: "Commencer les cours",
           k_ch: "Chapitres terminés", k_tests: "Tests passés", k_avg: "Moyenne", k_best: "Meilleur score", k_err: "Erreurs à revoir", histEmpty: "Aucun test pour l'instant. Lancez une série depuis la page Entraînement.",
           h_date: "Date", h_type: "Type", h_theme: "Thème", h_score: "Score", t_train: "Entraînement", t_exam: "Examen blanc", t_livre: "Test du livre",
-          all: "Tous les thèmes", custom: "Examen personnalisé", favs: "Mes favoris", signs: "Panneaux", situations: "Ordre de passage", errors: "Mes erreurs", reset: "Effacer ma progression", resetSure: "Sûr ? Cliquez encore",
+          all: "Tous les thèmes", rapide: "Test 2 minutes", custom: "Examen personnalisé", favs: "Mes favoris", signs: "Panneaux", situations: "Ordre de passage", errors: "Mes erreurs", reset: "Effacer ma progression", resetSure: "Sûr ? Cliquez encore",
           noErr: "Aucune erreur à revoir.", days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"], step: "Fiche", thDone: "Thème terminé !", thDoneTxt: "Testez-vous maintenant sur ses questions.", thFree: "3 questions d'essai gratuites ; toutes les questions et les examens blancs avec le Premium, prochainement disponible.",
           wk_t: "Points faibles", wk_none: "Répondez à au moins 5 questions d'un thème pour que nous analysions vos résultats.", wk_rev: "Revoir le cours", wk_tr: "S'entraîner", wk_q: "réponses", wk_free: "Version gratuite : seulement le thème le plus faible. L'analyse de tous les thèmes avec le Premium, prochainement disponible.", wk_first: "À revoir en priorité", k_more: "Statistiques détaillées", prem: "Premium (bientôt)", bkCopied: "Code copié. Gardez-le en lieu sûr (par exemple dans un message à vous-même).", bkSure: "Votre progression actuelle sera remplacée. Touchez encore pour confirmer.", bkOk: "Progression restaurée.", bkBad: "Ce code n'est pas valide. Copiez-le en entier.", histFree: "Version gratuite : seulement les 3 derniers résultats. Historique complet, moyenne et meilleur score avec le Premium, prochainement disponible." },
     dz: { prev: "اللي قبل", next: "اللي بعد", finish: "كمّل الفصل", check: "شوف", done: "كملت الفصل!", doneTxt: "برافو. تقدر تفوت للفصل اللي جاي.",
@@ -807,7 +821,7 @@ var RokhCode = (function () {
           start: "ابدا الدرس", resume: "كمّل الدرس", review: "عاود من الأول", readOf: "%a من %b فصول كملتهم", cont: "كمّل: %t", startCourse: "ابدا الدروس",
           k_ch: "فصول كملتهم", k_tests: "الاختبارات", k_avg: "المعدل", k_best: "أحسن نتيجة", k_err: "غلطات تعاودهم", histEmpty: "مازال ما درت حتى اختبار. ابدا سلسلة من صفحة التدريب.",
           h_date: "النهار", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
-          all: "كامل المحاور", custom: "امتحان على كيفك", favs: "المفضلة تاعي", signs: "البانوات", situations: "شكون يفوت الأول", errors: "الغلطات تاعي", reset: "امسح كلش", resetSure: "متأكد؟ اضغط مرة أخرى",
+          all: "كامل المحاور", rapide: "تيست دقيقتين", custom: "امتحان على كيفك", favs: "المفضلة تاعي", signs: "البانوات", situations: "شكون يفوت الأول", errors: "الغلطات تاعي", reset: "امسح كلش", resetSure: "متأكد؟ اضغط مرة أخرى",
           noErr: "ما كانش غلطات تعاودهم.", days: ["حد", "تنين", "ثلاث", "ربع", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "كمّلت هاد المحور!", thDoneTxt: "جرّب روحك دروك على الأسئلة تاعو.", thFree: "3 أسئلة بلاش باش تجرّب؛ كامل الأسئلة والامتحانات في البريميوم، جاي قريب.",
           wk_t: "النقاط الضعيفة", wk_none: "جاوب على 5 أسئلة على الأقل في محور باش نحلّلو النتائج تاعك.", wk_rev: "عاود الدرس", wk_tr: "تدرّب", wk_q: "أجوبة", wk_free: "النسخة بلاش: غير المحور الأضعف. تحليل كامل المحاور في البريميوم، جاي قريب.", wk_first: "راجعو قبل", k_more: "إحصائيات مفصّلة", prem: "بريميوم (قريب)", bkCopied: "الكود تنسخ. خبّيه في بلاصة آمنة (ميساج لروحك مثلًا).", bkSure: "التقدم تاعك دروك راح يتبدّل. اضغط مرة أخرى باش تأكد.", bkOk: "التقدم تاعك رجع.", bkBad: "هاد الكود ماشي صحيح. انسخو كامل.", histFree: "النسخة بلاش: غير آخر 3 نتائج. السجل كامل والمعدل وأحسن نتيجة في البريميوم، جاي قريب." }
   };

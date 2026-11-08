@@ -118,6 +118,7 @@ function product(P,tot){
     ['Score moyen aux examens',g('e_tot')?Math.round(100*g('e_pts')/g('e_tot'))+' %':'–','sur '+n(g('e_end'))+' examen(s)'],
     ['Téléchargement → installation',pct(inst,dl),n(inst)+' / '+n(dl)+' · objectif > 30 %'],
     ['Chapitres terminés',n(g('c_done')),'au total'],
+    ['Tests « 2 minutes » terminés',n(g('qk_e')),n(g('qk_s'))+' commencé(s)'],
     ['Recherches d’auto-école',n(g('ae_w')),n(g('ae_map'))+' carte(s) affichée(s)']
   ].map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small></div>'}).join('')+'</div>';
   var ch=Object.keys(T).filter(function(k){return /^co:/.test(k)&&T[k]>=3}).map(function(k){var id=k.slice(3),o=T[k],d=T['cd:'+id]||0;return {id:id,o:o,d:d,a:1-d/o}}).sort(function(a,b){return b.a-a.a||b.o-a.o}).slice(0,10);
@@ -132,7 +133,7 @@ document.getElementById('gs').onclick=function(){
   var days=document.getElementById('per').value;
   fetch(BASE+'/api/stats?days='+days,{headers:{'x-admin-key':k.value},cache:'no-store'}).then(rd).then(function(j){
     if(!j.ok){msg.className='err';msg.textContent=j.err==='key'?'Clé admin incorrecte.':'Erreur : '+j.err;out.innerHTML='';return}
-    msg.textContent='Du '+new Date(j.from).toLocaleDateString('fr-FR')+' au '+new Date(j.to).toLocaleDateString('fr-FR');
+    msg.textContent='Du '+new Date(j.from).toLocaleDateString('fr-FR')+' au '+new Date(j.to).toLocaleDateString('fr-FR')+(j.web&&j.web.ok?(j.web.src==='all'?' · visites : toutes les entrées Web Analytics de rokhssati.com':' · visites : une seule entrée Web Analytics (CF_SITE_TAG)'):'');
     var E=j.events||{},W=j.web||{},rows={},tot={},today=j.to,d7=new Date(Date.parse(j.to)-6*864e5).toISOString().slice(0,10);
     Object.keys(E).forEach(function(d){rows[d]=rows[d]||{};for(var e in E[d]){rows[d][e]=E[d][e];tot[e]=(tot[e]||0)+E[d][e]}});
     (W.days||[]).forEach(function(x){rows[x.d]=rows[x.d]||{};rows[x.d].visits=x.visits;rows[x.d].views=x.views;tot.visits=(tot.visits||0)+x.visits;tot.views=(tot.views||0)+x.views});
@@ -167,5 +168,5 @@ document.getElementById('gs').onclick=function(){
     out.innerHTML=h+'<p class="muted">Compteurs sans cookie ni donnée personnelle. Robots et aperçus de liens (WhatsApp, Facebook…) exclus. Jours à l’heure d’Algérie.</p>';
   }).catch(function(){msg.className='err';msg.textContent='Pas de réponse (connexion). Ouvrez la page dans Chrome : rokhssati.com/gestion.html'});
 };
-</script><script>(function(){var b=document.getElementById("nt");function r(){var on=false;try{on=localStorage.getItem("rokhssati-notrack")==="1"}catch(e){}b.textContent=on?"✅ Ce navigateur n'est pas compté (réactiver)":"Ne pas compter ce navigateur";}b.onclick=function(){try{if(localStorage.getItem("rokhssati-notrack")==="1")localStorage.removeItem("rokhssati-notrack");else localStorage.setItem("rokhssati-notrack","1")}catch(e){}r()};r();})();</script>
+</script><script>(function(){var b=document.getElementById("nt");function r(){var on=false;try{on=localStorage.getItem("rokhssati-notrack")==="1"}catch(e){}b.textContent=on?"✅ Ce navigateur n'est pas compté (réactiver)":"Ne pas compter ce navigateur";}b.onclick=function(){try{if(localStorage.getItem("rokhssati-notrack")==="1")localStorage.removeItem("rokhssati-notrack");else localStorage.setItem("rokhssati-notrack","1")}catch(e){}r()};r();})();</script><script>/* Does Cloudflare inject its own Web Analytics beacon? gestion.html has none of its own, so any beacon here comes from Cloudflare. */window.addEventListener("load",function(){setTimeout(function(){var inj=!!document.querySelector('script[src*="cloudflareinsights"]')||performance.getEntriesByType("resource").some(function(e){return /cloudflareinsights/.test(e.name)});var p=document.createElement("p");p.id="cfinj";p.style.cssText="margin:8px 0 0;font-size:.92em";p.textContent=inj?"⚠️ Cloudflare ajoute lui-même sa mesure de visites à chaque page : le bouton ci-dessus n'exclut pas vos visites des « Visites » et « Pages vues » (il exclut bien téléchargements, essais, entonnoir).":"Mesure Cloudflare : pas ajoutée par Cloudflare. Avec le bouton activé, ce navigateur n'est pas compté dans les visites ; vos autres navigateurs et appareils (ordinateur, onglet privé) le sont.";var c=document.querySelector(".ctl");c.parentNode.insertBefore(p,c.nextSibling)},2500)});</script>
 </main></body></html>
