@@ -929,3 +929,5 @@ html.news-open { overflow: hidden; }
 .aef-cta { display: flex; flex-wrap: wrap; gap: 12px; }
 .aef-note { margin: 18px 0 28px; }
 .leaflet-container a.btn { color: inherit; }
+@media (min-width:1241px){.top-row{flex-wrap:nowrap}.nav-list>li>a,.nav-btn{padding-inline:4px}.mainnav{gap:6px}}
+body::after{content:'VERSION DE TEST · non publique';position:fixed;inset-inline-start:8px;bottom:8px;z-index:9999;background:#B42318;color:#fff;font:600 12px/1 system-ui,sans-serif;padding:6px 10px;border-radius:999px;pointer-events:none}
