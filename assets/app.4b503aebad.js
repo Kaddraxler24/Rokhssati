@@ -389,6 +389,7 @@ var RokhCode = (function () {
     var sigBox = null;
     if (meta.track && els.fb) {
       var wrapApi = root.closest("[data-api]"), sigApi = []; try { sigApi = JSON.parse(wrapApi ? wrapApi.getAttribute("data-api") : "[]"); } catch (e) {}
+      $$(".q-sig", els.fb).forEach(function (o) { o.remove(); });   /* Quiz() is re-run on the same box (theme, restart): keep a single report link */
       sigBox = document.createElement("div"); sigBox.className = "q-sig";
       sigBox.innerHTML = '<button type="button" class="q-sig-btn"></button><div class="q-sig-form" hidden><label></label><select></select><textarea rows="2"></textarea><button type="button" class="btn btn-ghost q-sig-send"></button></div><p class="q-sig-msg muted" hidden></p>';
       els.fb.appendChild(sigBox);
