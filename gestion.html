@@ -26,6 +26,9 @@ button:hover{border-color:var(--sign)}
 .kpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
 .kpi b{display:block;font:700 34px/1.1 "Barlow Condensed",Arial,sans-serif;font-variant-numeric:tabular-nums}
 .kpi span{color:var(--muted);font-size:14px}.kpi small{display:block;color:var(--sign);margin-top:4px;font-size:13px}
+.chart{width:100%;height:auto;display:block;margin:8px 0 4px}.legend{display:flex;gap:16px;font-size:13px;color:var(--muted)}.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-inline-end:6px;vertical-align:-1px}
+.hb{display:grid;grid-template-columns:minmax(120px,38%) 1fr auto;gap:6px 10px;align-items:center;font-size:14px;margin:8px 0}.hb .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hb .b{height:12px;border-radius:999px;background:var(--sign)}.hb .b.alt{background:#F0B323}.hb .v{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px;text-align:end}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}.flow>div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}.flow h3{margin:0 0 6px;font-size:15px}
 .bar{display:inline-block;height:10px;background:var(--sign);border-radius:999px;vertical-align:middle;margin-inline-end:8px}
 .note{background:var(--amber-soft);border:1px solid var(--amber);border-radius:12px;padding:12px 14px;margin-top:14px}
 table{border-collapse:separate;border-spacing:0;margin-top:12px;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
@@ -128,6 +131,46 @@ function product(P,tot){
   setTimeout(function(){names().then(function(N){[].forEach.call(document.querySelectorAll('[data-q]'),function(td){var t=N.q[td.dataset.q];if(t)td.textContent=t});[].forEach.call(document.querySelectorAll('[data-c]'),function(td){var t=N.c[td.dataset.c];if(t)td.textContent=t})})},0);
   return h;
 }
+
+// ---- parcours anonyme (09/11/2026) : ss_web/ss_app, en:, pv:, nv:A>B, t5: (tranches de 5 s). Aucun identifiant.
+var PN={'index':'Accueil','entrainement':'Entraînement','code-de-la-route':'Cours (sommaire)','panneaux':'Panneaux','progression':'Progression','activer':'Premium / activer','contact':'Contact','aide':'Aide','permis':'Permis','auto-ecoles':'Auto-écoles (offre)','trouver-auto-ecole':'Trouver une auto-école','tests-livre':'Tests du livre','confidentialite':'Confidentialité','sources':'Sources','conseils':'Conseils','fiche-distances':'Fiche distances','creneau':'Le créneau','code-2026':'Code 2026','404':'Page introuvable'};
+function pn(k){if(PN[k])return PN[k];var m=/^theme-(.+)$/.exec(k);if(m)return 'Cours · '+m[1].charAt(0).toUpperCase()+m[1].slice(1);m=/^test-livre-(\d+)$/.exec(k);if(m)return 'Test du livre '+(+m[1]);return k}
+function hbars(rows,alt){var mx=Math.max.apply(null,rows.map(function(r){return r[1]}).concat([1]));return '<div class="hb">'+rows.map(function(r){return '<span class="t" title="'+esc(r[0])+'">'+esc(r[0])+'</span><span><span class="b'+(alt?' alt':'')+'" style="display:block;width:'+Math.max(2,Math.round(100*r[1]/mx))+'%"></span></span><span class="v">'+r[2]+'</span>'}).join('')+'</div>'}
+function dayChart(P){
+  var ds=Object.keys(P).sort();if(!ds.length)return '';
+  var W=720,H=180,pl=34,pb=24,pt=10,bw=(W-pl-8)/ds.length,mx=1;
+  ds.forEach(function(d){mx=Math.max(mx,(P[d].ss_web||0)+(P[d].ss_app||0))});
+  var step=Math.pow(10,Math.floor(Math.log10(mx)));if(mx/step<3)step/=2;var top=Math.ceil(mx/step)*step||1;
+  var y=function(v){return pt+(H-pt-pb)*(1-v/top)},g='';
+  for(var v=0;v<=top;v+=step)g+='<line x1="'+pl+'" x2="'+W+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="currentColor" stroke-opacity=".12"/><text x="'+(pl-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".6">'+v+'</text>';
+  ds.forEach(function(d,i){var w=P[d].ss_web||0,a=P[d].ss_app||0,x=pl+i*bw+bw*.15,bwi=Math.max(2,bw*.7);
+    g+='<rect x="'+x+'" y="'+y(w)+'" width="'+bwi+'" height="'+(y(0)-y(w))+'" fill="#0E6A43" rx="2"><title>'+d+' · site : '+w+'</title></rect>';
+    g+='<rect x="'+x+'" y="'+y(w+a)+'" width="'+bwi+'" height="'+(y(w)-y(w+a))+'" fill="#F0B323" rx="2"><title>'+d+' · appli : '+a+'</title></rect>';
+    if(ds.length<=16||i%Math.ceil(ds.length/12)===0)g+='<text x="'+(x+bwi/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".6">'+d.slice(8)+'/'+d.slice(5,7)+'</text>'});
+  return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Sessions par jour">'+g+'</svg><div class="legend"><span><i style="background:#0E6A43"></i>Site</span><span><i style="background:#F0B323"></i>Appli</span></div>';
+}
+function parcours(P){
+  var T={};Object.keys(P).forEach(function(d){for(var e in P[d])T[e]=(T[e]||0)+P[d][e]});
+  var g=function(k){return T[k]||0},ss=g('ss_web')+g('ss_app');
+  var h='<h2>Parcours</h2>';
+  if(!ss)return h+'<div class="note">Pas encore de données : le suivi anonyme des parcours démarre avec cette mise à jour (09/11/2026). Rien n’identifie un visiteur : seulement des compteurs par jour.</div>';
+  var pv={},en={},t5={},out={},tr=[];
+  for(var k in T){var m;if(m=/^pv:(.+)$/.exec(k))pv[m[1]]=T[k];else if(m=/^en:(.+)$/.exec(k))en[m[1]]=T[k];else if(m=/^t5:(.+)$/.exec(k))t5[m[1]]=T[k];else if(m=/^nv:(.+)>(.+)$/.exec(k)){tr.push([m[1],m[2],T[k]]);out[m[1]]=(out[m[1]]||0)+T[k]}}
+  var pvT=0;for(k in pv)pvT+=pv[k];
+  var tm=0;for(k in t5)tm+=t5[k]*5;
+  h+='<div class="kpis">'+[['Sessions',n(ss),n(g('ss_web'))+' site · '+n(g('ss_app'))+' appli'],['Écrans vus',n(pvT),(pvT/ss).toFixed(1).replace('.',',')+' par session'],['Temps moyen par session',ss?String(Math.round(tm/ss/60*10)/10).replace('.',',')+' min':'–','temps visible à l’écran'],['Arrivée la plus fréquente',(function(){var b=Object.keys(en).sort(function(a,c){return en[c]-en[a]})[0];return b?esc(pn(b)):'–'})(),'premier écran des sessions']].map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small></div>'}).join('')+'</div>';
+  h+='<h3>Sessions par jour</h3>'+dayChart(P);
+  var pages=Object.keys(pv).sort(function(a,b){return pv[b]-pv[a]}).slice(0,15);
+  h+='<h3>Écrans les plus vus</h3>'+hbars(pages.map(function(p){var ex=Math.max(0,pv[p]-(out[p]||0)),t=t5[p]?Math.round(t5[p]*5/pv[p]):0;return [pn(p),pv[p],n(pv[p])+' · '+(t>=60?Math.floor(t/60)+' min '+(t%60)+' s':t+' s')+' · sortie '+pct(ex,pv[p])]}));
+  h+='<p class="muted">Temps = moyenne par écran vu. Sortie = part des vues après lesquelles la session s’arrête (ou change d’appli).</p>';
+  var ent=Object.keys(en).sort(function(a,b){return en[b]-en[a]}).slice(0,8);
+  h+='<h3>Par où ils arrivent</h3>'+hbars(ent.map(function(p){return [pn(p),en[p],n(en[p])+' · '+pct(en[p],ss)]}),true);
+  tr.sort(function(a,b){return b[2]-a[2]});
+  h+='<h3>Enchaînements les plus fréquents</h3>'+hbars(tr.slice(0,15).map(function(x){return [pn(x[0])+' → '+pn(x[1]),x[2],n(x[2])]}));
+  var hubs=pages.slice(0,4);
+  h+='<h3>Après ces écrans, où vont-ils ?</h3><div class="flow">'+hubs.map(function(p){var nx=tr.filter(function(x){return x[0]===p}).slice(0,5),ex=Math.max(0,pv[p]-(out[p]||0));var rows=nx.map(function(x){return [pn(x[1]),x[2],pct(x[2],pv[p])]});rows.push(['Fin de session',ex,pct(ex,pv[p])]);rows.sort(function(a,b){return b[1]-a[1]});return '<div><h3>'+esc(pn(p))+'</h3>'+hbars(rows)+'</div>'}).join('')+'</div>';
+  return h;
+}
 document.getElementById('gs').onclick=function(){
   msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
   var days=document.getElementById('per').value;
@@ -141,6 +184,7 @@ document.getElementById('gs').onclick=function(){
     var K=[['Visites',/^visits$/],['Pages vues',/^views$/],['Téléchargements de l’appli (téléphones Android)',/^dl_/],['Messages envoyés',/^contact_(code|autoecole|autre)$/],['Inscrits « prévenez-moi » Premium',/^contact_premium$/],['Tentatives de contact',/^contact_try$/],['Codes activés',/^act_ok$/],['Essais gratuits offerts (max 10)',/^essai_ok$/]];
     var h='<div class="kpis">'+K.map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+n(per(x[1],'0'))+'</b><small>7 j : '+n(per(x[1],d7))+' · aujourd’hui : '+n(per(x[1],today))+'</small></div>'}).join('')+'</div>';
     h+=product(j.product||{},tot);
+    h+=parcours(j.product||{});
     if(!W.ok)h+='<div class="note"><b>Visites et pages vues non branchées.</b> '+(W.err==='not_configured'?'Elles sont mesurées par Cloudflare Web Analytics (dashboard Cloudflare → Analytics &amp; Logs → Web Analytics). Pour les voir ici, ajoutez CF_API_TOKEN, CF_ACCOUNT_ID et CF_SITE_TAG dans Cloudflare Pages → Settings → Variables and Secrets, puis redéployez.':'Erreur Cloudflare : '+esc(W.err))+'</div>';
     var ds=Object.keys(rows).sort().reverse();
     h+='<h2>Jour par jour</h2><table><tr><th>Jour</th><th>Visites</th><th>Pages vues</th><th>Téléch.</th><th>Contact (envoyés / tentatives)</th><th>Activations (ok / code faux / expiré)</th></tr>';
