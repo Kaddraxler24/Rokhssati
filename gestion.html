@@ -122,7 +122,9 @@ function product(P,tot){
     ['Téléchargement → installation',pct(inst,dl),n(inst)+' / '+n(dl)+' · objectif > 30 %'],
     ['Chapitres terminés',n(g('c_done')),'au total'],
     ['Tests « 2 minutes » terminés',n(g('qk_e')),n(g('qk_s'))+' commencé(s)'],
-    ['Recherches d’auto-école',n(g('ae_w')),n(g('ae_map'))+' carte(s) affichée(s)']
+    ['Recherches d’auto-école',n(g('ae_w')),n(g('ae_map'))+' carte(s) affichée(s)'],
+    ['Intérêt Premium (test prix)',pct(g('pr_i'),g('pr_v')),n(g('pr_i'))+' oui · '+n(g('pr_n'))+' non · '+n(g('pr_v'))+' ont vu l’annonce'],
+    ['Formule préférée',(function(){var o=[['1 mois (300 DA)',g('pr_m1')],['3 mois (700 DA)',g('pr_m3')],['1 an (2 000 DA)',g('pr_y')]].sort(function(a,b){return b[1]-a[1]});return o[0][1]?o[0][0]:'–'})(),'1 mois : '+n(g('pr_m1'))+' · 3 mois : '+n(g('pr_m3'))+' · 1 an : '+n(g('pr_y'))]
   ].map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small></div>'}).join('')+'</div>';
   var ch=Object.keys(T).filter(function(k){return /^co:/.test(k)&&T[k]>=3}).map(function(k){var id=k.slice(3),o=T[k],d=T['cd:'+id]||0;return {id:id,o:o,d:d,a:1-d/o}}).sort(function(a,b){return b.a-a.a||b.o-a.o}).slice(0,10);
   if(ch.length)h+='<h2>Chapitres les plus abandonnés</h2><table><tr><th>Chapitre</th><th>Ouverts</th><th>Terminés</th><th>Abandon</th></tr>'+ch.map(function(x){return '<tr><td data-c="'+esc(x.id)+'">'+esc(x.id)+'</td><td>'+n(x.o)+'</td><td>'+n(x.d)+'</td><td>'+Math.round(100*x.a)+' %</td></tr>'}).join('')+'</table><p class="muted">Chapitres ouverts au moins 3 fois. Ouvert / terminé = navigateurs différents, comptés une fois chacun.</p>';
