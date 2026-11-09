@@ -25,7 +25,7 @@ export async function onRequest({ request, env }) {
     const okMail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m.email), okTel = /^\+?[0-9]{9,15}$/.test(m.phone);
     if (!okMail && !okTel) return out({ ok: false, err: "email" }, 400);
     if (!okMail) m.email = ""; if (!okTel) m.phone = "";
-    const F = { m1: "1 mois (300 DA)", m3: "3 mois (700 DA)", y: "1 an (2 000 DA)" };
+    const F = { m1: "1 mois (600 DA)", m3: "3 mois (1 000 DA)", y: "1 an (sans prix affiché)" };
     m.formule = F[cut(b.formule, 4)] ? cut(b.formule, 4) : ""; m.src = cut(b.src, 10);
     m.msg = "Intéressé par le Premium" + (m.formule ? " — formule : " + F[m.formule] : "") + (m.src ? " (" + m.src + ")" : "");
   }
