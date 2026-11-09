@@ -122,9 +122,13 @@ var RokhCode = (function () {
       if (off()) return;
       var f = null; try { f = localStorage.getItem("rokhssati-first"); } catch (e) { return; }
       var today = Math.floor(Date.now() / 86400000);
-      if (!f) { try { localStorage.setItem("rokhssati-first", String(today)); } catch (e) {} once("v_new"); return; }
+      /* cohortes (ROK-01, 10/11/2026) : chaque compteur porte aussi le jour d'arrivée (AAAAMMJJ, UTC), pour lire J+1 / J+7 par cohorte.
+         Une date de cohorte, pas un identifiant. vc = nouveau visiteur, r1c = revenu le lendemain, r7c = revenu 7 jours ou plus après. */
+      var coh = function (n) { return new Date(n * 86400000).toISOString().slice(0, 10).replace(/-/g, ""); };
+      if (!f) { try { localStorage.setItem("rokhssati-first", String(today)); } catch (e) {} once("v_new"); once("vc:" + coh(today)); return; }
       var d = today - (+f || today);
       if (d >= 1) once("r1"); if (d >= 7) once("r7");
+      if (+f) { if (d === 1) once("r1c:" + coh(+f)); if (d >= 7) once("r7c:" + coh(+f)); }
     })();
     (function nav() {   // parcours anonyme (09/11/2026) : écran vu, écran d'entrée, enchaînement A>B, temps par tranches de 5 s. Aucun identifiant.
       if (off()) return;
@@ -142,7 +146,8 @@ var RokhCode = (function () {
     document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") flush(); });
     window.addEventListener("pagehide", flush);
     setTimeout(flush, 4000);
-    return { add: add, once: once, flush: flush };
+    function cohort(name) { var f = null; try { f = +localStorage.getItem("rokhssati-first"); } catch (e) {} if (f) once(name + ":" + new Date(f * 86400000).toISOString().slice(0, 10).replace(/-/g, "")); }
+    return { add: add, once: once, flush: flush, cohort: cohort };
   })();
 
   /* ---------- test d'intérêt Premium (09/11/2026) : prix prévus, rien n'est vendu. Un vote par navigateur. ---------- */
@@ -214,7 +219,7 @@ var RokhCode = (function () {
         if ((p.read[chap] || 0) < step) p.read[chap] = Math.min(step, n);
         if (step >= 2) learned();
         p.last = { theme: theme, chap: chap, step: step, ts: Date.now() };
-        if (step >= n && !p.done[chap]) { p.done[chap] = Date.now(); Measure.add("c_done"); Measure.once("cd:" + chap); Measure.once("a1"); }
+        if (step >= n && !p.done[chap]) { p.done[chap] = Date.now(); Measure.add("c_done"); Measure.once("cd:" + chap); Measure.once("a1"); Measure.cohort("a1c"); }
         set(PK, p); markDay();
       },
       chapQ: function (qid, ok) { var p = prog(); p.qs[qid] = ok ? 1 : 0; set(PK, p); this.answer(qid, ok); },
@@ -232,7 +237,7 @@ var RokhCode = (function () {
         learned();
         var h = get(HK, []);
         h.push({ ts: Date.now(), kind: kind, theme: theme || "all", score: score, total: total });
-        Measure.add(kind === "exam" ? "e_end" : "t_end"); Measure.once("a1");
+        Measure.add(kind === "exam" ? "e_end" : "t_end"); Measure.once("a1"); Measure.cohort("a1c");
         if (kind === "exam") { Measure.add("e_pts", score); Measure.add("e_tot", total); }
         set(HK, h.slice(-200)); markDay();
       },
