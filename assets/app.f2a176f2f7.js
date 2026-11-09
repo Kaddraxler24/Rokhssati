@@ -125,6 +125,19 @@ var RokhCode = (function () {
       var d = today - (+f || today);
       if (d >= 1) once("r1"); if (d >= 7) once("r7");
     })();
+    (function nav() {   // parcours anonyme (09/11/2026) : écran vu, écran d'entrée, enchaînement A>B, temps par tranches de 5 s. Aucun identifiant.
+      if (off()) return;
+      var p = ((location.pathname.split("/").pop() || "index").replace(/\.html?$/, "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 32)) || "index";
+      var prev = null; try { prev = sessionStorage.getItem("rokhssati-nav"); } catch (e) { return; }
+      if (prev === null) { add(window.RokhNative ? "ss_app" : "ss_web"); add("en:" + p); }
+      else if (prev !== p) add("nv:" + prev + ">" + p);
+      try { sessionStorage.setItem("rokhssati-nav", p); } catch (e) {}
+      add("pv:" + p);
+      var t0 = Date.now();
+      function stamp() { if (!t0) return; var u = Math.min(120, Math.round((Date.now() - t0) / 5000)); t0 = 0; if (u > 0) add("t5:" + p, u); }
+      document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") stamp(); else t0 = Date.now(); });
+      window.addEventListener("pagehide", stamp);
+    })();
     document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") flush(); });
     window.addEventListener("pagehide", flush);
     setTimeout(flush, 4000);
