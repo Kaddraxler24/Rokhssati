@@ -990,6 +990,9 @@ html.news-open { overflow: hidden; }
 .pr-ask { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px; border-radius: 14px; background: var(--soft); }
 .pr-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .pr-thanks { margin-top: 12px; }
+.pr-sub { color: var(--muted); font-size: 14px; min-height: 2.6em; }
+.pr-price.none { color: var(--muted); }
+.pr-card.is-none { border-style: dashed; }
 .pr-form .wait-row { justify-content: center; }
 .pr-done { margin: 12px 0; padding: 12px; border-radius: 14px; background: var(--soft); font-weight: 600; }
 @media (min-width:1241px){.top-row{flex-wrap:nowrap}.nav-list>li>a,.nav-btn{padding-inline:4px}.mainnav{gap:6px}}
