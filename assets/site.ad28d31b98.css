@@ -517,6 +517,8 @@ ul.ticks{padding-inline-start:1.2em;margin:0 0 1.2em}ul.ticks li{margin:.35em 0}
 .slide { display: flex; flex-direction: column; gap: 14px; }
 .s-title { font-size: 22px; }
 .s-fig { display: flex; justify-content: center; }
+/* numbers and units inside the drawings always read left to right, also on Arabic pages (09/11/2026) */
+.s-fig svg, .sheet-figs svg, .zoom-in svg { direction: ltr; }
 .s-fig svg { width: 100%; max-width: 420px; height: auto; max-height: 260px; border-radius: 14px; }
 .s-fig.small svg { max-width: 300px; max-height: 190px; }
 .s-signs { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
