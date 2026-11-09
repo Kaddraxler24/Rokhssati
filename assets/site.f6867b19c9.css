@@ -989,7 +989,9 @@ html.news-open { overflow: hidden; }
 .pr-trial { margin: 6px 0 14px; }
 .pr-ask { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px; border-radius: 14px; background: var(--soft); }
 .pr-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-.pr-thanks { margin-top: 12px; font-weight: 600; }
+.pr-thanks { margin-top: 12px; }
+.pr-form .wait-row { justify-content: center; }
+.pr-done { margin: 12px 0; padding: 12px; border-radius: 14px; background: var(--soft); font-weight: 600; }
 @media (min-width:1241px){.top-row{flex-wrap:nowrap}.nav-list>li>a,.nav-btn{padding-inline:4px}.mainnav{gap:6px}}
 body::after{content:'VERSION DE TEST';position:fixed;inset:0;z-index:9999;pointer-events:none;border:3px solid #B42318;display:flex;justify-content:center;align-items:flex-start;color:#fff;font:700 9px/1 system-ui,sans-serif;letter-spacing:.5px}
 body::before{content:'';position:fixed;top:0;left:50%;width:96px;height:13px;margin-left:-48px;background:#B42318;border-radius:0 0 6px 6px;z-index:9999;pointer-events:none}

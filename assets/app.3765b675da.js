@@ -152,7 +152,7 @@ var RokhCode = (function () {
       var done = {}; try { done = JSON.parse(localStorage.getItem("rokhssati-pr") || "{}") || {}; } catch (e) {}
       function paint() {
         [].forEach.call(document.querySelectorAll(".pr-ad [data-pr]"), function (b) { b.classList.toggle("is-on", !!done[b.getAttribute("data-pr")]); });
-        [].forEach.call(document.querySelectorAll(".pr-ad .pr-thanks"), function (t) { t.hidden = !(done.pr_i || done.pr_m1 || done.pr_m3 || done.pr_y); });
+        [].forEach.call(document.querySelectorAll(".pr-ad .pr-thanks"), function (t) { t.hidden = !(done.pr_i || done.pr_m1 || done.pr_m3 || done.pr_y) || !!done.sent; });
       }
       [].forEach.call(document.querySelectorAll(".pr-ad [data-pr]"), function (b) {
         b.addEventListener("click", function () {
@@ -164,6 +164,28 @@ var RokhCode = (function () {
           paint(); Measure.flush();
         });
       });
+      // « qui est intéressé » : contact laissé volontairement (e-mail ou téléphone) + formule choisie → Gestion (contact.js, kind "premium")
+      var MM = { ar: ["شكرًا! سنخبرك عند صدور البريميوم.", "اكتب بريدًا إلكترونيًا أو رقم هاتف صحيحًا.", "تعذّر الإرسال. تحقق من الاتصال بالإنترنت."],
+                 fr: ["Merci ! Nous vous préviendrons à la sortie du Premium.", "Écrivez un e-mail ou un numéro de téléphone valide.", "Envoi impossible. Vérifiez votre connexion internet."],
+                 dz: ["صحّيت! نخبروك كي يخرج البريميوم.", "اكتب إيمايل ولا نيمرو صحيح.", "ما تبعثش. شوف الأنترنت."] };
+      [].forEach.call(document.querySelectorAll(".pr-ad .pr-form"), function (f) {
+        f.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var m = MM[lang] || MM.fr, out = f.querySelector(".pr-msg"), v = f.querySelector(".pr-contact").value.trim();
+          var mail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v) ? v : "", tel = !mail && /^\+?[0-9 .-]{9,18}$/.test(v) ? v.replace(/[ .-]/g, "") : "";
+          out.hidden = false;
+          if (!mail && !tel) { out.dataset.state = "ko"; out.textContent = m[1]; return; }
+          var pick = done.pr_y ? "y" : done.pr_m3 ? "m3" : done.pr_m1 ? "m1" : "";
+          fetch((window.RokhNative ? "https://rokhssati.com" : "") + "/api/contact", { method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ kind: "premium", email: mail, phone: tel, formule: pick, src: window.RokhNative ? "appli" : "site", lang: lang, hp: f.querySelector(".pr-hp").value }) })
+            .then(function (r) { return r.json(); }).then(function (j) {
+              out.dataset.state = j && j.ok ? "ok" : "ko"; out.textContent = j && j.ok ? m[0] : m[1];
+              if (j && j.ok) { done.sent = 1; try { localStorage.setItem("rokhssati-pr", JSON.stringify(done)); } catch (e) {} Measure.once("pr_c"); Measure.flush();
+                setTimeout(function () { [].forEach.call(document.querySelectorAll(".pr-ad .pr-ask"), function (q) { var p = document.createElement("p"); p.className = "pr-done"; p.textContent = m[0]; q.parentNode.replaceChild(p, q); }); paint(); }, 1200); }
+            }).catch(function () { out.dataset.state = "ko"; out.textContent = m[2]; });
+        });
+      });
+      if (done.sent) [].forEach.call(document.querySelectorAll(".pr-ad .pr-ask"), function (q) { var p = document.createElement("p"); p.className = "pr-done"; p.textContent = (MM[lang] || MM.fr)[0]; q.parentNode.replaceChild(p, q); });
       paint();
     }
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
