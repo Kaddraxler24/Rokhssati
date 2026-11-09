@@ -1049,7 +1049,7 @@ var RokhCode = (function () {
       var n = cur.slides.length, end = cur.i >= n;
       stage.innerHTML = "";
       if (end) stage.appendChild(endCard());
-      else { var ob = cur.i === 0 && cur.li && $(".cobj", cur.li); if (ob) stage.appendChild(ob.cloneNode(true)); var node = cur.slides[cur.i].cloneNode(true); stage.appendChild(node); if (node.classList.contains("slide-q")) wireQ(node); }
+      else { var ob = cur.i === 0 && cur.li && $(".cobj", cur.li); if (ob) stage.appendChild(ob.cloneNode(true)); var node = cur.slides[cur.i].cloneNode(true); stage.appendChild(node); $$(".s-check", node).forEach(initCheck); if (node.classList.contains("slide-q")) wireQ(node); }
       stage.scrollTop = 0;
       $$("i", steps).forEach(function (s, k) { s.className = k < cur.i ? "seen" : k === cur.i ? "now" : ""; });
       $(".v-count", viewer).textContent = end ? n + " / " + n : (cur.i + 1) + " / " + n;
@@ -1512,6 +1512,20 @@ var RokhCode = (function () {
     function upd() { bar.hidden = navigator.onLine !== false; }
     window.addEventListener("online", upd); window.addEventListener("offline", upd); upd();
   })();
+
+  /* ---------- course checklists (« La checklist avant de partir », 09/11/2026): ticks kept in this browser only ---------- */
+  function initCheck(box) {
+    if (box._ck) return; box._ck = true;
+    var key = "rokhssati-" + box.getAttribute("data-key"), ins = $$("input", box), n = $(".s-check-n b", box);
+    function load() { try { return JSON.parse(localStorage.getItem(key) || "[]") || []; } catch (e) { return []; } }
+    function draw() { var c = 0; ins.forEach(function (i) { if (i.checked) c++; }); n.textContent = c; box.classList.toggle("is-done", c === ins.length); }
+    var on = load(); ins.forEach(function (i) { i.checked = on.indexOf(+i.value) >= 0; i.addEventListener("change", function () {
+      var v = ins.filter(function (x) { return x.checked; }).map(function (x) { return +x.value; });
+      try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) {} draw(); }); });
+    $(".s-check-reset", box).addEventListener("click", function () { ins.forEach(function (i) { i.checked = false; }); try { localStorage.removeItem(key); } catch (e) {} draw(); });
+    draw();
+  }
+  $$(".s-check").forEach(initCheck);
 
   /* ---------- Trouver une auto-école (owner 08/11/2026) ----------
      Data: OpenStreetMap contributors (ODbL), refreshed monthly (tools/osm). The list loads when a wilaya is chosen;

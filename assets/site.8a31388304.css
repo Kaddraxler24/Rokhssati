@@ -918,6 +918,15 @@ html.news-open { overflow: hidden; }
 .app-band h2 { font-size: clamp(26px, 3.4vw, 36px); }
 .app-band .btn-apk.btn-xl { font-size: 21px; padding: 18px 32px; }
 /* fiche détaillée (distances, panonceaux, balises) */
+.s-check { margin-top: 6px; }
+.s-check-n { margin: 0 0 8px; font-weight: 700; color: var(--muted); }
+.s-check-n b { font-size: 1.3em; color: var(--sign); }
+.s-check ul { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 6px; }
+.s-check label { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; line-height: 1.35; }
+.s-check input { width: 22px; height: 22px; flex: 0 0 22px; accent-color: var(--sign); margin: 0; }
+.s-check label:has(input:checked) { border-color: var(--sign); }
+.s-check label:has(input:checked) span { text-decoration: line-through; opacity: .7; }
+.s-check.is-done .s-check-n b::after { content: " ✓"; }
 .s-sheet { margin: 14px 0 0; }
 .s-sheet a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
 .sheet-figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; margin: 0 0 16px; }
