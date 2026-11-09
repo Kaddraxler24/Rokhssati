@@ -144,6 +144,31 @@ var RokhCode = (function () {
     return { add: add, once: once, flush: flush };
   })();
 
+  /* ---------- test d'intérêt Premium (09/11/2026) : prix prévus, rien n'est vendu. Un vote par navigateur. ---------- */
+  (function prAd() {
+    function init() {
+      var ads = document.querySelectorAll(".pr-ad"); if (!ads.length) return;
+      Measure.once("pr_v");
+      var done = {}; try { done = JSON.parse(localStorage.getItem("rokhssati-pr") || "{}") || {}; } catch (e) {}
+      function paint() {
+        [].forEach.call(document.querySelectorAll(".pr-ad [data-pr]"), function (b) { b.classList.toggle("is-on", !!done[b.getAttribute("data-pr")]); });
+        [].forEach.call(document.querySelectorAll(".pr-ad .pr-thanks"), function (t) { t.hidden = !(done.pr_i || done.pr_m1 || done.pr_m3 || done.pr_y); });
+      }
+      [].forEach.call(document.querySelectorAll(".pr-ad [data-pr]"), function (b) {
+        b.addEventListener("click", function () {
+          var k = b.getAttribute("data-pr");
+          if (k === "pr_i") delete done.pr_n; if (k === "pr_n") { delete done.pr_i; delete done.pr_m1; delete done.pr_m3; delete done.pr_y; }
+          if (/^pr_(m1|m3|y)$/.test(k)) { delete done.pr_m1; delete done.pr_m3; delete done.pr_y; done.pr_i = 1; Measure.once("pr_i"); }
+          done[k] = 1; Measure.once(k);
+          try { localStorage.setItem("rokhssati-pr", JSON.stringify(done)); } catch (e) {}
+          paint(); Measure.flush();
+        });
+      });
+      paint();
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+  })();
+
   /* ---------- progress & history store (this device only) ---------- */
   var Track = (function () {
     var PK = "rokhssati-progress", HK = "rokhssati-history", EK = "rokhssati-errors", DK = "rokhssati-days", FK = "rokhssati-favs", TK = "rokhssati-tstats";

@@ -974,6 +974,22 @@ html.news-open { overflow: hidden; }
 .cr-steps .cr-fig { justify-content: flex-start; margin: 4px 0 10px; }
 .cr-steps .cr-fig svg { max-width: 420px; }
 .mega-soon { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 6px 10px; color: var(--muted); }
+/* test d'intérêt Premium (09/11/2026) */
+.pr-ad { max-width: 860px; margin: 0 auto; text-align: center; }
+.pr-ad h2 { margin: 8px 0 6px; }
+.pr-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+@media (max-width: 560px) { .pr-cards { grid-template-columns: 1fr; } }
+.pr-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 18px 12px 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.pr-card.is-best { border: 2px solid var(--sign); }
+.pr-badge:empty { display: none; }
+.pr-badge { position: absolute; top: -11px; padding: 2px 10px; border-radius: 999px; background: var(--sign); color: #fff; font-size: 12px; font-weight: 600; }
+.pr-card b { font-size: 17px; }
+.pr-price { font: 700 30px/1.1 "Barlow Condensed", Arial, sans-serif; color: var(--ink); }
+.pr-card .btn.is-on, .pr-btns .btn.is-on { background: var(--sign); color: #fff; border-color: var(--sign); }
+.pr-trial { margin: 6px 0 14px; }
+.pr-ask { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px; border-radius: 14px; background: var(--soft); }
+.pr-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.pr-thanks { margin-top: 12px; font-weight: 600; }
 @media (min-width:1241px){.top-row{flex-wrap:nowrap}.nav-list>li>a,.nav-btn{padding-inline:4px}.mainnav{gap:6px}}
 body::after{content:'VERSION DE TEST';position:fixed;inset:0;z-index:9999;pointer-events:none;border:3px solid #B42318;display:flex;justify-content:center;align-items:flex-start;color:#fff;font:700 9px/1 system-ui,sans-serif;letter-spacing:.5px}
 body::before{content:'';position:fixed;top:0;left:50%;width:96px;height:13px;margin-left:-48px;background:#B42318;border-radius:0 0 6px 6px;z-index:9999;pointer-events:none}
