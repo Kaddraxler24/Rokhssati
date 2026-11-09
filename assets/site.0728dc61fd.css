@@ -995,6 +995,12 @@ html.news-open { overflow: hidden; }
 .pr-card.is-none { border-style: dashed; }
 .pr-form .wait-row { justify-content: center; }
 .pr-done { margin: 12px 0; padding: 12px; border-radius: 14px; background: var(--soft); font-weight: 600; }
+/* P0 premier écran (09/11/2026) */
+.hero .lead { max-width: 34em; }
+.hero-app { margin: 10px 0 0; }
+@media (max-width: 560px) { .hero h1 { font-size: clamp(30px, 8.6vw, 40px); line-height: 1.08; } .hero .lead { font-size: 17px; margin: 10px 0 14px; } .hero .eyebrow { margin-bottom: 6px; } .hero { padding-top: 22px; } }
+.hero-app a { color: var(--muted); font-size: 15px; text-decoration: underline; text-underline-offset: 3px; }
+.hero-ctas .btn-alt { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
 @media (min-width:1241px){.top-row{flex-wrap:nowrap}.nav-list>li>a,.nav-btn{padding-inline:4px}.mainnav{gap:6px}}
 body::after{content:'VERSION DE TEST';position:fixed;inset:0;z-index:9999;pointer-events:none;border:3px solid #B42318;display:flex;justify-content:center;align-items:flex-start;color:#fff;font:700 9px/1 system-ui,sans-serif;letter-spacing:.5px}
 body::before{content:'';position:fixed;top:0;left:50%;width:96px;height:13px;margin-left:-48px;background:#B42318;border-radius:0 0 6px 6px;z-index:9999;pointer-events:none}

@@ -148,6 +148,10 @@ var RokhCode = (function () {
   /* ---------- test d'intérêt Premium (09/11/2026) : prix prévus, rien n'est vendu. Un vote par navigateur. ---------- */
   (function prAd() {
     function init() {
+      [].forEach.call(document.querySelectorAll('.pr-ad[data-gate="learned"]'), function (ad) {   // P0 : pas de Premium au premier passage
+        var ok = false; try { ok = localStorage.getItem("rokhssati-learned") === "1" || JSON.parse(localStorage.getItem("rokhssati-history") || "[]").length > 0; } catch (e) {}
+        var sec = ad.closest("section") || ad; if (!ok) { sec.hidden = true; ad.remove(); }
+      });
       var ads = document.querySelectorAll(".pr-ad"); if (!ads.length) return;
       Measure.once("pr_v");
       var done = {}; try { done = JSON.parse(localStorage.getItem("rokhssati-pr") || "{}") || {}; } catch (e) {}
@@ -199,6 +203,7 @@ var RokhCode = (function () {
     function set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
     function day(d) { d = d || new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
     function markDay() { var a = get(DK, []), td = day(); if (a.indexOf(td) < 0) { a.push(td); set(DK, a.slice(-120)); } }
+    function learned() { try { localStorage.setItem("rokhssati-learned", "1"); } catch (e) {} }   // P0 : 1re interaction pédagogique (Premium montré ensuite)
     function prog() { var p = get(PK, {}); p.read = p.read || {}; p.done = p.done || {}; p.qs = p.qs || {}; return p; }
     return {
       day: day,
@@ -207,6 +212,7 @@ var RokhCode = (function () {
       read: function (theme, chap, step, n) {
         var p = prog();
         if ((p.read[chap] || 0) < step) p.read[chap] = Math.min(step, n);
+        if (step >= 2) learned();
         p.last = { theme: theme, chap: chap, step: step, ts: Date.now() };
         if (step >= n && !p.done[chap]) { p.done[chap] = Date.now(); Measure.add("c_done"); Measure.once("cd:" + chap); Measure.once("a1"); }
         set(PK, p); markDay();
@@ -214,6 +220,7 @@ var RokhCode = (function () {
       chapQ: function (qid, ok) { var p = prog(); p.qs[qid] = ok ? 1 : 0; set(PK, p); this.answer(qid, ok); },
       answer: function (qid, ok, theme) {
         if (!qid) return;
+        learned();
         if (theme) { var ts = get(TK, {}), x = ts[theme] || (ts[theme] = { r: 0, w: 0 }); if (ok) x.r++; else x.w++; set(TK, ts); }
         var e = get(EK, {});
         if (ok) delete e[qid]; else { e[qid] = (e[qid] || 0) + 1; Measure.once("qko:" + qid); }
@@ -222,6 +229,7 @@ var RokhCode = (function () {
       errors: function () { return get(EK, {}); },
       test: function (kind, theme, score, total) {
         if (!total) return;
+        learned();
         var h = get(HK, []);
         h.push({ ts: Date.now(), kind: kind, theme: theme || "all", score: score, total: total });
         Measure.add(kind === "exam" ? "e_end" : "t_end"); Measure.once("a1");
