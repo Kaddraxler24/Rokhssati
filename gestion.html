@@ -29,6 +29,13 @@ button:hover{border-color:var(--sign)}
 .chart{width:100%;height:auto;display:block;margin:8px 0 4px}.legend{display:flex;gap:16px;font-size:13px;color:var(--muted)}.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-inline-end:6px;vertical-align:-1px}
 .hb{display:grid;grid-template-columns:minmax(120px,38%) 1fr auto;gap:6px 10px;align-items:center;font-size:14px;margin:8px 0}.hb .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hb .b{height:12px;border-radius:999px;background:var(--sign)}.hb .b.alt{background:#F0B323}.hb .v{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px;text-align:end}
 .flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}.flow>div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}.flow h3{margin:0 0 6px;font-size:15px}
+.tabs-wrap{position:sticky;top:61px;z-index:4;background:var(--bg);padding:10px 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-bottom:1px solid var(--line)}
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}.tabs button{border:0;border-radius:0;padding:9px 18px}.tabs button.on{background:var(--sign);color:#fff}
+.toc{display:flex;flex-wrap:wrap;gap:6px}.toc a{font-size:13px;color:var(--sign);text-decoration:none;padding:5px 10px;border-radius:999px;background:var(--soft)}
+.gsec{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:6px 18px 18px;margin-top:18px;scroll-margin-top:130px;overflow-x:auto}.gsec h2{margin-top:14px}.gsec .sub{margin:0 0 6px;font-size:14px}.gsec h3{font-size:16px;margin:18px 0 4px}
+.gsec .kpi{background:var(--bg)}.gsec table{background:var(--bg)}details.gsec{padding:14px 18px}details summary{cursor:pointer;color:var(--sign);font-weight:600;margin-top:12px}
+table.cmp td:not(:first-child),table.cmp th:not(:first-child){text-align:right;width:16%}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}.bar.warn{background:var(--err)}
 .bar{display:inline-block;height:10px;background:var(--sign);border-radius:999px;vertical-align:middle;margin-inline-end:8px}
 .note{background:var(--amber-soft);border:1px solid var(--amber);border-radius:12px;padding:12px 14px;margin-top:14px}
 table{border-collapse:separate;border-spacing:0;margin-top:12px;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
@@ -36,7 +43,7 @@ td,th{border-bottom:1px solid var(--line);padding:9px 12px;text-align:left;font-
 tr:last-child td{border-bottom:0}
 th{background:var(--soft);font-weight:600}
 .err{color:var(--err)}
-#out{overflow-x:auto}
+#out{overflow:visible}#out>table{display:block;overflow-x:auto}
 .rp{margin-top:8px;display:grid;gap:6px}
 .rp textarea{width:100%;box-sizing:border-box;font:inherit}
 .rp-done{margin-top:6px;color:#0E6B47}
@@ -104,75 +111,11 @@ var SRC={popup:'Fenêtre « Nouveauté » (direct)',page:'Section Android (direc
 var NAMES=null;
 function names(){if(NAMES)return Promise.resolve(NAMES);return fetch(BASE+'/entrainement.html',{cache:'no-store'}).then(function(r){return r.text()}).then(function(t){var d=new DOMParser().parseFromString(t,'text/html'),q={},c={};try{JSON.parse(d.getElementById('quizData').textContent).questions.forEach(function(x){if(x.id)q[x.id]=x.fr.q})}catch(e){}try{JSON.parse(d.getElementById('courseIndex').textContent).forEach(function(th){th.chapters.forEach(function(ch){c[ch.id]=th.name.fr+' · '+ch.t.fr})})}catch(e){}NAMES={q:q,c:c};return NAMES}).catch(function(){return {q:{},c:{}}})}
 function pct(a,b){return b?Math.round(100*a/b)+' %':'–'}
-function product(P,tot){
-  var T={};Object.keys(P).forEach(function(d){for(var e in P[d])T[e]=(T[e]||0)+P[d][e]});
-  var g=function(k){return T[k]||0};
-  if(!Object.keys(T).length)return '<h2>Mesure produit</h2><div class="note">Pas encore de données : la mesure anonyme a démarré le 08/11/2026. Les premiers chiffres arrivent avec les prochaines visites.</div>';
-  var inst=0,dl=0;for(var e in tot){if(/^inst_/.test(e)||/^maj_/.test(e))inst+=tot[e];if(/^dl_/.test(e))dl+=tot[e]}
-  var steps=[['Visites (Cloudflare)',tot.visits||0],['Nouveaux visiteurs',g('v_new')],['Activés (1er chapitre ou 1re série terminés)',g('a1')],['Revenus après 1 jour',g('r1')],['Revenus après 7 jours',g('r7')]];
-  var mx=Math.max.apply(null,steps.map(function(x){return x[1]}))||1;
-  var h='<h2>Entonnoir produit</h2><table>'+steps.map(function(x,i){return '<tr><td>'+x[0]+'</td><td style="width:45%"><span class="bar" style="width:'+Math.max(2,Math.round(100*x[1]/mx))+'%"></span> '+n(x[1])+(i>=2?' <span class="muted">('+pct(x[1],g('v_new'))+' des nouveaux)</span>':'')+'</td></tr>'}).join('')+'</table>';
-  h+='<div class="kpis">'+[
-    ['Activation',pct(g('a1'),g('v_new')),'objectif > 25 %'],
-    ['Retour à J+1',pct(g('r1'),g('v_new')),'des nouveaux visiteurs'],
-    ['Retour à J+7',pct(g('r7'),g('v_new')),'objectif > 15 %'],
-    ['Séries terminées',pct(g('t_end'),g('t_start')),n(g('t_end'))+' / '+n(g('t_start'))+' commencées'],
-    ['Examens blancs terminés',pct(g('e_end'),g('e_start')),n(g('e_end'))+' / '+n(g('e_start'))+' · objectif > 60 %'],
-    ['Score moyen aux examens',g('e_tot')?Math.round(100*g('e_pts')/g('e_tot'))+' %':'–','sur '+n(g('e_end'))+' examen(s)'],
-    ['Téléchargement → installation',pct(inst,dl),n(inst)+' / '+n(dl)+' · objectif > 30 %'],
-    ['Chapitres terminés',n(g('c_done')),'au total'],
-    ['Tests « 2 minutes » terminés',n(g('qk_e')),n(g('qk_s'))+' commencé(s)'],
-    ['Recherches d’auto-école',n(g('ae_w')),n(g('ae_map'))+' carte(s) affichée(s)'],
-    ['Intérêt Premium (test prix)',pct(g('pr_i'),g('pr_v')),n(g('pr_i'))+' oui · '+n(g('pr_n'))+' non · '+n(g('pr_v'))+' ont vu l’annonce · '+n(g('pr_c'))+' contact(s) laissé(s)'],
-    ['Formule préférée',(function(){var o=[['1 mois (600 DA)',g('pr_m1')],['3 mois (1 000 DA)',g('pr_m3')],['1 an (sans prix)',g('pr_y')]].sort(function(a,b){return b[1]-a[1]});return o[0][1]?o[0][0]:'–'})(),'1 mois : '+n(g('pr_m1'))+' · 3 mois : '+n(g('pr_m3'))+' · 1 an : '+n(g('pr_y'))]
-  ].map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small></div>'}).join('')+'</div>';
-  var ch=Object.keys(T).filter(function(k){return /^co:/.test(k)&&T[k]>=3}).map(function(k){var id=k.slice(3),o=T[k],d=T['cd:'+id]||0;return {id:id,o:o,d:d,a:1-d/o}}).sort(function(a,b){return b.a-a.a||b.o-a.o}).slice(0,10);
-  if(ch.length)h+='<h2>Chapitres les plus abandonnés</h2><table><tr><th>Chapitre</th><th>Ouverts</th><th>Terminés</th><th>Abandon</th></tr>'+ch.map(function(x){return '<tr><td data-c="'+esc(x.id)+'">'+esc(x.id)+'</td><td>'+n(x.o)+'</td><td>'+n(x.d)+'</td><td>'+Math.round(100*x.a)+' %</td></tr>'}).join('')+'</table><p class="muted">Chapitres ouverts au moins 3 fois. Ouvert / terminé = navigateurs différents, comptés une fois chacun.</p>';
-  var qk=Object.keys(T).filter(function(k){return /^qko:/.test(k)}).map(function(k){return {id:k.slice(4),v:T[k]}}).sort(function(a,b){return b.v-a.v}).slice(0,10);
-  if(qk.length)h+='<h2>Questions les plus ratées</h2><table><tr><th>Question</th><th>Navigateurs qui se sont trompés</th></tr>'+qk.map(function(x){return '<tr><td data-q="'+esc(x.id)+'">'+esc(x.id)+'</td><td>'+n(x.v)+'</td></tr>'}).join('')+'</table><p class="muted">Une question très ratée est soit mal formulée, soit une notion à mieux expliquer dans le cours.</p>';
-  setTimeout(function(){names().then(function(N){[].forEach.call(document.querySelectorAll('[data-q]'),function(td){var t=N.q[td.dataset.q];if(t)td.textContent=t});[].forEach.call(document.querySelectorAll('[data-c]'),function(td){var t=N.c[td.dataset.c];if(t)td.textContent=t})})},0);
-  return h;
-}
 
 // ---- parcours anonyme (09/11/2026) : ss_web/ss_app, en:, pv:, nv:A>B, t5: (tranches de 5 s). Aucun identifiant.
 var PN={'index':'Accueil','entrainement':'Entraînement','code-de-la-route':'Cours (sommaire)','panneaux':'Panneaux','progression':'Progression','activer':'Premium / activer','contact':'Contact','aide':'Aide','permis':'Permis','auto-ecoles':'Auto-écoles (offre)','trouver-auto-ecole':'Trouver une auto-école','tests-livre':'Tests du livre','confidentialite':'Confidentialité','sources':'Sources','conseils':'Conseils','fiche-distances':'Fiche distances','creneau':'Le créneau','code-2026':'Code 2026','404':'Page introuvable'};
 function pn(k){if(PN[k])return PN[k];var m=/^theme-(.+)$/.exec(k);if(m)return 'Cours · '+m[1].charAt(0).toUpperCase()+m[1].slice(1);m=/^test-livre-(\d+)$/.exec(k);if(m)return 'Test du livre '+(+m[1]);return k}
 function hbars(rows,alt){var mx=Math.max.apply(null,rows.map(function(r){return r[1]}).concat([1]));return '<div class="hb">'+rows.map(function(r){return '<span class="t" title="'+esc(r[0])+'">'+esc(r[0])+'</span><span><span class="b'+(alt?' alt':'')+'" style="display:block;width:'+Math.max(2,Math.round(100*r[1]/mx))+'%"></span></span><span class="v">'+r[2]+'</span>'}).join('')+'</div>'}
-function dayChart(P){
-  var ds=Object.keys(P).sort();if(!ds.length)return '';
-  var W=720,H=180,pl=34,pb=24,pt=10,bw=(W-pl-8)/ds.length,mx=1;
-  ds.forEach(function(d){mx=Math.max(mx,(P[d].ss_web||0)+(P[d].ss_app||0))});
-  var step=Math.pow(10,Math.floor(Math.log10(mx)));if(mx/step<3)step/=2;var top=Math.ceil(mx/step)*step||1;
-  var y=function(v){return pt+(H-pt-pb)*(1-v/top)},g='';
-  for(var v=0;v<=top;v+=step)g+='<line x1="'+pl+'" x2="'+W+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="currentColor" stroke-opacity=".12"/><text x="'+(pl-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".6">'+v+'</text>';
-  ds.forEach(function(d,i){var w=P[d].ss_web||0,a=P[d].ss_app||0,x=pl+i*bw+bw*.15,bwi=Math.max(2,bw*.7);
-    g+='<rect x="'+x+'" y="'+y(w)+'" width="'+bwi+'" height="'+(y(0)-y(w))+'" fill="#0E6A43" rx="2"><title>'+d+' · site : '+w+'</title></rect>';
-    g+='<rect x="'+x+'" y="'+y(w+a)+'" width="'+bwi+'" height="'+(y(w)-y(w+a))+'" fill="#F0B323" rx="2"><title>'+d+' · appli : '+a+'</title></rect>';
-    if(ds.length<=16||i%Math.ceil(ds.length/12)===0)g+='<text x="'+(x+bwi/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".6">'+d.slice(8)+'/'+d.slice(5,7)+'</text>'});
-  return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Sessions par jour">'+g+'</svg><div class="legend"><span><i style="background:#0E6A43"></i>Site</span><span><i style="background:#F0B323"></i>Appli</span></div>';
-}
-function parcours(P){
-  var T={};Object.keys(P).forEach(function(d){for(var e in P[d])T[e]=(T[e]||0)+P[d][e]});
-  var g=function(k){return T[k]||0},ss=g('ss_web')+g('ss_app');
-  var h='<h2>Parcours</h2>';
-  if(!ss)return h+'<div class="note">Pas encore de données : le suivi anonyme des parcours démarre avec cette mise à jour (09/11/2026). Rien n’identifie un visiteur : seulement des compteurs par jour.</div>';
-  var pv={},en={},t5={},out={},tr=[];
-  for(var k in T){var m;if(m=/^pv:(.+)$/.exec(k))pv[m[1]]=T[k];else if(m=/^en:(.+)$/.exec(k))en[m[1]]=T[k];else if(m=/^t5:(.+)$/.exec(k))t5[m[1]]=T[k];else if(m=/^nv:(.+)>(.+)$/.exec(k)){tr.push([m[1],m[2],T[k]]);out[m[1]]=(out[m[1]]||0)+T[k]}}
-  var pvT=0;for(k in pv)pvT+=pv[k];
-  var tm=0;for(k in t5)tm+=t5[k]*5;
-  h+='<div class="kpis">'+[['Sessions',n(ss),n(g('ss_web'))+' site · '+n(g('ss_app'))+' appli'],['Écrans vus',n(pvT),(pvT/ss).toFixed(1).replace('.',',')+' par session'],['Temps moyen par session',ss?String(Math.round(tm/ss/60*10)/10).replace('.',',')+' min':'–','temps visible à l’écran'],['Arrivée la plus fréquente',(function(){var b=Object.keys(en).sort(function(a,c){return en[c]-en[a]})[0];return b?esc(pn(b)):'–'})(),'premier écran des sessions']].map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small></div>'}).join('')+'</div>';
-  h+='<h3>Sessions par jour</h3>'+dayChart(P);
-  var pages=Object.keys(pv).sort(function(a,b){return pv[b]-pv[a]}).slice(0,15);
-  h+='<h3>Écrans les plus vus</h3>'+hbars(pages.map(function(p){var ex=Math.max(0,pv[p]-(out[p]||0)),t=t5[p]?Math.round(t5[p]*5/pv[p]):0;return [pn(p),pv[p],n(pv[p])+' · '+(t>=60?Math.floor(t/60)+' min '+(t%60)+' s':t+' s')+' · sortie '+pct(ex,pv[p])]}));
-  h+='<p class="muted">Temps = moyenne par écran vu. Sortie = part des vues après lesquelles la session s’arrête (ou change d’appli).</p>';
-  var ent=Object.keys(en).sort(function(a,b){return en[b]-en[a]}).slice(0,8);
-  h+='<h3>Par où ils arrivent</h3>'+hbars(ent.map(function(p){return [pn(p),en[p],n(en[p])+' · '+pct(en[p],ss)]}),true);
-  tr.sort(function(a,b){return b[2]-a[2]});
-  h+='<h3>Enchaînements les plus fréquents</h3>'+hbars(tr.slice(0,15).map(function(x){return [pn(x[0])+' → '+pn(x[1]),x[2],n(x[2])]}));
-  var hubs=pages.slice(0,4);
-  h+='<h3>Après ces écrans, où vont-ils ?</h3><div class="flow">'+hubs.map(function(p){var nx=tr.filter(function(x){return x[0]===p}).slice(0,5),ex=Math.max(0,pv[p]-(out[p]||0));var rows=nx.map(function(x){return [pn(x[1]),x[2],pct(x[2],pv[p])]});rows.push(['Fin de session',ex,pct(ex,pv[p])]);rows.sort(function(a,b){return b[1]-a[1]});return '<div><h3>'+esc(pn(p))+'</h3>'+hbars(rows)+'</div>'}).join('')+'</div>';
-  return h;
-}
 
 // ---- « qui est intéressé » par le Premium (pub « prix prévus » + ancien formulaire « prévenez-moi ») — 09/11/2026
 document.getElementById('gp').onclick=function(){
@@ -190,45 +133,120 @@ document.getElementById('gp').onclick=function(){
     var b=document.getElementById('gpcsv');if(b)b.onclick=function(){var t=R.map(function(r){return [r.email,r.phone,F[r.formule]||''].filter(Boolean).join(' ; ')}).join('\n');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){document.getElementById('gpm').textContent='✓ Copié'},function(){document.getElementById('gpm').textContent='Copie impossible : sélectionnez le tableau'})};
   }).catch(function(){msg.className='err';msg.textContent='Pas de réponse du serveur.'});
 };
+/* ================= Statistiques v2 (09/11/2026) : Total / Site / Appli, sections triées ================= */
+var PLAT='t',LAST=null;
+var PLN={t:'Total',w:'Site',a:'Appli'};
+// compteurs produit d'un jour pour une plateforme : « a|x » appli, « w|x » site ; clés sans préfixe = avant la séparation (Total seulement,
+// sauf ss_web / ss_app qui disaient déjà d'où venait la session)
+function pick(day,pl){var o={};for(var k in day){var m=/^([aw])\|(.+)$/.exec(k),key,src;if(m){src=m[1];key=m[2]}else{key=k;src=k==='ss_web'?'w':k==='ss_app'?'a':'?'}
+  if(pl==='t'||pl===src)o[key]=(o[key]||0)+day[k]}return o}
+function sumDays(P,pl){var T={};Object.keys(P).forEach(function(d){var o=pick(P[d],pl);for(var e in o)T[e]=(T[e]||0)+o[e]});return T}
+function legacy(P){var t=0;Object.keys(P).forEach(function(d){for(var k in P[d])if(!/^[aw]\|/.test(k)&&k!=='ss_web'&&k!=='ss_app')t+=P[d][k]});return t}
+function kp(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+(x[2]||'')+'</small></div>'}
+function sec(title,sub,body,id){return '<section class="gsec"'+(id?' id="'+id+'"':'')+'><h2>'+title+'</h2>'+(sub?'<p class="muted sub">'+sub+'</p>':'')+body+'</section>'}
+function tmin(s){s=Math.round(s);return s>=60?Math.floor(s/60)+' min '+(s%60?(s%60)+' s':''):s+' s'}
+function dayChart(P){
+  var ds=Object.keys(P).sort();if(!ds.length)return '';
+  var W=720,H=180,pl=34,pb=24,pt=10,bw=(W-pl-8)/ds.length,mx=1,S=ds.map(function(d){return [pick(P[d],'w').ss_web||0,pick(P[d],'a').ss_app||0]});
+  S.forEach(function(s){mx=Math.max(mx,s[0]+s[1])});
+  var step=Math.pow(10,Math.floor(Math.log10(mx)));if(mx/step<3)step/=2;if(step<1)step=1;var top=Math.ceil(mx/step)*step||1;
+  var y=function(v){return pt+(H-pt-pb)*(1-v/top)},g='';
+  for(var v=0;v<=top;v+=step)g+='<line x1="'+pl+'" x2="'+W+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="currentColor" stroke-opacity=".12"/><text x="'+(pl-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".6">'+v+'</text>';
+  ds.forEach(function(d,i){var w=S[i][0],a=S[i][1],x=pl+i*bw+bw*.15,bwi=Math.max(2,bw*.7);
+    g+='<rect x="'+x+'" y="'+y(w)+'" width="'+bwi+'" height="'+(y(0)-y(w))+'" fill="#0E6A43" rx="2"><title>'+d+' · site : '+w+'</title></rect>';
+    g+='<rect x="'+x+'" y="'+y(w+a)+'" width="'+bwi+'" height="'+(y(w)-y(w+a))+'" fill="#F0B323" rx="2"><title>'+d+' · appli : '+a+'</title></rect>';
+    if(ds.length<=16||i%Math.ceil(ds.length/12)===0)g+='<text x="'+(x+bwi/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".6">'+d.slice(8)+'/'+d.slice(5,7)+'</text>'});
+  return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Sessions par jour">'+g+'</svg><div class="legend"><span><i style="background:#0E6A43"></i>Site</span><span><i style="background:#F0B323"></i>Appli</span></div>';
+}
+function render(){
+  var j=LAST;if(!j)return;
+  var P=j.product||{},E=j.events||{},W=j.web||{},pl=PLAT;
+  var T=sumDays(P,pl),g=function(k){return T[k]||0};
+  var TW=sumDays(P,'w'),TA=sumDays(P,'a'),TT=sumDays(P,'t');
+  var tot={},rows={};Object.keys(E).forEach(function(d){rows[d]=rows[d]||{};for(var e in E[d]){rows[d][e]=E[d][e];tot[e]=(tot[e]||0)+E[d][e]}});
+  (W.days||[]).forEach(function(x){rows[x.d]=rows[x.d]||{};rows[x.d].visits=x.visits;rows[x.d].views=x.views;tot.visits=(tot.visits||0)+x.visits;tot.views=(tot.views||0)+x.views});
+  var te=function(re){var t=0;for(var e in tot)if(re.test(e))t+=tot[e];return t};
+  var h='<div class="tabs" role="tablist">'+['t','w','a'].map(function(p){return '<button type="button" role="tab" data-pl="'+p+'" aria-selected="'+(p===pl)+'"'+(p===pl?' class="on"':'')+'>'+PLN[p]+'</button>'}).join('')+'</div>';
+  var lg=legacy(P);if(lg&&pl!=='t')h+='<p class="muted sub">Avant le 09/11/2026 à 20 h, site et appli n’étaient pas séparés : ces '+n(lg)+' compteurs ne figurent que dans <b>Total</b>.</p>';
+  // 1. Vue d'ensemble : comparaison Site / Appli / Total
+  var M=[['Sessions',function(X){return (X.ss_web||0)+(X.ss_app||0)}],['Nouveaux visiteurs',function(X){return X.v_new||0}],['Activés (1er chapitre ou série)',function(X){return X.a1||0}],['Revenus après 1 jour',function(X){return X.r1||0}],['Revenus après 7 jours',function(X){return X.r7||0}],['Chapitres terminés',function(X){return X.c_done||0}],['Séries terminées',function(X){return X.t_end||0}],['Examens blancs terminés',function(X){return X.e_end||0}],['Tests « 2 minutes » terminés',function(X){return X.qk_e||0}],['Intéressés Premium (oui)',function(X){return X.pr_i||0}]];
+  var cmp='<table class="cmp"><tr><th></th><th>Site</th><th>Appli</th><th>Total</th></tr>'+M.map(function(m){return '<tr><td>'+m[0]+'</td><td>'+n(m[1](TW))+'</td><td>'+n(m[1](TA))+'</td><td><b>'+n(m[1](TT))+'</b></td></tr>'}).join('')+'</table>';
+  var ss=g('ss_web')+g('ss_app'),pv=0,t5=0;for(var k in T){if(/^pv:/.test(k))pv+=T[k];if(/^t5:/.test(k))t5+=T[k]}
+  h+=sec('1 · Vue d’ensemble · '+PLN[pl],'Les chiffres clés de la période, puis la comparaison site / appli.',
+    '<div class="kpis">'+[['Sessions',n(ss),pl==='t'?n(g('ss_web'))+' site · '+n(g('ss_app'))+' appli':'sur la période'],['Nouveaux visiteurs',n(g('v_new')),'1re visite sur ce navigateur / téléphone'],['Activation',pct(g('a1'),g('v_new')),'1er chapitre ou 1re série · objectif > 25 %'],['Retour à J+7',pct(g('r7'),g('v_new')),'J+1 : '+pct(g('r1'),g('v_new'))+' · objectif J+7 > 15 %'],['Écrans par session',ss?(pv/ss).toFixed(1).replace('.',','):'–',n(pv)+' écrans vus'],['Temps moyen par session',ss?tmin(t5*5/ss):'–','temps visible à l’écran']].map(kp).join('')+'</div>'+cmp+'<h3>Sessions par jour</h3>'+dayChart(P),'s1');
+  // 2. Apprentissage : ce qui a été fait / abandonné
+  var ch=Object.keys(T).filter(function(k){return /^co:/.test(k)}).map(function(k){var id=k.slice(3),o=T[k],d=Math.min(o,T['cd:'+id]||0);return {id:id,o:o,d:d,ab:o-d}}).sort(function(a,b){return b.ab-a.ab||b.o-a.o});
+  var cO=0,cD=0;ch.forEach(function(x){cO+=x.o;cD+=x.d});
+  var lt='<div class="kpis">'+[['Chapitres ouverts',n(cO),n(ch.length)+' chapitre(s) différent(s)'],['Chapitres terminés',n(cD),pct(cD,cO)+' des ouvertures'],['Chapitres abandonnés',n(cO-cD),pct(cO-cD,cO)+' des ouvertures'],['Séries d’entraînement',pct(g('t_end'),g('t_start'))+' finies',n(g('t_end'))+' / '+n(g('t_start'))+' commencées'],['Examens blancs',pct(g('e_end'),g('e_start'))+' finis',n(g('e_end'))+' / '+n(g('e_start'))+' · score moyen '+(g('e_tot')?Math.round(100*g('e_pts')/g('e_tot'))+' %':'–')],['Test « 2 minutes »',pct(g('qk_e'),g('qk_s'))+' fini',n(g('qk_e'))+' / '+n(g('qk_s'))+' commencés']].map(kp).join('')+'</div>';
+  if(ch.length){var trow=function(x){return '<tr><td data-c="'+esc(x.id)+'">'+esc(x.id)+'</td><td>'+n(x.o)+'</td><td>'+n(x.d)+'</td><td>'+n(x.ab)+'</td><td><span class="bar'+(x.ab/x.o>.5?' warn':'')+'" style="width:'+Math.max(2,Math.round(60*x.ab/x.o))+'px"></span>'+pct(x.ab,x.o)+'</td></tr>'},hd='<tr><th>Chapitre</th><th>Ouverts</th><th>Terminés</th><th>Abandonnés</th><th>Taux d’abandon</th></tr>';
+    lt+='<h3>Chapitres : du plus abandonné au moins abandonné</h3><table>'+hd+ch.slice(0,12).map(trow).join('')+'</table>'+(ch.length>12?'<details><summary>Voir les '+(ch.length-12)+' autres chapitres</summary><table>'+hd+ch.slice(12).map(trow).join('')+'</table></details>':'');
+    var top=ch.slice().sort(function(a,b){return b.d-a.d}).slice(0,5).filter(function(x){return x.d});
+    if(top.length)lt+='<h3>Chapitres les plus terminés</h3>'+hbars(top.map(function(x){return [x.id,x.d,n(x.d)+' / '+n(x.o)]}),false).replace(/<span class="t" title="([^"]*)">[^<]*<\/span>/g,'<span class="t" data-c="$1">$1</span>');
+  } else lt+='<div class="note">Aucun chapitre ouvert sur la période pour '+PLN[pl].toLowerCase()+'.</div>';
+  var qk=Object.keys(T).filter(function(k){return /^qko:/.test(k)}).map(function(k){return {id:k.slice(4),v:T[k]}}).sort(function(a,b){return b.v-a.v}).slice(0,10);
+  if(qk.length)lt+='<h3>Questions les plus ratées</h3><table><tr><th>Question</th><th>Personnes qui se sont trompées</th></tr>'+qk.map(function(x){return '<tr><td data-q="'+esc(x.id)+'">'+esc(x.id)+'</td><td>'+n(x.v)+'</td></tr>'}).join('')+'</table><p class="muted">Une question très ratée est soit mal formulée, soit une notion à mieux expliquer.</p>';
+  h+=sec('2 · Apprentissage : ce qui a été fait','Chapitres, séries et examens · '+PLN[pl]+'. Ouvert / terminé : chaque personne comptée une fois par chapitre.',lt,'s2');
+  // 3. Parcours
+  var pvs={},en={},t5s={},out_={},tr=[];
+  for(k in T){var m;if(m=/^pv:(.+)$/.exec(k))pvs[m[1]]=T[k];else if(m=/^en:(.+)$/.exec(k))en[m[1]]=T[k];else if(m=/^t5:(.+)$/.exec(k))t5s[m[1]]=T[k];else if(m=/^nv:(.+)>(.+)$/.exec(k)){tr.push([m[1],m[2],T[k]]);out_[m[1]]=(out_[m[1]]||0)+T[k]}}
+  var pages=Object.keys(pvs).sort(function(a,b){return pvs[b]-pvs[a]});
+  var pc='';
+  if(!pages.length)pc='<div class="note">Pas encore de parcours pour '+PLN[pl].toLowerCase()+' (suivi démarré le 09/11/2026 ; l’appli compte à partir de la 1.4.27).</div>';
+  else{
+    pc+='<h3>Écrans les plus vus</h3><table><tr><th>Écran</th><th>Vues</th><th>Temps moyen</th><th>Sortie</th></tr>'+pages.slice(0,12).map(function(p){var ex=Math.max(0,pvs[p]-(out_[p]||0));return '<tr><td>'+esc(pn(p))+'</td><td>'+n(pvs[p])+'</td><td>'+(t5s[p]?tmin(t5s[p]*5/pvs[p]):'–')+'</td><td>'+pct(ex,pvs[p])+'</td></tr>'}).join('')+'</table><p class="muted">Sortie = la session s’arrête après cet écran.</p>';
+    var ent=Object.keys(en).sort(function(a,b){return en[b]-en[a]}).slice(0,6);
+    pc+='<div class="two"><div><h3>Par où ils arrivent</h3>'+hbars(ent.map(function(p){return [pn(p),en[p],n(en[p])+' · '+pct(en[p],ss)]}),true)+'</div>';
+    tr.sort(function(a,b){return b[2]-a[2]});
+    pc+='<div><h3>Enchaînements les plus fréquents</h3>'+hbars(tr.slice(0,8).map(function(x){return [pn(x[0])+' → '+pn(x[1]),x[2],n(x[2])]}))+'</div></div>';
+    pc+='<details><summary>Après les 4 écrans principaux, où vont-ils ?</summary><div class="flow">'+pages.slice(0,4).map(function(p){var rows_=tr.filter(function(x){return x[0]===p}).slice(0,5).map(function(x){return [pn(x[1]),x[2],pct(x[2],pvs[p])]}),ex=Math.max(0,pvs[p]-(out_[p]||0));rows_.push(['Fin de session',ex,pct(ex,pvs[p])]);rows_.sort(function(a,b){return b[1]-a[1]});return '<div><h3>'+esc(pn(p))+'</h3>'+hbars(rows_)+'</div>'}).join('')+'</div></details>';
+  }
+  h+=sec('3 · Parcours','Où les gens vont, combien de temps ils restent, où ils partent · '+PLN[pl]+'.',pc,'s3');
+  // 4. Premium
+  var prm='<div class="kpis">'+[['Ont vu l’annonce Premium',n(g('pr_v')),''],['Intéressés (oui)',n(g('pr_i')),pct(g('pr_i'),g('pr_v'))+' de ceux qui l’ont vue'],['Pas intéressés',n(g('pr_n')),pct(g('pr_n'),g('pr_v'))],['Contacts laissés',n(g('pr_c')),'détail : bouton « Intéressés Premium »']].map(kp).join('')+'</div>'+
+    '<h3>Formule choisie</h3>'+hbars([['1 mois (600 DA)',g('pr_m1'),n(g('pr_m1'))],['3 mois (1 000 DA)',g('pr_m3'),n(g('pr_m3'))],['1 an (sans prix)',g('pr_y'),n(g('pr_y'))]],true);
+  if(pl!=='w')prm+='<div class="kpis">'+[['Codes activés',n(te(/^act_ok$/)),'appli · '+n(te(/^act_faux$/))+' code(s) faux · '+n(te(/^act_expire$/))+' expiré(s)'],['Essais 3 jours offerts',n(te(/^essai_ok$/)),'appli · 10 places'],['Demandes de code (contact)',n(te(/^code_dem_/)),'3 jours : '+n(te(/^code_dem_3j$/))+' · 1 mois : '+n(te(/^code_dem_mois$/))]].map(kp).join('')+'</div>';
+  h+=sec('4 · Premium','Test d’intérêt (prix prévus) · '+PLN[pl]+'.',prm,'s4');
+  // 5. Appli Android (téléchargements, installations, versions)
+  var VER={34:'1.4.17',35:'1.4.18',36:'1.4.19',37:'1.4.20',38:'1.4.21',39:'1.4.22',40:'1.4.23',41:'1.4.24',42:'1.4.25',43:'1.4.26',44:'1.4.27'};
+  var vn=function(c){return c==='old'?'ancienne (≤ 1.4.22)':'v'+(VER[c]||('code '+c))};
+  function list(arr,lab,val,alt){if(!arr||!arr.length)return '<p class="muted">Rien sur la période.</p>';arr.sort(function(a,b){return val(b)-val(a)});return hbars(arr.map(function(x){return [lab(x),val(x),n(val(x))]}),alt)}
+  if(pl!=='w'){
+    var dl=te(/^dl_/),inst=te(/^inst_/)+te(/^maj_/);
+    var ap='<div class="kpis">'+[['Téléchargements (Android)',n(dl),'depuis un ordinateur : '+n(te(/^dlpc_/))],['Installations + mises à jour',n(inst),'téléchargement → installation : '+pct(inst,dl)],['Nouvelles installations',n(te(/^inst_/)),'appli 1.4.23 et +'],['Mises à jour faites',n(te(/^maj_/)),'']].map(kp).join('')+'</div>';
+    ap+='<div class="two"><div><h3>Téléchargements par bouton</h3>'+list(Object.keys(tot).filter(function(e){return /^dl_/.test(e)}).map(function(e){return {s:e.slice(3),v:tot[e]}}),function(x){return SRC[x.s]||x.s},function(x){return x.v})+'</div>';
+    ap+='<div><h3>Ouvertures de l’appli par version</h3>'+list(Object.keys(tot).filter(function(e){return /^app_v\d+$/.test(e)}).map(function(e){return {c:+e.slice(5),v:tot[e]}}),function(x){return vn(x.c)},function(x){return x.v},true)+'</div></div>';
+    ap+='<details><summary>Installations et mises à jour par version</summary><div class="two"><div><h3>Nouvelles installations</h3>'+list(Object.keys(tot).filter(function(e){return /^inst_\d+$/.test(e)}).map(function(e){return {c:e.slice(5),v:tot[e]}}),function(x){return vn(x.c)},function(x){return x.v})+'</div><div><h3>Mises à jour (avant → après)</h3>'+list(Object.keys(tot).filter(function(e){return /^maj_[a-z0-9]+_\d+$/.test(e)}).map(function(e){var p=e.split('_');return {f:p[1],t:p[2],v:tot[e]}}),function(x){return vn(x.f)+' → '+vn(x.t)},function(x){return x.v})+'</div></div></details>';
+    h+=sec('5 · Appli Android','Téléchargements, installations et versions utilisées.',ap,'s5');
+  }
+  // 6. Site (Cloudflare Web Analytics)
+  if(pl!=='a'){
+    var st='';
+    if(W.ok){st+='<div class="kpis">'+[['Visites',n(tot.visits),'Cloudflare Web Analytics'],['Pages vues',n(tot.views),tot.visits?(tot.views/tot.visits).toFixed(1).replace('.',',')+' par visite':'']].map(kp).join('')+'</div>';
+      st+='<div class="two"><div><h3>D’où viennent les visiteurs</h3>'+list((W.refs||[]).slice(),function(x){return x.h||'(direct)'},function(x){return x.visits})+'</div><div><h3>Pays</h3>'+list((W.countries||[]).slice(),function(x){return x.c},function(x){return x.visits},true)+'</div></div>';
+      st+='<details><summary>Pages les plus vues (Cloudflare)</summary>'+list((W.pages||[]).slice(),function(x){return x.p},function(x){return x.views})+'</details>';}
+    else st='<div class="note"><b>Visites et pages vues non branchées.</b> '+(W.err==='not_configured'?'Ajoutez CF_API_TOKEN, CF_ACCOUNT_ID et CF_SITE_TAG dans Cloudflare Pages → Settings → Variables and Secrets, puis redéployez.':'Erreur Cloudflare : '+esc(W.err))+' Les sessions et parcours ci-dessus (mesure Rokhssati) restent justes.</div>';
+    h+=sec('6 · Site web','Mesure Cloudflare (visites, sources, pays).',st,'s6');
+  }
+  // 7. Contacts
+  var kinds=[['contact_code','Question ou demande de code'],['contact_autoecole','Auto-école'],['contact_autre','Autre sujet'],['contact_signal','Signalement de question'],['contact_premium','Intéressé Premium'],['contact_incomplet','Formulaire sans téléphone ni e-mail']].map(function(x){return {s:x[1],v:tot[x[0]]||0}}).filter(function(x){return x.v});
+  h+=sec('7 · Contacts','Messages reçus par sujet (site et appli). Pour les lire : bouton « Messages ».','<div class="kpis">'+[['Messages envoyés',n(te(/^contact_(code|autoecole|autre|signal)$/)),'tentatives : '+n(tot.contact_try)]].map(kp).join('')+'</div>'+list(kinds,function(x){return x.s},function(x){return x.v}),'s7');
+  // 8. Jour par jour (replié)
+  var ds=Object.keys(rows).concat(Object.keys(P)).filter(function(d,i,a){return a.indexOf(d)===i}).sort().reverse();
+  var jt='<table><tr><th>Jour</th><th>Sessions site</th><th>Sessions appli</th><th>Visites CF</th><th>Téléch.</th><th>Contacts</th><th>Codes activés</th></tr>'+ds.map(function(d){var r=rows[d]||{},p=P[d]||{};return '<tr><td>'+new Date(d).toLocaleDateString('fr-FR',{weekday:'short',day:'2-digit',month:'2-digit'})+'</td><td>'+n(pick(p,'w').ss_web)+'</td><td>'+n(pick(p,'a').ss_app)+'</td><td>'+(r.visits!=null?n(r.visits):'–')+'</td><td>'+n(sum(r,/^dl_/))+'</td><td>'+n(sum(r,/^contact_(code|autoecole|autre|signal)$/))+'</td><td>'+n(r.act_ok)+'</td></tr>'}).join('')+'</table>';
+  h+='<details class="gsec"><summary><b>8 · Jour par jour</b></summary>'+jt+'</details>';
+  var toc='<nav class="toc">'+[['s1','Vue d’ensemble'],['s2','Apprentissage'],['s3','Parcours'],['s4','Premium']].concat(pl!=='w'?[['s5','Appli']]:[]).concat(pl!=='a'?[['s6','Site']]:[]).concat([['s7','Contacts']]).map(function(x){return '<a href="#'+x[0]+'">'+x[1]+'</a>'}).join('')+'</nav>';
+  out.innerHTML=h.replace('<div class="tabs"','<div class="tabs-wrap"><div class="tabs"').replace('</div>','</div>'+toc+'</div>')+'<p class="muted">Compteurs sans cookie ni donnée personnelle. Robots et aperçus de liens exclus. Jours à l’heure d’Algérie.</p>';
+  [].forEach.call(out.querySelectorAll('.tabs button'),function(b){b.onclick=function(){PLAT=b.dataset.pl;try{localStorage.setItem('rk-plat',PLAT)}catch(e){}render()}});
+  setTimeout(function(){names().then(function(N){[].forEach.call(out.querySelectorAll('[data-q]'),function(td){var t=N.q[td.dataset.q];if(t)td.textContent=t});[].forEach.call(out.querySelectorAll('[data-c]'),function(td){var t=N.c[td.dataset.c];if(t){td.textContent=t;td.title=t}})})},0);
+}
+try{PLAT=localStorage.getItem('rk-plat')||'t'}catch(e){}
 document.getElementById('gs').onclick=function(){
   msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
   var days=document.getElementById('per').value;
   fetch(BASE+'/api/stats?days='+days,{headers:{'x-admin-key':k.value},cache:'no-store'}).then(rd).then(function(j){
     if(!j.ok){msg.className='err';msg.textContent=j.err==='key'?'Clé admin incorrecte.':'Erreur : '+j.err;out.innerHTML='';return}
-    msg.textContent='Du '+new Date(j.from).toLocaleDateString('fr-FR')+' au '+new Date(j.to).toLocaleDateString('fr-FR')+(j.web&&j.web.ok?(j.web.src==='all'?' · visites : toutes les entrées Web Analytics de rokhssati.com':' · visites : une seule entrée Web Analytics (CF_SITE_TAG)'):'');
-    var E=j.events||{},W=j.web||{},rows={},tot={},today=j.to,d7=new Date(Date.parse(j.to)-6*864e5).toISOString().slice(0,10);
-    Object.keys(E).forEach(function(d){rows[d]=rows[d]||{};for(var e in E[d]){rows[d][e]=E[d][e];tot[e]=(tot[e]||0)+E[d][e]}});
-    (W.days||[]).forEach(function(x){rows[x.d]=rows[x.d]||{};rows[x.d].visits=x.visits;rows[x.d].views=x.views;tot.visits=(tot.visits||0)+x.visits;tot.views=(tot.views||0)+x.views});
-    function per(re,from){var t=0;Object.keys(rows).forEach(function(d){if(d>=from)for(var e in rows[d])if(re.test(e))t+=rows[d][e]});return t}
-    var K=[['Visites',/^visits$/],['Pages vues',/^views$/],['Téléchargements de l’appli (téléphones Android)',/^dl_/],['Messages envoyés',/^contact_(code|autoecole|autre)$/],['Inscrits « prévenez-moi » Premium',/^contact_premium$/],['Tentatives de contact',/^contact_try$/],['Codes activés',/^act_ok$/],['Essais gratuits offerts (max 10)',/^essai_ok$/]];
-    var h='<div class="kpis">'+K.map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+n(per(x[1],'0'))+'</b><small>7 j : '+n(per(x[1],d7))+' · aujourd’hui : '+n(per(x[1],today))+'</small></div>'}).join('')+'</div>';
-    h+=product(j.product||{},tot);
-    h+=parcours(j.product||{});
-    if(!W.ok)h+='<div class="note"><b>Visites et pages vues non branchées.</b> '+(W.err==='not_configured'?'Elles sont mesurées par Cloudflare Web Analytics (dashboard Cloudflare → Analytics &amp; Logs → Web Analytics). Pour les voir ici, ajoutez CF_API_TOKEN, CF_ACCOUNT_ID et CF_SITE_TAG dans Cloudflare Pages → Settings → Variables and Secrets, puis redéployez.':'Erreur Cloudflare : '+esc(W.err))+'</div>';
-    var ds=Object.keys(rows).sort().reverse();
-    h+='<h2>Jour par jour</h2><table><tr><th>Jour</th><th>Visites</th><th>Pages vues</th><th>Téléch.</th><th>Contact (envoyés / tentatives)</th><th>Activations (ok / code faux / expiré)</th></tr>';
-    ds.forEach(function(d){var r=rows[d];h+='<tr><td>'+new Date(d).toLocaleDateString('fr-FR',{weekday:'short',day:'2-digit',month:'2-digit'})+'</td><td>'+(r.visits!=null?n(r.visits):'–')+'</td><td>'+(r.views!=null?n(r.views):'–')+'</td><td>'+n(sum(r,/^dl_/))+'</td><td>'+n(sum(r,/^contact_(code|autoecole|autre)$/))+' / '+n(r.contact_try)+'</td><td>'+n(r.act_ok)+' / '+n(r.act_faux)+' / '+n(r.act_expire)+'</td></tr>'});
-    if(!ds.length)h+='<tr><td colspan="6" class="muted">Rien encore sur la période.</td></tr>';
-    h+='</table>';
-    function list(title,arr,lab,val){if(!arr||!arr.length)return '';var mx=Math.max.apply(null,arr.map(val))||1;return '<h2>'+title+'</h2><table>'+arr.map(function(x){return '<tr><td>'+esc(lab(x))+'</td><td style="width:55%"><span class="bar" style="width:'+Math.round(val(x)/mx*80)+'%"></span>'+n(val(x))+'</td></tr>'}).join('')+'</table>'}
-    var srcs=Object.keys(tot).filter(function(e){return /^dl_/.test(e)}).map(function(e){return {s:e.slice(3),v:tot[e]}}).sort(function(a,b){return b.v-a.v});
-    h+=list('Téléchargements par bouton',srcs,function(x){return SRC[x.s]||x.s},function(x){return x.v});
-    var pcs=Object.keys(tot).filter(function(e){return /^dlpc_/.test(e)}).map(function(e){return {s:e.slice(5),v:tot[e]}}).sort(function(a,b){return b.v-a.v});
-    if(pcs.length) h+=list('Téléchargements depuis un ordinateur (non installables, non comptés au-dessus)',pcs,function(x){return SRC[x.s]||x.s},function(x){return x.v});
-    var VER={34:'1.4.17',35:'1.4.18',36:'1.4.19',37:'1.4.20',38:'1.4.21',39:'1.4.22',40:'1.4.23',41:'1.4.24',42:'1.4.25',43:'1.4.26'};
-    var apps=Object.keys(tot).filter(function(e){return /^app_v\d+$/.test(e)}).map(function(e){return {c:+e.slice(5),v:tot[e]}}).sort(function(a,b){return b.c-a.c});
-    var vn=function(c){return c==='old'?'ancienne (≤ 1.4.22)':'v'+(VER[c]||('code '+c))};
-    var ins=Object.keys(tot).filter(function(e){return /^inst_\d+$/.test(e)}).map(function(e){return {c:e.slice(5),v:tot[e]}});
-    h+=list('Nouvelles installations (appli 1.4.23 et +)',ins,function(x){return vn(x.c)},function(x){return x.v});
-    var mj=Object.keys(tot).filter(function(e){return /^maj_[a-z0-9]+_\d+$/.test(e)}).map(function(e){var p=e.split('_');return {f:p[1],t:p[2],v:tot[e]}});
-    h+=list('Mises à jour : version d’avant → nouvelle',mj,function(x){return vn(x.f)+' → '+vn(x.t)},function(x){return x.v});
-    h+=list('Ouvertures de l’appli par version (avec Internet)',apps,function(x){return 'v'+(VER[x.c]||('code '+x.c))},function(x){return x.v});
-    var kinds=[['contact_code','Question ou demande de code (total)'],['code_dem_3j','dont demandes de code d’essai 3 jours'],['code_dem_mois','dont demandes de code d’un mois'],['contact_autoecole','Auto-école'],['contact_autre','Autre sujet'],['contact_signal','Signalement de question'],['contact_incomplet','Formulaire sans téléphone ni e-mail']].map(function(x){return {s:x[1],v:tot[x[0]]||0}}).filter(function(x){return x.v});
-    h+=list('Contact par sujet',kinds,function(x){return x.s},function(x){return x.v});
-    if(W.ok){h+=list('Pages les plus vues',W.pages,function(x){return x.p},function(x){return x.views});
-      h+=list('Pays des visiteurs',W.countries,function(x){return x.c},function(x){return x.visits});
-      h+=list('D’où viennent les visiteurs',W.refs,function(x){return x.h},function(x){return x.visits});}
-    out.innerHTML=h+'<p class="muted">Compteurs sans cookie ni donnée personnelle. Robots et aperçus de liens (WhatsApp, Facebook…) exclus. Jours à l’heure d’Algérie.</p>';
+    msg.textContent='Du '+new Date(j.from).toLocaleDateString('fr-FR')+' au '+new Date(j.to).toLocaleDateString('fr-FR');
+    LAST=j;render();
   }).catch(function(){msg.className='err';msg.textContent='Pas de réponse (connexion). Ouvrez la page dans Chrome : rokhssati.com/gestion.html'});
 };
 </script><script>(function(){var b=document.getElementById("nt");function r(){var on=false;try{on=localStorage.getItem("rokhssati-notrack")==="1"}catch(e){}b.textContent=on?"✅ Ce navigateur n'est pas compté (réactiver)":"Ne pas compter ce navigateur";}b.onclick=function(){try{if(localStorage.getItem("rokhssati-notrack")==="1")localStorage.removeItem("rokhssati-notrack");else localStorage.setItem("rokhssati-notrack","1")}catch(e){}r()};r();})();</script><script>/* Does Cloudflare inject its own Web Analytics beacon? gestion.html has none of its own, so any beacon here comes from Cloudflare. */window.addEventListener("load",function(){setTimeout(function(){var inj=!!document.querySelector('script[src*="cloudflareinsights"]')||performance.getEntriesByType("resource").some(function(e){return /cloudflareinsights/.test(e.name)});var p=document.createElement("p");p.id="cfinj";p.style.cssText="margin:8px 0 0;font-size:.92em";p.textContent=inj?"⚠️ Cloudflare ajoute lui-même sa mesure de visites à chaque page : le bouton ci-dessus n'exclut pas vos visites des « Visites » et « Pages vues » (il exclut bien téléchargements, essais, entonnoir).":"Mesure Cloudflare : pas ajoutée par Cloudflare. Avec le bouton activé, ce navigateur n'est pas compté dans les visites ; vos autres navigateurs et appareils (ordinateur, onglet privé) le sont.";var c=document.querySelector(".ctl");c.parentNode.insertBefore(p,c.nextSibling)},2500)});</script>
