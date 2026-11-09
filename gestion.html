@@ -49,7 +49,7 @@ th{background:var(--soft);font-weight:600}
       <strong class="sr-only"><span class="l-fr" lang="fr">Rokhssati</span></strong>
     </a><span class="tag">Gestion · privé</span></div></header><main><h1>Gestion</h1>
 <p class="muted">Collez la <b>clé admin</b> : c'est la valeur de la variable ROKH_ADMIN_KEY (Cloudflare Pages → Settings → Variables and Secrets). Sans la clé, cette page n'affiche rien.</p>
-<div class="ctl"><input id="k" type="password" placeholder="Clé admin"> <button id="go">Codes activés</button> <button id="gm">Messages</button> <button id="gs">Statistiques</button> <select id="per"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">90 jours</option></select> <button id="nt"></button> <span id="msg"></span></div>
+<div class="ctl"><input id="k" type="password" placeholder="Clé admin"> <button id="go">Codes activés</button> <button id="gm">Messages</button> <button id="gp">Intéressés Premium</button> <button id="gs">Statistiques</button> <select id="per"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">90 jours</option></select> <button id="nt"></button> <span id="msg"></span></div>
 <div id="out"></div>
 <script>
 var BASE=location.protocol==='https:'&&/rokhssati\.com$/.test(location.hostname)?'':'https://rokhssati.com';
@@ -73,7 +73,7 @@ var TPL=[
  {n:'Merci pour le signalement',fr:'Merci pour votre signalement ! Nous avons vérifié la question et la corrigeons dans la prochaine mise à jour. L’équipe Rokhssati',ar:'شكرًا على تنبيهك! راجعنا السؤال وسنصححه في التحديث القادم. فريق رخصتي',dz:'يعطيك الصحة على التنبيه! شفنا السؤال وراح نصلحوه في التحديث الجاي. فريق رخصتي'},
  {n:'Question bien reçue, réponse',fr:'Bonjour, merci pour votre question. ',ar:'مرحبًا، شكرًا على سؤالك. ',dz:'السلام، يعطيك الصحة على السؤال. '},
  {n:'Auto-école : on vous recontacte',fr:'Bonjour, merci pour l’intérêt que vous portez à Rokhssati. Nous préparons l’offre auto-écoles et revenons vers vous très vite. L’équipe Rokhssati',ar:'مرحبًا، شكرًا على اهتمامك برخصتي. نحضّر عرض مدارس السياقة وسنعود إليك قريبًا جدًا. فريق رخصتي',dz:'السلام، يعطيك الصحة على الاهتمام برخصتي. راحنا نحضرو العرض تاع الأوطو إيكول ونرجعولك قريب. فريق رخصتي'}];
-var KIND={code:'Code d’activation','auto-ecole':'Auto-école',autre:'Autre',signal:'Signalement de question'};
+var KIND={code:'Code d’activation','auto-ecole':'Auto-école',autre:'Autre',signal:'Signalement de question',premium:'Intéressé Premium'};
 document.getElementById('gm').onclick=function(){
   msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
   fetch(BASE+'/api/messages',{headers:{'x-admin-key':k.value},cache:'no-store'}).then(rd).then(function(j){
@@ -123,7 +123,7 @@ function product(P,tot){
     ['Chapitres terminés',n(g('c_done')),'au total'],
     ['Tests « 2 minutes » terminés',n(g('qk_e')),n(g('qk_s'))+' commencé(s)'],
     ['Recherches d’auto-école',n(g('ae_w')),n(g('ae_map'))+' carte(s) affichée(s)'],
-    ['Intérêt Premium (test prix)',pct(g('pr_i'),g('pr_v')),n(g('pr_i'))+' oui · '+n(g('pr_n'))+' non · '+n(g('pr_v'))+' ont vu l’annonce'],
+    ['Intérêt Premium (test prix)',pct(g('pr_i'),g('pr_v')),n(g('pr_i'))+' oui · '+n(g('pr_n'))+' non · '+n(g('pr_v'))+' ont vu l’annonce · '+n(g('pr_c'))+' contact(s) laissé(s)'],
     ['Formule préférée',(function(){var o=[['1 mois (300 DA)',g('pr_m1')],['3 mois (700 DA)',g('pr_m3')],['1 an (2 000 DA)',g('pr_y')]].sort(function(a,b){return b[1]-a[1]});return o[0][1]?o[0][0]:'–'})(),'1 mois : '+n(g('pr_m1'))+' · 3 mois : '+n(g('pr_m3'))+' · 1 an : '+n(g('pr_y'))]
   ].map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small></div>'}).join('')+'</div>';
   var ch=Object.keys(T).filter(function(k){return /^co:/.test(k)&&T[k]>=3}).map(function(k){var id=k.slice(3),o=T[k],d=T['cd:'+id]||0;return {id:id,o:o,d:d,a:1-d/o}}).sort(function(a,b){return b.a-a.a||b.o-a.o}).slice(0,10);
@@ -173,6 +173,23 @@ function parcours(P){
   h+='<h3>Après ces écrans, où vont-ils ?</h3><div class="flow">'+hubs.map(function(p){var nx=tr.filter(function(x){return x[0]===p}).slice(0,5),ex=Math.max(0,pv[p]-(out[p]||0));var rows=nx.map(function(x){return [pn(x[1]),x[2],pct(x[2],pv[p])]});rows.push(['Fin de session',ex,pct(ex,pv[p])]);rows.sort(function(a,b){return b[1]-a[1]});return '<div><h3>'+esc(pn(p))+'</h3>'+hbars(rows)+'</div>'}).join('')+'</div>';
   return h;
 }
+
+// ---- « qui est intéressé » par le Premium (pub « prix prévus » + ancien formulaire « prévenez-moi ») — 09/11/2026
+document.getElementById('gp').onclick=function(){
+  msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
+  fetch(BASE+'/api/messages',{headers:{'x-admin-key':k.value},cache:'no-store'}).then(rd).then(function(j){
+    if(!j.ok){msg.className='err';msg.textContent=j.err==='key'?'Clé admin incorrecte.':'Erreur : '+j.err;out.innerHTML='';return}
+    var R=j.rows.filter(function(r){return r.kind==='premium'}),F={m1:'1 mois (300 DA)',m3:'3 mois (700 DA)',y:'1 an (2 000 DA)'},LG={ar:'Arabe',fr:'Français',dz:'Darija'};
+    msg.textContent=R.length+' personne(s) intéressée(s)';
+    var c={m1:0,m3:0,y:0,'':0};R.forEach(function(r){c[r.formule||'']=(c[r.formule||'']||0)+1});
+    var h='<h2>Intéressés par le Premium</h2><div class="kpis">'+[['Personnes intéressées',n(R.length),'contact laissé volontairement'],['1 mois (300 DA)',n(c.m1),pct(c.m1,R.length)],['3 mois (700 DA)',n(c.m3),pct(c.m3,R.length)],['1 an (2 000 DA)',n(c.y),pct(c.y,R.length)],['Sans formule choisie',n(c['']),'oui sans choix, ou ancien formulaire']].map(function(x){return '<div class="kpi"><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small></div>'}).join('')+'</div>';
+    if(!R.length)h+='<div class="note">Personne pour l’instant. Les réponses de la pub « Premium : bientôt » (accueil et page Premium) arriveront ici.</div>';
+    else h+='<table><tr><th>Date</th><th>E-mail / téléphone</th><th>Formule préférée</th><th>Langue</th><th>Source</th></tr>'+R.map(function(r){return '<tr><td>'+d(r.at)+'</td><td>'+(r.email?'<a href="mailto:'+esc(r.email)+'">'+esc(r.email)+'</a>':'')+(r.phone?(r.email?'<br>':'')+'<a href="tel:'+esc(r.phone)+'">'+esc(r.phone)+'</a>':'')+'</td><td>'+esc(F[r.formule]||'–')+'</td><td>'+esc(LG[r.lang]||r.lang||'')+'</td><td>'+esc(r.src||'site')+'</td></tr>'}).join('')+'</table>'+
+      '<p><button id="gpcsv">Copier la liste (e-mails et téléphones)</button> <span class="muted" id="gpm"></span></p><p class="muted">Ces personnes ont donné leur contact seulement pour être prévenues de la sortie du Premium : ne l’utilisez que pour ça. Effacé automatiquement après 12 mois.</p>';
+    out.innerHTML=h;
+    var b=document.getElementById('gpcsv');if(b)b.onclick=function(){var t=R.map(function(r){return [r.email,r.phone,F[r.formule]||''].filter(Boolean).join(' ; ')}).join('\n');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){document.getElementById('gpm').textContent='✓ Copié'},function(){document.getElementById('gpm').textContent='Copie impossible : sélectionnez le tableau'})};
+  }).catch(function(){msg.className='err';msg.textContent='Pas de réponse du serveur.'});
+};
 document.getElementById('gs').onclick=function(){
   msg.textContent='Chargement…';msg.className='';try{localStorage.setItem('rk-admin',k.value)}catch(e){}
   var days=document.getElementById('per').value;

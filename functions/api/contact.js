@@ -20,9 +20,14 @@ export async function onRequest({ request, env }) {
   // phone/e-mail optional (replies go to "Mes messages"), except for driving schools
   if (m.kind === "auto-ecole" && !m.phone && !m.email) { await count(env, "contact_incomplet", request); return out({ ok: false, err: "contact" }, 400); }
   // "prévenez-moi" list for the Premium release: e-mail only, nothing to pay, no pre-order (kept 12 months like every message)
+  // 09/11/2026 : depuis la pub « prix prévus », e-mail OU téléphone, + formule préférée (m1 / m3 / y) et source (site / appli)
   if (m.kind === "premium") {
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m.email)) return out({ ok: false, err: "email" }, 400);
-    m.msg = "Prévenir à la sortie du Premium";
+    const okMail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m.email), okTel = /^\+?[0-9]{9,15}$/.test(m.phone);
+    if (!okMail && !okTel) return out({ ok: false, err: "email" }, 400);
+    if (!okMail) m.email = ""; if (!okTel) m.phone = "";
+    const F = { m1: "1 mois (300 DA)", m3: "3 mois (700 DA)", y: "1 an (2 000 DA)" };
+    m.formule = F[cut(b.formule, 4)] ? cut(b.formule, 4) : ""; m.src = cut(b.src, 10);
+    m.msg = "Intéressé par le Premium" + (m.formule ? " — formule : " + F[m.formule] : "") + (m.src ? " (" + m.src + ")" : "");
   }
   if (!m.msg && m.kind !== "auto-ecole") return out({ ok: false, err: "msg" }, 400);
   if (!env.ROKH_KV) return out({ ok: false, err: "store" }, 500);
