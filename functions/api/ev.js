@@ -13,10 +13,14 @@ export async function onRequest({ request, env }) {
   if (!env.ROKH_KV || BOT.test(request.headers.get("user-agent") || "") || request.headers.get("sec-gpc") === "1" || request.headers.get("dnt") === "1") return out({ ok: true });
   let b; try { b = JSON.parse((await request.text()).slice(0, 4000)); } catch (e) { return out({ ok: false }, 400); }
   if (!b || typeof b !== "object") return out({ ok: false }, 400);
+  // 09/11/2026 : compteurs séparés appli / site. « a|… » = appli, « w|… » = site ; les clés sans préfixe datent d'avant la séparation.
+  // L'appli 1.4.27 n'envoie pas _p : reconnue par la WebView Android (« ; wv) ») ou une origine autre que rokhssati.com.
+  const ua = request.headers.get("user-agent") || "", org = request.headers.get("origin") || "";
+  const p = b._p === "a" || b._p === "w" ? b._p : (/; wv\)/.test(ua) || (org && !/rokhssati\.com$/.test(org)) ? "a" : "w");
   const add = {}; let n = 0;
   for (const [k, v] of Object.entries(b)) {
     const x = Math.floor(+v);
-    if (OK.test(k) && x >= 1 && x <= 200 && ++n <= 60) add[k] = x;
+    if (OK.test(k) && x >= 1 && x <= 200 && ++n <= 60) add[p + "|" + k] = x;
   }
   if (!n) return out({ ok: true });
   try {

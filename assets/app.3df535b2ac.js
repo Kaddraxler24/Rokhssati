@@ -112,6 +112,7 @@ var RokhCode = (function () {
     function flush() {
       if (off()) { try { localStorage.removeItem(QK); } catch (e) {} return; }
       var q = jget(QK); if (!Object.keys(q).length) return;
+      q._p = window.RokhNative ? "a" : "w";   // appli / site (séparés dans Gestion, 09/11/2026)
       var url = (window.RokhNative ? "https://rokhssati.com" : "") + "/api/ev", body = JSON.stringify(q), sent = false;
       try { sent = navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type: "text/plain" })); } catch (e) {}
       if (!sent) { try { fetch(url, { method: "POST", body: body, keepalive: true }); } catch (e) {} }
