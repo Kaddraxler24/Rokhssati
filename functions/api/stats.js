@@ -56,12 +56,21 @@ async function web(env, from, to) {
     if (j.errors && j.errors.length) return { ok: false, err: j.errors.map((e) => e.message).join(" | ").slice(0, 300) };
     if (!j.data || !j.data.viewer) return { ok: false, err: "Réponse inattendue (HTTP " + r.status + ")" };
     const a = j.data.viewer.accounts[0];
+    // ROK-02 (10/11/2026) : vues et visites de la page Gestion, retirées des totaux côté Gestion. Requête à part : si elle échoue, les totaux restent bruts.
+    let adm = null;
+    if (a) try {
+      const QG = (src === "all" ? QALL : Q).replace(/\{viewer[\s\S]*$/, "") + "{viewer{accounts(filter:{accountTag:$a}){gdays:rumPageloadEventsAdaptiveGroups(limit:200,filter:{"
+        + (src === "all" ? "requestHost_in:" + HOSTS : "siteTag:$s") + ',requestPath_in:["/gestion","/gestion.html"],date_geq:$f,date_leq:$t},orderBy:[date_ASC]){count sum{visits} dimensions{date}}}}}';
+      const g = await ask(QG, src === "all" ? { a: acc, f: from, t: to } : { a: acc, s: site, f: from, t: to });
+      const ga = g.j && !g.j.errors && g.j.data && g.j.data.viewer && g.j.data.viewer.accounts[0];
+      if (ga) adm = (ga.gdays || []).map((x) => ({ d: x.dimensions.date, views: x.count, visits: x.sum.visits }));
+    } catch (e) {}
     if (!a) return { ok: false, err: "Compte introuvable : vérifiez CF_ACCOUNT_ID, et que le jeton a la permission Account Analytics : Read sur ce compte" };
     return { ok: true, src,
       days: (a.days || []).map((x) => ({ d: x.dimensions.date, views: x.count, visits: x.sum.visits })),
       pages: (a.pages || []).map((x) => ({ p: x.dimensions.requestPath, views: x.count })),
       countries: (a.countries || []).map((x) => ({ c: x.dimensions.countryName, visits: x.sum.visits })),
-      refs: (a.refs || []).map((x) => ({ h: x.dimensions.refererHost || "(direct)", visits: x.sum.visits })) };
+      refs: (a.refs || []).map((x) => ({ h: x.dimensions.refererHost || "(direct)", visits: x.sum.visits })), adm };
   } catch (e) { return { ok: false, err: String(e).slice(0, 200) }; }
 }
 
