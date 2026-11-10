@@ -811,6 +811,7 @@ html.news-open { overflow: hidden; }
 .inbox-bar { background: var(--sign); color: #fff; text-align: center; padding: 10px 16px; font-weight: 600; }
 .inbox-bar a { color: #fff; text-decoration: underline; margin-inline-start: 6px; }
 
+.pure-badge { height: 1.3em; width: auto; border-radius: 6px; vertical-align: middle; margin-inline-start: 4px; }
 .btn-apk.is-soon { opacity: .85; cursor: default; pointer-events: none; }
 
 /* weak points */
