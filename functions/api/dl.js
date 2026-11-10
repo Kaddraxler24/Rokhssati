@@ -3,7 +3,7 @@
 const SOON = false;
 // owner 08/11/2026: APKPure page of the app (same APK, same signature). Empty = "to=apkpure" falls back to the site's APK.
 // Keep in sync with APKPURE_URL in the generator (build/build2.py). Fixed value only: never redirect to a URL taken from the request.
-const APKPURE = "";
+const APKPURE = "https://apkpure.com/p/com.rokhssati.app";   // page publique, 10/11/2026
 import { count } from "../_lib/stats.js";
 export async function onRequest({ request, env, waitUntil }) {
   const src = (new URL(request.url).searchParams.get("src") || "autre").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 12) || "autre";
