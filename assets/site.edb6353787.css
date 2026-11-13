@@ -1015,6 +1015,13 @@ html.news-open { overflow: hidden; }
 .cr-epr span:last-child { color: var(--muted); }
 .cr-steps .cr-fig { justify-content: flex-start; margin: 4px 0 10px; }
 .cr-steps .cr-fig svg { max-width: 420px; }
+.cr-det { margin: 12px 0 0; display: grid; gap: 6px; }
+.cr-det > div { background: var(--surface, #fff); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; }
+.cr-det dt { font-weight: 700; font-size: .92em; }
+.cr-det dd { margin: 2px 0 0; }
+.cr-det .cr-d-vol { border-color: rgba(15,118,110,.35); }
+.cr-det .cr-d-err { background: #fff6e8; border-color: #f0c98a; }
+@media (min-width: 720px) { .cr-det { grid-template-columns: 1fr 1fr; } .cr-det .cr-d-err { grid-column: 1 / -1; } }
 .mega-soon { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 6px 10px; color: var(--muted); }
 /* test d'intérêt Premium (09/11/2026) */
 .pr-ad { max-width: 860px; margin: 0 auto; text-align: center; }
