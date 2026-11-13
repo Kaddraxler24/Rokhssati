@@ -126,7 +126,25 @@ var RokhCode = (function () {
       /* cohortes (ROK-01, 10/11/2026) : chaque compteur porte aussi le jour d'arrivée (AAAAMMJJ, UTC), pour lire J+1 / J+7 par cohorte.
          Une date de cohorte, pas un identifiant. vc = nouveau visiteur, r1c = revenu le lendemain, r7c = revenu 7 jours ou plus après. */
       var coh = function (n) { return new Date(n * 86400000).toISOString().slice(0, 10).replace(/-/g, ""); };
-      if (!f) { try { localStorage.setItem("rokhssati-first", String(today)); } catch (e) {} once("v_new"); once("vc:" + coh(today)); return; }
+      if (!f) {
+        try { localStorage.setItem("rokhssati-first", String(today)); } catch (e) {} once("v_new"); once("vc:" + coh(today));
+        // RKV3-03 (13/11/2026): where the new visitor came from (utm_source, else the referring site), kept on this device only,
+        // so activation can be read per source (a1s:). A category, never the full address.
+        var cl = function (x) { return String(x || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 20); }, src = "direct", sp = null;
+        try { sp = new URLSearchParams(location.search); } catch (e) {}
+        var us = sp && cl(sp.get("utm_source")), uc = sp && cl(sp.get("utm_campaign")), ref = "";
+        try { ref = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) {}
+        if (window.RokhNative) src = "app";
+        else if (us && us.length >= 2) src = us;
+        else if (/(^|\.)(facebook|fb|messenger|instagram)\./.test(ref) || /^(l|lm|m)\.facebook\./.test(ref)) src = "facebook";
+        else if (/(^|\.)google\./.test(ref)) src = "google";
+        else if (/(^|\.)(bing|msn)\./.test(ref)) src = "bing";
+        else if (/(^|\.)(youtube|tiktok|whatsapp|t)\./.test(ref)) src = ref.split(".").slice(-2)[0];
+        else if (ref && ref.indexOf("rokhssati") < 0) src = "autre";
+        try { localStorage.setItem("rokhssati-src", src); } catch (e) {}
+        once("src:" + src); if (uc && uc.length >= 2) once("cp:" + uc);
+        return;
+      }
       var d = today - (+f || today);
       if (d >= 1) once("r1"); if (d >= 7) once("r7");
       if (+f) { if (d === 1) once("r1c:" + coh(+f)); if (d >= 7) once("r7c:" + coh(+f)); }
@@ -147,7 +165,14 @@ var RokhCode = (function () {
     document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") flush(); });
     window.addEventListener("pagehide", flush);
     setTimeout(flush, 4000);
-    function cohort(name) { var f = null; try { f = +localStorage.getItem("rokhssati-first"); } catch (e) {} if (f) once(name + ":" + new Date(f * 86400000).toISOString().slice(0, 10).replace(/-/g, "")); }
+    // NF-09 (13/11/2026): count script errors from our own files (no message, no address), at most one per page
+    var jsErr = false;
+    window.addEventListener("error", function (e) { if (jsErr || !e || !/\/assets\/|rokhssati|appassets/.test(String(e.filename || ""))) return; jsErr = true; add("jserr"); });
+    function cohort(name) {
+      var f = null, sr = ""; try { f = +localStorage.getItem("rokhssati-first"); sr = localStorage.getItem("rokhssati-src") || ""; } catch (e) {}
+      if (f) once(name + ":" + new Date(f * 86400000).toISOString().slice(0, 10).replace(/-/g, ""));
+      if (name === "a1c" && sr) once("a1s:" + sr);   // activation per source (only visitors whose source is known, from 13/11/2026)
+    }
     return { add: add, once: once, flush: flush, cohort: cohort };
   })();
 
@@ -1245,6 +1270,18 @@ var RokhCode = (function () {
     if (!pgRing) return;
     var p = Track.prog(), g = globalStats(p), h = Track.history(), errs = Object.keys(Track.errors()).length;
     setRing(pgRing, g.pct);
+    // audit PO (P2), 13/11/2026: a new learner sees where to start instead of a bare "0 %"
+    var empty = !g.done && !h.length && !Object.keys(p.read || {}).length, eb = $("#pgEmpty");
+    if (empty && !eb) {
+      eb = document.createElement("div"); eb.id = "pgEmpty"; eb.className = "pg-empty";
+      eb.innerHTML = '<p></p><p class="pg-actions"><a class="btn btn-primary" href="entrainement.html#rapide"></a> <a class="btn btn-ghost" href="code-de-la-route.html"></a></p>';
+      var top = pgRing.closest(".stats-top"); top.parentNode.insertBefore(eb, top);
+    }
+    if (eb) {
+      eb.hidden = !empty;
+      var E = { ar: ["سيظهر تقدّمك هنا. ابدأ باختبار من دقيقتين أو بأول درس.", "⏱ اختبر نفسك في دقيقتين", "📘 الدروس"], fr: ["Votre progression apparaîtra ici. Commencez par le test de 2 minutes ou par un premier chapitre.", "⏱ Teste-toi en 2 minutes", "📘 Les cours"], dz: ["التقدّم تاعك يبان هنا. ابدا بتاست تاع دقيقتين ولا بأول درس.", "⏱ جرّب روحك في دقيقتين", "📘 الدروس"] }[lang] || [];
+      var ps = eb.querySelectorAll("p, a"); ps[0].textContent = E[0]; ps[2].textContent = E[1]; ps[3].textContent = E[2];
+    }
     var pcts = h.map(function (x) { return x.score / x.total; });
     var avg = pcts.length ? pcts.reduce(function (a, b) { return a + b; }, 0) / pcts.length : 0;
     var best = pcts.length ? Math.max.apply(null, pcts) : 0;
@@ -1400,6 +1437,18 @@ var RokhCode = (function () {
         d.querySelector("b").textContent = it.from === "r" ? t("inR") : t("inMe");
         d.querySelector("small").textContent = fmtDate(new Date(it.at).getTime());
         d.querySelector("p").textContent = it.text;
+        // RKV3-28 (13/11/2026): optional "did this help?" under our latest reply, anonymous counters rep_up / rep_dn, asked once per reply
+        if (it.from === "r" && it === items.filter(function (x) { return x.from === "r"; }).pop()) {
+          var FK = "rokhssati-fb-" + it.at, FB = { ar: ["هل ساعدك هذا الرد؟", "نعم", "لا", "شكرًا على رأيك!"], fr: ["Cette réponse vous a aidé ?", "Oui", "Non", "Merci pour votre avis !"], dz: ["هاد الرد عاونك؟", "إيه", "لا", "يعطيك الصحة على رأيك!"] }[lang] || [];
+          var fb = document.createElement("p"); fb.className = "in-fb muted";
+          if (lsGet(FK)) fb.textContent = FB[3];
+          else {
+            fb.innerHTML = '<span></span> <button type="button" class="btn btn-ghost in-up">👍 <b></b></button> <button type="button" class="btn btn-ghost in-dn">👎 <b></b></button>';
+            fb.firstChild.textContent = FB[0]; fb.querySelector(".in-up b").textContent = FB[1]; fb.querySelector(".in-dn b").textContent = FB[2];
+            $$("button", fb).forEach(function (bt) { bt.addEventListener("click", function () { Measure.add(bt.classList.contains("in-up") ? "rep_up" : "rep_dn"); lsSet(FK, "1"); fb.textContent = FB[3]; }); });
+          }
+          d.appendChild(fb);
+        }
         list.appendChild(d);
       });
     }
