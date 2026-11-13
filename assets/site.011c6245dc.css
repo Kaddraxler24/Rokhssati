@@ -995,6 +995,21 @@ html.news-open { overflow: hidden; }
 .cr-epr li.is-here > a { border: 2px solid var(--sign); }
 .cr-epr li.is-soon > div { opacity: .65; border-style: dashed; }
 .cr-epr .cr-ic { font-size: 26px; }
+/* 13/11/2026 : « Le créneau et les manœuvres » (version de test) */
+.mv-sum { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.mv-sum a { display: grid; gap: 2px; padding: 14px 16px; border-radius: 14px; background: var(--bg); border: 1px solid var(--line); color: inherit; text-decoration: none; }
+.mv-sum b { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--sign); color: #fff; font-family: var(--num); }
+.mv-sum small { color: var(--muted); }
+.mv-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.mv-ch > a, .mv-ch > div { display: grid; grid-template-columns: 44px 1fr; gap: 12px; height: 100%; box-sizing: border-box; padding: 16px; border-radius: 16px; background: var(--surface, #fff); border: 1px solid var(--line); color: inherit; text-decoration: none; }
+.mv-ch > a { border: 2px solid var(--sign); }
+.mv-ch.is-prep > div { border-style: dashed; }
+.mv-n { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--soft); color: var(--sign); font-family: var(--num); font-weight: 800; font-size: 18px; }
+.mv-ch h3 { margin: 6px 0 6px; font-size: 1.05rem; }
+.mv-obj { margin: 0 0 6px; font-size: .92rem; }
+.mv-ch ul { margin: 0 0 10px; padding-inline-start: 18px; font-size: .88rem; color: var(--muted); }
+.mv-st { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: .78rem; font-weight: 700; }
+.mv-st.is-ok { background: var(--sign); color: #fff; } .mv-st.is-prep { background: var(--amber-soft); color: var(--amber-ink); }
 .cr-epr b { font-size: 18px; }
 .cr-epr span:last-child { color: var(--muted); }
 .cr-steps .cr-fig { justify-content: flex-start; margin: 4px 0 10px; }
