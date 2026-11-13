@@ -1527,38 +1527,7 @@ var RokhCode = (function () {
     check(false);
   })();
 
-  /* lot 3 (cahier v2 § 5.2): course figures and situations open full screen on tap */
-  (function () {
-    var ov = null, last = null;
-    function close() { if (!ov || ov.hidden) return; ov.hidden = true; ov.querySelector(".zoom-in").innerHTML = ""; document.documentElement.classList.remove("news-open"); if (last && last.focus) last.focus(); }
-    function openZoom(fig) {
-      var svg = fig.querySelector("svg"); if (!svg) return;
-      if (!ov) {
-        ov = document.createElement("div"); ov.className = "zoom-ov"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
-        ov.innerHTML = '<button type="button" class="zoom-x">×</button><div class="zoom-in"></div>';
-        document.getElementById("app").appendChild(ov);
-        ov.addEventListener("click", function (e) { if (e.target === ov || e.target.classList.contains("zoom-in")) close(); });
-        ov.querySelector(".zoom-x").addEventListener("click", close);
-        document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
-      }
-      last = document.activeElement;
-      var c = svg.cloneNode(true); c.removeAttribute("width"); c.removeAttribute("height"); c.removeAttribute("style");
-      ov.querySelector(".zoom-in").appendChild(c);
-      var x = ov.querySelector(".zoom-x"); x.setAttribute("aria-label", t("zoomClose"));
-      ov.setAttribute("aria-label", t("zoom"));
-      ov.hidden = false; document.documentElement.classList.add("news-open"); x.focus();
-    }
-    function prep(root) {
-      $$(".s-fig, #trainer .q-sign, .v-stage .q-sign", root || document).forEach(function (f) {
-        if (f.dataset.zoom || !f.querySelector("svg")) return;
-        f.dataset.zoom = "1"; f.classList.add("is-zoomable"); f.tabIndex = 0; f.setAttribute("role", "button"); f.setAttribute("aria-label", t("zoom"));
-      });
-    }
-    document.addEventListener("click", function (e) { var f = e.target.closest && e.target.closest(".is-zoomable"); if (f) openZoom(f); });
-    document.addEventListener("keydown", function (e) { if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("is-zoomable")) { e.preventDefault(); openZoom(e.target); } });
-    prep(); new MutationObserver(function () { prep(); }).observe(document.getElementById("app"), { childList: true, subtree: true });
-    listeners.push(function () { $$(".is-zoomable").forEach(function (f) { f.setAttribute("aria-label", t("zoom")); }); });
-  })();
+  /* (13/11/2026, owner) figures no longer open full screen: zoom removed everywhere. Signs keep their own fiche. */
 
   /* Premium "prévenez-moi" list: e-mail only (functions/api/contact.js kind "premium"); nothing to pay, no pre-order */
   (function () {
