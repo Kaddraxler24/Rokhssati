@@ -118,6 +118,7 @@ var RokhCode = (function () {
       if (!sent) { try { fetch(url, { method: "POST", body: body, keepalive: true }); } catch (e) {} }
       try { localStorage.removeItem(QK); } catch (e) {}
     }
+    try { if (window.RokhNative && typeof window.RokhNative.setNoTrack === "function") window.RokhNative.setNoTrack(off()); } catch (e) {}   // 1.4.28: same refusal for the app's opens-per-version count
     (function visit() {   // new visitor / came back after 1 day / after 7 days (each counted once per browser)
       if (off()) return;
       var f = null; try { f = localStorage.getItem("rokhssati-first"); } catch (e) { return; }
@@ -1497,7 +1498,7 @@ var RokhCode = (function () {
               fr: ["Vous participez à la mesure anonyme.", "Vous ne participez pas à la mesure (sur ce navigateur).", "Ne pas participer", "Participer de nouveau"],
               dz: ["راك تشارك في القياس المجهول.", "ما راكش تشارك في القياس (في هاد المتصفح).", "ما نحبش نشارك", "نشارك عاوتاني"] };
     function draw() { var off = false; try { off = localStorage.getItem("rokhssati-notrack") === "1"; } catch (e) {} var m = M[lang] || M.fr; st.textContent = off ? m[1] : m[0]; b.textContent = off ? m[3] : m[2]; }
-    b.addEventListener("click", function () { try { if (localStorage.getItem("rokhssati-notrack") === "1") localStorage.removeItem("rokhssati-notrack"); else { localStorage.setItem("rokhssati-notrack", "1"); localStorage.removeItem("rokhssati-evq"); } } catch (e) {} draw(); });
+    b.addEventListener("click", function () { try { if (localStorage.getItem("rokhssati-notrack") === "1") localStorage.removeItem("rokhssati-notrack"); else { localStorage.setItem("rokhssati-notrack", "1"); localStorage.removeItem("rokhssati-evq"); } } catch (e) {} try { if (window.RokhNative && window.RokhNative.setNoTrack) window.RokhNative.setNoTrack(localStorage.getItem("rokhssati-notrack") === "1"); } catch (e) {} draw(); });
     listeners.push(draw); draw();
   })();
 
