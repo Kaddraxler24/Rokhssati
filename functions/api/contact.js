@@ -31,6 +31,11 @@ export async function onRequest({ request, env }) {
   }
   if (!m.msg && m.kind !== "auto-ecole") return out({ ok: false, err: "msg" }, 400);
   if (!env.ROKH_KV) return out({ ok: false, err: "store" }, 500);
+  // R4-011 (13/11/2026): at most 15 messages per network address per hour (anti-spam; the address itself is not stored with the message)
+  const rl = "rl:c:" + (request.headers.get("cf-connecting-ip") || "?") + ":" + Math.floor(Date.now() / 3600000);
+  const nrl = +(await env.ROKH_KV.get(rl)) || 0;
+  if (nrl >= 15) return out({ ok: false, err: "trop" }, 429);
+  await env.ROKH_KV.put(rl, String(nrl + 1), { expirationTtl: 7200 });
   await count(env, "contact_" + (sig ? "signal" : m.kind === "auto-ecole" ? "autoecole" : m.kind === "code" ? "code" : m.kind === "premium" ? "premium" : "autre"), request);
   if (m.demande === "essai-3j" || m.demande === "mois") await count(env, m.demande === "mois" ? "code_dem_mois" : "code_dem_3j", request);
   m.bx = await bxOf(b.box);                                   // private thread for "Mes messages" (optional)

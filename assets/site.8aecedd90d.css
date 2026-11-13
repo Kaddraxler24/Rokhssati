@@ -435,6 +435,8 @@ ul.ticks{padding-inline-start:1.2em;margin:0 0 1.2em}ul.ticks li{margin:.35em 0}
 .pg-empty p { margin: 0 0 10px; }
 .in-fb { margin: 8px 0 0; font-size: .9rem; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .in-fb .btn { padding: 4px 12px; min-height: 0; }
+.hero-ctas .btn.btn-resume { background: var(--surface, #fff); color: var(--sign, #0E6A43); border: 2px solid var(--sign, #0E6A43); }
+.hero-ctas .btn-resume span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
 .free-note { margin: 10px 0 0; padding: 10px 12px; border-radius: 12px; background: var(--soft, #EEF5F0); font-size: .92rem; line-height: 1.55; }
 .score-ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
 .score-ctas .btn { flex: 1 1 200px; justify-content: center; text-align: center; }

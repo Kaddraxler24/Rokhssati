@@ -1604,6 +1604,24 @@ var RokhCode = (function () {
     }).catch(function () {});
   })();
 
+  /* R4-015 / US-P08 (13/11/2026): a returning learner sees "Reprendre : <chapitre>" on the home page (last chapter opened, or the next one if it is done) */
+  (function () {
+    var a = $("#heroResume"); if (!a) return;
+    function draw() {
+      var p = Track.prog(), L = p.last, ci = null; if (!L || !L.chap) { a.hidden = true; return; }
+      try { ci = JSON.parse(document.getElementById("courseIndex").textContent); } catch (e) {}
+      var list = []; (ci || []).forEach(function (th) { th.chapters.forEach(function (c) { list.push({ th: th.slug, c: c }); }); });
+      var i = -1; list.some(function (x, k) { if (x.c.id === L.chap) { i = k; return true; } return false; });
+      if (i < 0) { a.hidden = true; return; }
+      if (p.done[L.chap]) { var j = i + 1; while (j < list.length && p.done[list[j].c.id]) j++; if (j >= list.length) { a.hidden = true; return; } i = j; }
+      var x = list[i], R = { ar: "تابع: ", fr: "Reprendre : ", dz: "كمّل: " };
+      a.setAttribute("href", "theme-" + x.th + ".html#c=" + x.c.id);
+      a.querySelector("span").textContent = (R[lang] || R.fr) + (x.c.t[lang] || x.c.t.fr);
+      a.hidden = false;
+    }
+    draw(); listeners.push(draw);
+  })();
+
   /* home: launch offer, live count of remaining trial places (functions/api/essai.js?info=1) */
   (function () {
     // R4-007 (13/11/2026): every mention of the "10 places" gift disappears when no place is left (.trial-ad = a line of the "Nouveauté" pop-up)
