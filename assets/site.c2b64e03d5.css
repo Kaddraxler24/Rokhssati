@@ -1063,20 +1063,24 @@ html.ck-on, html.ck-on body { overflow: hidden !important; }
 .ck { position: fixed; inset: 0; z-index: 10000; background: #BFDDF0; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; font-family: Cairo, Inter, sans-serif; }
 .ck[hidden] { display: none; }
 #ckGL { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.ck-mirror { position: absolute; border: 3px solid #1b211e; box-shadow: 0 4px 12px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.3); pointer-events: none; }
-.ck-m-c { top: 6px; left: 50%; transform: translateX(-50%); width: 28vw; height: 14vh; border-radius: 10px; }
-.ck-m-l { left: 8px; top: 30vh; width: 17vw; height: 20vh; border-radius: 22px 10px 10px 22px; }
-.ck-m-r { right: 8px; top: 30vh; width: 17vw; height: 20vh; border-radius: 10px 22px 22px 10px; }
-.ck:not(.is-fpv) .ck-mirror { display: none; }
+.ck-mirror { position: absolute; border: 4px solid #121715; box-shadow: 0 6px 16px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.35); pointer-events: none; }
+.ck-m-c { top: 4px; left: 50%; transform: translateX(-50%); width: 21vw; height: 10vh; border-radius: 9px; }
+.ck-m-l { left: 1.2vw; bottom: 37vh; width: 15vw; height: 15vh; border-radius: 34px 12px 12px 22px; }
+.ck-m-r { right: 1.2vw; bottom: 37vh; width: 15vw; height: 15vh; border-radius: 12px 34px 22px 12px; }
+.ck:not(.is-fpv) .ck-mirror, .ck.no-mirrors .ck-mirror, .ck:not(.is-fpv) .ck-pillars { display: none; }
+.ck-pillars { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+@media (max-width: 1000px) { .ck-bl { display: none; } .ck-b { padding: 5px 9px; font-size: 14px; } }
+.ck-mir[aria-pressed="false"] { opacity: .55; text-decoration: line-through; }
 .ck-guides { position: absolute; left: 20vw; right: 20vw; top: 18vh; height: 44vh; pointer-events: none; } .ck-guides svg { width: 100%; height: 100%; }
-.ck-msg { position: absolute; top: 6px; left: 8px; max-width: 33vw; max-height: 26vh; overflow: auto; font-size: 13px; line-height: 1.35; font-weight: 700; color: #fff; background: rgba(14,106,67,.93); padding: 8px 10px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,.3); }
-.ck-msg.is-bad { background: rgba(178,30,48,.95); } .ck-msg a, .ck-msg .sim-peek { color: #fff; }
-.ck-map { position: absolute; top: 6px; right: 8px; width: 23vw; border-radius: 12px; overflow: hidden; border: 2px solid #1b211e; background: #DCE1DB; box-shadow: 0 4px 12px rgba(0,0,0,.3); cursor: zoom-in; transition: width .2s; }
+.ck-msg { position: absolute; top: 8px; left: 10px; max-width: 29vw; max-height: 24vh; overflow: auto; font-size: 12.5px; line-height: 1.4; font-weight: 700; color: #fff; background: rgba(12,40,27,.52); -webkit-backdrop-filter: blur(10px) saturate(1.3); backdrop-filter: blur(10px) saturate(1.3); padding: 8px 11px; border-radius: 14px; border: 1px solid rgba(255,255,255,.22); border-inline-start: 4px solid #2bb673; text-shadow: 0 1px 2px rgba(0,0,0,.35); }
+.ck-msg.is-bad { background: rgba(160,24,40,.7); border-inline-start-color: #ff6b7d; } .ck-msg a, .ck-msg .sim-peek { color: #fff; }
+.ck-map { position: absolute; top: 8px; right: 10px; width: 22vw; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.45); background: rgba(220,225,219,.35); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 6px 16px rgba(0,0,0,.25); cursor: zoom-in; transition: width .2s; opacity: .9; }
+.ck-map svg { opacity: .82; }
 .ck-map svg { display: block; width: 100%; height: auto; } .ck.map-big .ck-map { width: 48vw; cursor: zoom-out; z-index: 3; }
-.ck-bar { position: absolute; top: calc(14vh + 14px); left: 50%; transform: translateX(-50%); display: flex; gap: 6px; flex-wrap: nowrap; }
-.ck-b { font: inherit; font-weight: 800; font-size: 12.5px; color: #fff; background: rgba(21,32,26,.82); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 6px 11px; cursor: pointer; white-space: nowrap; backdrop-filter: blur(4px); }
+.ck-bar { position: absolute; top: calc(10vh + 12px); left: 50%; transform: translateX(-50%); display: flex; gap: 5px; flex-wrap: nowrap; }
+.ck-b { font: inherit; font-weight: 800; font-size: 12px; color: #fff; background: rgba(15,22,18,.42); border: 1px solid rgba(255,255,255,.28); border-radius: 999px; padding: 5px 10px; cursor: pointer; white-space: nowrap; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); text-shadow: 0 1px 2px rgba(0,0,0,.4); }
 .ck-b:active { transform: scale(.96); } .ck-quit { background: rgba(178,30,48,.9); }
-.ck-dash { position: absolute; left: 0; right: 0; bottom: 0; height: 40vh; pointer-events: none; }
+.ck-dash { position: absolute; left: 0; right: 0; bottom: 0; height: 36vh; pointer-events: none; }
 .ck-dash > * { pointer-events: auto; } .ck-dash-bg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none !important; }
 .ck-wheel-box { position: absolute; left: 3vw; bottom: 1vh; }
 .ck .sim-wheel { width: min(36vh, 190px); height: min(36vh, 190px); touch-action: none; cursor: grab; display: block; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); border-radius: 50%; }
