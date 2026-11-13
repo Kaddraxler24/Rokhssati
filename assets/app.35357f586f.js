@@ -254,6 +254,7 @@ var RokhCode = (function () {
         learned();
         if (theme) { var ts = get(TK, {}), x = ts[theme] || (ts[theme] = { r: 0, w: 0 }); if (ok) x.r++; else x.w++; set(TK, ts); }
         var e = get(EK, {});
+        if (/^q[0-9a-f]{6,12}$/.test(qid)) Measure.once("qan:" + qid);   // 13/11/2026: answered (same rule as qko: once a day per device) -> real error rate in Gestion
         if (ok) delete e[qid]; else { e[qid] = (e[qid] || 0) + 1; Measure.once("qko:" + qid); }
         set(EK, e); markDay();
       },
