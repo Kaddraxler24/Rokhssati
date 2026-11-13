@@ -931,7 +931,7 @@ var RokhCode = (function () {
           h_date: "التاريخ", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
           all: "كل المحاور", rapide: "اختبار دقيقتين", custom: "امتحان مخصّص", favs: "مفضلتي", signs: "الإشارات", situations: "ترتيب المرور", errors: "أخطائي", reset: "مسح كل التقدم", resetSure: "متأكد؟ اضغط مرة أخرى",
           noErr: "لا توجد أخطاء للمراجعة.", days: ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "أنهيت هذا المحور!", thDoneTxt: "اختبر نفسك الآن على أسئلته.", thFree: "3 أسئلة تجريبية مجانية؛ كل الأسئلة والامتحانات التجريبية في البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز).",
-          wk_t: "نقاط الضعف", wk_none: "أجب على 5 أسئلة على الأقل في محور لنحلّل نتائجك.", wk_rev: "راجع الدرس", wk_tr: "تدرّب", wk_q: "أجوبة", wk_free: "النسخة المجانية: المحور الأضعف فقط. تحليل كل المحاور في البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز).", wk_first: "للمراجعة أولًا", k_more: "إحصائيات مفصّلة", prem: "بريميوم (قريبًا)", bkCopied: "تم نسخ الرمز. احفظه في مكان آمن (رسالة لنفسك مثلًا).", bkSure: "سيُستبدل تقدمك الحالي. اضغط مرة أخرى للتأكيد.", bkOk: "تم استرجاع تقدمك.", bkBad: "هذا الرمز غير صالح. انسخه كاملًا.", histFree: "النسخة المجانية: آخر 3 نتائج فقط. السجل الكامل والمعدل وأفضل نتيجة في البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز)." },
+          wk_t: "نقاط الضعف", wk_none: "أجب على 3 أسئلة على الأقل في محور لنحلّل نتائجك.", wk_rev: "راجع الدرس", wk_tr: "تدرّب", wk_q: "أجوبة", wk_free: "النسخة المجانية: المحور الأضعف فقط. تحليل كل المحاور في البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز).", wk_first: "للمراجعة أولًا", k_more: "إحصائيات مفصّلة", prem: "بريميوم (مُهدى خلال الإطلاق)", bkCopied: "تم نسخ الرمز. احفظه في مكان آمن (رسالة لنفسك مثلًا).", bkSure: "سيُستبدل تقدمك الحالي. اضغط مرة أخرى للتأكيد.", bkOk: "تم استرجاع تقدمك.", bkBad: "هذا الرمز غير صالح. انسخه كاملًا.", histFree: "النسخة المجانية: آخر 3 نتائج فقط. السجل الكامل والمعدل وأفضل نتيجة في البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز)." },
     fr: { prev: "Précédent", next: "Suivant", finish: "Terminer le chapitre", check: "Vérifier", done: "Chapitre terminé !", doneTxt: "Bravo. Vous pouvez passer au chapitre suivant.",
           nextChap: "Chapitre suivant", nextTheme: "Thème suivant", back: "Retour aux chapitres", train: "S'entraîner sur ce thème", right: "Bonne réponse", wrong: "Pas tout à fait",
           start: "Commencer le cours", resume: "Reprendre le cours", review: "Revoir depuis le début", readOf: "%a sur %b chapitres terminés", cont: "Reprendre : %t", startCourse: "Commencer les cours",
@@ -939,7 +939,7 @@ var RokhCode = (function () {
           h_date: "Date", h_type: "Type", h_theme: "Thème", h_score: "Score", t_train: "Entraînement", t_exam: "Examen blanc", t_livre: "Test du livre",
           all: "Tous les thèmes", rapide: "Test 2 minutes", custom: "Examen personnalisé", favs: "Mes favoris", signs: "Panneaux", situations: "Ordre de passage", errors: "Mes erreurs", reset: "Effacer ma progression", resetSure: "Sûr ? Cliquez encore",
           noErr: "Aucune erreur à revoir.", days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"], step: "Fiche", thDone: "Thème terminé !", thDoneTxt: "Testez-vous maintenant sur ses questions.", thFree: "3 questions d'essai gratuites ; toutes les questions et les examens blancs avec le Premium, offert pendant le lancement (essai 3 jours ou code).",
-          wk_t: "Points faibles", wk_none: "Répondez à au moins 5 questions d'un thème pour que nous analysions vos résultats.", wk_rev: "Revoir le cours", wk_tr: "S'entraîner", wk_q: "réponses", wk_free: "Version gratuite : seulement le thème le plus faible. L'analyse de tous les thèmes avec le Premium, offert pendant le lancement (essai 3 jours ou code).", wk_first: "À revoir en priorité", k_more: "Statistiques détaillées", prem: "Premium (bientôt)", bkCopied: "Code copié. Gardez-le en lieu sûr (par exemple dans un message à vous-même).", bkSure: "Votre progression actuelle sera remplacée. Touchez encore pour confirmer.", bkOk: "Progression restaurée.", bkBad: "Ce code n'est pas valide. Copiez-le en entier.", histFree: "Version gratuite : seulement les 3 derniers résultats. Historique complet, moyenne et meilleur score avec le Premium, offert pendant le lancement (essai 3 jours ou code)." },
+          wk_t: "Points faibles", wk_none: "Répondez à au moins 3 questions d'un thème pour que nous analysions vos résultats.", wk_rev: "Revoir le cours", wk_tr: "S'entraîner", wk_q: "réponses", wk_free: "Version gratuite : seulement le thème le plus faible. L'analyse de tous les thèmes avec le Premium, offert pendant le lancement (essai 3 jours ou code).", wk_first: "À revoir en priorité", k_more: "Statistiques détaillées", prem: "Premium (offert pendant le lancement)", bkCopied: "Code copié. Gardez-le en lieu sûr (par exemple dans un message à vous-même).", bkSure: "Votre progression actuelle sera remplacée. Touchez encore pour confirmer.", bkOk: "Progression restaurée.", bkBad: "Ce code n'est pas valide. Copiez-le en entier.", histFree: "Version gratuite : seulement les 3 derniers résultats. Historique complet, moyenne et meilleur score avec le Premium, offert pendant le lancement (essai 3 jours ou code)." },
     dz: { prev: "اللي قبل", next: "اللي بعد", finish: "كمّل الفصل", check: "شوف", done: "كملت الفصل!", doneTxt: "برافو. تقدر تفوت للفصل اللي جاي.",
           nextChap: "الفصل اللي جاي", nextTheme: "المحور اللي جاي", back: "ارجع للفصول", train: "تدرّب على هاد المحور", right: "صحيح!", wrong: "ماشي هاكا",
           start: "ابدا الدرس", resume: "كمّل الدرس", review: "عاود من الأول", readOf: "%a من %b فصول كملتهم", cont: "كمّل: %t", startCourse: "ابدا الدروس",
@@ -947,7 +947,7 @@ var RokhCode = (function () {
           h_date: "النهار", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
           all: "كامل المحاور", rapide: "تيست دقيقتين", custom: "امتحان على كيفك", favs: "المفضلة تاعي", signs: "البانوات", situations: "شكون يفوت الأول", errors: "الغلطات تاعي", reset: "امسح كلش", resetSure: "متأكد؟ اضغط مرة أخرى",
           noErr: "ما كانش غلطات تعاودهم.", days: ["حد", "تنين", "ثلاث", "ربع", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "كمّلت هاد المحور!", thDoneTxt: "جرّب روحك دروك على الأسئلة تاعو.", thFree: "3 أسئلة بلاش باش تجرّب؛ كامل الأسئلة والامتحانات في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود).",
-          wk_t: "النقاط الضعيفة", wk_none: "جاوب على 5 أسئلة على الأقل في محور باش نحلّلو النتائج تاعك.", wk_rev: "عاود الدرس", wk_tr: "تدرّب", wk_q: "أجوبة", wk_free: "النسخة بلاش: غير المحور الأضعف. تحليل كامل المحاور في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود).", wk_first: "راجعو قبل", k_more: "إحصائيات مفصّلة", prem: "بريميوم (قريب)", bkCopied: "الكود تنسخ. خبّيه في بلاصة آمنة (ميساج لروحك مثلًا).", bkSure: "التقدم تاعك دروك راح يتبدّل. اضغط مرة أخرى باش تأكد.", bkOk: "التقدم تاعك رجع.", bkBad: "هاد الكود ماشي صحيح. انسخو كامل.", histFree: "النسخة بلاش: غير آخر 3 نتائج. السجل كامل والمعدل وأحسن نتيجة في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود)." }
+          wk_t: "النقاط الضعيفة", wk_none: "جاوب على 3 أسئلة على الأقل في محور باش نحلّلو النتائج تاعك.", wk_rev: "عاود الدرس", wk_tr: "تدرّب", wk_q: "أجوبة", wk_free: "النسخة بلاش: غير المحور الأضعف. تحليل كامل المحاور في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود).", wk_first: "راجعو قبل", k_more: "إحصائيات مفصّلة", prem: "بريميوم (بلاش في وقت الإطلاق)", bkCopied: "الكود تنسخ. خبّيه في بلاصة آمنة (ميساج لروحك مثلًا).", bkSure: "التقدم تاعك دروك راح يتبدّل. اضغط مرة أخرى باش تأكد.", bkOk: "التقدم تاعك رجع.", bkBad: "هاد الكود ماشي صحيح. انسخو كامل.", histFree: "النسخة بلاش: غير آخر 3 نتائج. السجل كامل والمعدل وأحسن نتيجة في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود)." }
   };
   var u = function (k) { return CU[lang][k]; };
   var CI = null;
@@ -1248,11 +1248,11 @@ var RokhCode = (function () {
     var names = {}; (CI || []).forEach(function (th) { names[th.slug] = { n: th.name[lang] || th.name.fr, url: th.url }; });
     names.signs = { n: ({ ar: "الإشارات", fr: "Panneaux", dz: "البانوات" })[lang], url: "panneaux.html" };
     names.situations = { n: ({ ar: "ترتيب المرور", fr: "Ordre de passage", dz: "شكون يفوت الأول" })[lang], url: "theme-circulation.html" };
-    var rows = Object.keys(ts).filter(function (k) { return names[k] && ts[k].r + ts[k].w >= 5; })
+    var rows = Object.keys(ts).filter(function (k) { return names[k] && ts[k].r + ts[k].w >= 3; })
       .map(function (k) { var n = ts[k].r + ts[k].w; return { k: k, n: n, p: ts[k].r / n }; })
       .sort(function (a, b) { return a.p - b.p; });
     box.innerHTML = "";
-    if (!rows.length) { var p0 = document.createElement("p"); p0.className = "muted"; p0.textContent = u("wk_none"); box.appendChild(p0); return; }
+    if (!rows.length) { var p0 = document.createElement("p"); p0.className = "muted"; p0.innerHTML = '<span></span> <a href="entrainement.html"></a>'; p0.firstChild.textContent = u("wk_none"); p0.lastChild.textContent = u("wk_tr") + " →"; box.appendChild(p0); return; }
     (premium ? rows : rows.slice(0, 1)).forEach(function (r, i) {
       var d = document.createElement("div"); d.className = "wk-row" + (r.p < 0.7 ? " is-low" : "");
       d.innerHTML = '<div class="wk-head"><b></b><span class="wk-pct" dir="ltr"></span></div><div class="bar"><i></i></div><p class="wk-meta"><small></small> <a class="wk-c"></a> · <a class="wk-t"></a></p>';
@@ -1266,6 +1266,34 @@ var RokhCode = (function () {
     });
     if (!premium && rows.length > 1) { var f = document.createElement("p"); f.className = "muted hist-free"; f.innerHTML = '<span></span> <a href="activer.html"></a>';
       f.firstChild.textContent = u("wk_free"); f.lastChild.textContent = t("unlock"); box.appendChild(f); }
+  }
+  // 13/11/2026: "Prochaine étape" card + where the learner is on the 5-step route (test, cours, entraînement, examen blanc, jour J)
+  function drawNext(p, h, empty) {
+    var box = $("#pgNext");
+    if (!box) { box = document.createElement("div"); box.id = "pgNext"; box.className = "pg-next"; var top = pgRing.closest(".stats-top"); top.parentNode.insertBefore(box, top); }
+    box.hidden = !!empty; if (empty) return;
+    var list = []; (CI || []).forEach(function (th, ti) { th.chapters.forEach(function (c, j) { list.push({ th: th, c: c, n: (ti + 1) + "." + (j + 1) }); }); });
+    var L = p.last, i = -1; if (L && L.chap) list.some(function (x, k) { if (x.c.id === L.chap) { i = k; return true; } return false; });
+    if (i < 0 || p.done[list[i].c.id]) { var j = i + 1; while (j < list.length && p.done[list[j].c.id]) j++; if (j >= list.length) j = list.findIndex(function (x) { return !p.done[x.c.id]; }); i = j; }
+    var nx = i >= 0 && i < list.length ? list[i] : null;
+    var types = {}; h.forEach(function (x) { types[x.kind || x.type || ""] = 1; });
+    var quick = h.some(function (x) { return /rapide|quick/.test(String(x.theme || x.th || "")); }) || !!(Track.tstats && Object.keys(Track.tstats()).length);
+    var exam = h.some(function (x) { return /exam/.test(String(x.mode || x.kind || x.type || "")); });
+    var train = h.some(function (x) { return !/rapide|quick/.test(String(x.theme || x.th || "")) && !/exam/.test(String(x.mode || x.kind || x.type || "")); });
+    var cur = !quick ? 0 : !Object.keys(p.done || {}).length ? 1 : !train ? 2 : !exam ? 3 : 4;
+    var N = { ar: ["خطوتك التالية", "تابع", "طريقك نحو الرخصة", ["اختبر مستواك", "تعلّم", "تدرّب", "امتحان تجريبي", "اليوم الموعود"], "أكملت كل الدروس ✓ تابع التدرّب والامتحانات التجريبية."],
+              fr: ["Prochaine étape", "Continuer", "Votre route vers le permis", ["Tester mon niveau", "Apprendre", "S'entraîner", "Examen blanc", "Le jour J"], "Tous les chapitres sont terminés ✓ Continuez l'entraînement et les examens blancs."],
+              dz: ["الخطوة الجاية", "كمّل", "الطريق تاعك للبرمي", ["جرّب مستواك", "تعلّم", "تدرّب", "امتحان تجريبي", "النهار الكبير"], "كمّلت كامل الدروس ✓ كمّل التدريب والامتحانات التجريبية."] }[lang] || [];
+    var U = ["entrainement.html#rapide", "code-de-la-route.html", "entrainement.html", "entrainement.html#examen-blanc", "permis.html#examens"];
+    box.innerHTML = '<p class="pg-next-k"></p><a class="pg-next-c"><b></b><small></small><span class="btn btn-primary"></span></a><p class="pg-route-k"></p><ol class="pg-route"></ol>';
+    box.querySelector(".pg-next-k").textContent = N[0];
+    var a = box.querySelector(".pg-next-c");
+    if (nx) { a.href = nx.th.url + "#c=" + nx.c.id; a.querySelector("b").textContent = nx.n + " " + (nx.c.t[lang] || nx.c.t.fr); a.querySelector("small").textContent = nx.th.name[lang] || nx.th.name.fr; a.querySelector(".btn").textContent = "▶ " + N[1]; }
+    else { a.href = U[3]; a.querySelector("b").textContent = N[4]; a.querySelector(".btn").textContent = "▶ " + N[3][3]; }
+    a.onclick = function () { Measure.add("pg_next"); };
+    box.querySelector(".pg-route-k").textContent = N[2];
+    var ol = box.querySelector(".pg-route");
+    N[3].forEach(function (lab, k) { var li = document.createElement("li"); li.className = k < cur ? "is-done" : k === cur ? "is-now" : ""; li.innerHTML = '<a><span class="d"></span><span class="l"></span></a>'; li.querySelector("a").href = U[k]; li.querySelector(".d").textContent = k < cur ? "✓" : k + 1; li.querySelector(".l").textContent = lab; ol.appendChild(li); });
   }
   function drawStats() {
     if (!pgRing) return;
@@ -1283,6 +1311,7 @@ var RokhCode = (function () {
       var E = { ar: ["سيظهر تقدّمك هنا. ابدأ باختبار من دقيقتين أو بأول درس.", "⏱ اختبر نفسك في دقيقتين", "📘 الدروس"], fr: ["Votre progression apparaîtra ici. Commencez par le test de 2 minutes ou par un premier chapitre.", "⏱ Teste-toi en 2 minutes", "📘 Les cours"], dz: ["التقدّم تاعك يبان هنا. ابدا بتاست تاع دقيقتين ولا بأول درس.", "⏱ جرّب روحك في دقيقتين", "📘 الدروس"] }[lang] || [];
       var ps = eb.querySelectorAll("p, a"); ps[0].textContent = E[0]; ps[2].textContent = E[1]; ps[3].textContent = E[2];
     }
+    drawNext(p, h, empty);
     var pcts = h.map(function (x) { return x.score / x.total; });
     var avg = pcts.length ? pcts.reduce(function (a, b) { return a + b; }, 0) / pcts.length : 0;
     var best = pcts.length ? Math.max.apply(null, pcts) : 0;
@@ -1294,15 +1323,23 @@ var RokhCode = (function () {
     var dl = $("#pgKpis"); dl.innerHTML = "";
     k.forEach(function (x) { var d = document.createElement("div"); d.innerHTML = "<dt></dt><dd dir=\"ltr\"></dd>"; d.querySelector("dt").textContent = x[0]; d.querySelector("dd").textContent = x[1]; dl.appendChild(d); });
     if (!premium) { var lastDd = dl.lastChild.querySelector("dd"); lastDd.className = "is-prem"; lastDd.removeAttribute("dir"); lastDd.innerHTML = '<a href="activer.html"></a>'; lastDd.firstChild.textContent = u("prem"); }
-    var box = $("#pgThemes"); box.innerHTML = "";
+    // 13/11/2026 (propriétaire « go ») : chaque thème mène à son prochain chapitre ; 2 barres = chapitres lus / bonnes réponses
+    var box = $("#pgThemes"), ts = Track.tstats(); box.innerHTML = "";
+    var PT = { ar: ["التالي: ", "الأجوبة الصحيحة: ", "تمّ ✓", "لا أجوبة بعد"], fr: ["Prochain : ", "Bonnes réponses : ", "Terminé ✓", "Pas encore de réponses"], dz: ["الجاي: ", "الأجوبة الصحاح: ", "كملت ✓", "مازال ما جاوبتش"] }[lang] || [];
     (CI || []).forEach(function (th, i) {
-      var st = themeStats(th, p), a = document.createElement("a");
-      a.className = "pg-th"; a.href = th.url;
-      a.innerHTML = '<span class="tcode" aria-hidden="true"></span><span class="pg-name"></span><span class="pbar"><i></i></span><span class="pg-n" dir="ltr"></span>';
+      var st = themeStats(th, p), a = document.createElement("a"), nx = null, num = 0;
+      th.chapters.some(function (c, j) { if (!p.done[c.id]) { nx = c; num = j + 1; return true; } return false; });
+      a.className = "pg-th"; a.href = nx ? th.url + "#c=" + nx.id : th.url;
+      a.innerHTML = '<span class="tcode" aria-hidden="true"></span><span class="pg-name"></span><span class="pbar"><i></i></span><span class="pg-n" dir="ltr"></span><span class="pg-sub"><span class="pg-nx"></span><span class="pg-ok"></span></span>';
       a.querySelector(".tcode").textContent = i + 1;
       a.querySelector(".pg-name").textContent = th.name[lang];
       a.querySelector(".pbar i").style.width = Math.round(st.pct * 100) + "%";
       a.querySelector(".pg-n").textContent = st.done + "/" + st.total;
+      a.querySelector(".pg-nx").textContent = nx ? PT[0] + (i + 1) + "." + num + " " + (nx.t[lang] || nx.t.fr) : PT[2];
+      var x = ts[th.slug], n = x ? x.r + x.w : 0, ok = a.querySelector(".pg-ok");
+      if (n) { ok.innerHTML = '<span></span><span class="pbar pbar-ok"><i></i></span>'; ok.firstChild.textContent = PT[1] + Math.round(100 * x.r / n) + "% (" + n + ")"; ok.querySelector("i").style.width = Math.round(100 * x.r / n) + "%"; }
+      else ok.textContent = PT[3];
+      a.addEventListener("click", function () { Measure.add("pg_th"); });
       box.appendChild(a);
     });
     var hist = $("#pgHist"); hist.innerHTML = "";
