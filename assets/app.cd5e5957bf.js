@@ -1527,6 +1527,13 @@ var RokhCode = (function () {
     check(false);
   })();
 
+  /* manœuvres (13/11/2026): Premium parts (.prem-zone) shown only with an active access (trial / code); test version: preview button */
+  (function () {
+    if (!document.querySelector(".prem-zone")) return;
+    if (pass()) document.documentElement.classList.add("has-pass");
+    document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest(".prem-peek")) document.documentElement.classList.add("has-pass"); });
+  })();
+
   /* (13/11/2026, owner) figures no longer open full screen: zoom removed everywhere. Signs keep their own fiche. */
 
   /* Premium "prévenez-moi" list: e-mail only (functions/api/contact.js kind "premium"); nothing to pay, no pre-order */
