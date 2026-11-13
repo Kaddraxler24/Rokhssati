@@ -39,7 +39,16 @@ export async function onRequest({ request, env }) {
   const fail = async () => { if (env.ROKH_KV) { try { await Promise.all(rk.map((k, i) => env.ROKH_KV.put(k, String(tries[i] + 1), { expirationTtl: 7200 }))); } catch (e) {} } };
   const r = await check(K.trim(), dev, code), c = clean(code);
   const log = (res) => console.log(JSON.stringify({ t: new Date().toISOString(), res, dev, code: c ? c.slice(0, 4) + "…" : "" }));
-  if (!r) { log("code"); await fail(); await count(env, "act_faux", request); return out({ ok: false, err: "code" }); }
+  if (!r) {
+    // RKV3-11 (13/11/2026): why it failed, so the app can say it (err stays "code" for older versions).
+    // "forme" = not 12 valid characters ; "autre" = a real code already activated on another device ; else a typo or a code made for another device number.
+    const okForm = c.length === 12 && [...c].every((ch) => A.includes(ch));
+    let why = okForm ? "" : "forme";
+    if (okForm && env.ROKH_KV) { try { const a = await env.ROKH_KV.get("act:" + c, "json"); if (a && a.dev && a.dev !== dev) why = "autre"; } catch (e) {} }
+    log("code" + (why ? "-" + why : "")); await fail();
+    await count(env, why === "forme" ? "act_forme" : why === "autre" ? "act_autre" : "act_faux", request);
+    return out({ ok: false, err: "code", why });
+  }
   if (r.until < Date.now()) { log("exp"); await count(env, "act_expire", request); return out({ ok: false, err: "exp", until: r.until }); }
   log("ok");
   await count(env, "act_ok", request);
