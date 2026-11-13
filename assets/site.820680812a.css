@@ -1068,6 +1068,12 @@ html.news-open { overflow: hidden; }
 .ck-b:hover { background: rgba(255,255,255,.24); }
 .ck-quit { background: rgba(200,40,58,.55) !important; }
 .sim-peek { font: inherit; margin-inline-start: 6px; }
+.ck .ck-view, .ck .ck-mir, .ck .ck-map { display: none !important; }
+.ck:not(.is-fpv) .ck-dash-bg, .ck:not(.is-fpv) .ck-pillars { display: none; }
+.ck:not(.is-fpv) .ck-dash { height: 34vh; background: linear-gradient(180deg, rgba(10,14,12,0), rgba(10,14,12,.28)); }
+.ck:not(.is-fpv) .ck-cluster { width: 22vw; padding: 4px 8px 2px; background: rgba(14,20,17,.28); } .ck:not(.is-fpv) .ck-cluster .ck-gear { width: 30px; height: 30px; font-size: 16px; }
+.ck:not(.is-fpv) .sim-wheel { width: min(30vh, 160px); height: min(30vh, 160px); opacity: .9; }
+.ck:not(.is-fpv) .sim-pedal { width: min(11vw, 92px); height: min(25vh, 128px); }   /* 13/11 : vue de dessus seule (autres vues cachées, gardées pour plus tard) */
 /* simulateur v3 : poste de conduite (paysage, plein écran) */
 html.ck-on, html.ck-on body { overflow: hidden !important; }
 .ck-intro .ck-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
