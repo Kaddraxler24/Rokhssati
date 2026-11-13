@@ -1017,6 +1017,28 @@ html.news-open { overflow: hidden; }
 .cr-steps .cr-fig svg { max-width: 420px; }
 .mv-tier { display: inline-block; margin-inline-start: 6px; font-size: .82em; font-weight: 700; padding: 2px 10px; border-radius: 999px; }
 .mv-tier.is-free { background: #e3f3ea; color: #0E6A43; } .mv-tier.is-prem { background: #fbefd2; color: #7a5300; }
+.sim-cta { margin-top: 14px; text-align: center; }
+.sim { max-width: 760px; margin: 0 auto; }
+.sim-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sim-modes { display: inline-flex; padding: 3px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); }
+.sim-mode, .sim-reset, .sim-end { font: inherit; font-weight: 700; border: 0; background: none; padding: 8px 14px; border-radius: 10px; cursor: pointer; color: var(--ink); }
+.sim-mode.is-on { background: var(--sign, #0E6A43); color: #fff; } .sim-reset { border: 1px solid var(--line); background: var(--surface); }
+.sim-msg { min-height: 3.2em; margin: 10px 0; padding: 10px 14px; border-radius: 12px; background: #e3f3ea; color: #0b4f32; font-weight: 600; }
+.sim-msg.is-bad { background: #fde8e8; color: #8a1c1c; }
+.sim-view { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #DCE1DB; }
+.sim-view svg { display: block; width: 100%; height: auto; touch-action: none; }
+.sim-flash { position: absolute; inset: 0; pointer-events: none; background: rgba(211,38,58,0); transition: background .2s; } .sim-flash.on { background: rgba(211,38,58,.28); }
+.sim-ctl { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 12px; }
+.sim-wheel-box { text-align: center; } .sim-wheel { width: 150px; height: 150px; touch-action: none; cursor: grab; display: block; }
+.sim-turns { font-weight: 800; margin: 4px 0 0; min-height: 1.4em; }
+.wheel-hint ~ * { } .sim-view svg.wheel-hint { outline: 3px solid #F0B323; outline-offset: -3px; }
+.sim-ped { display: flex; flex-direction: column; gap: 10px; flex: 1; max-width: 260px; }
+.sim-btn { font: inherit; font-weight: 800; font-size: 1.1em; padding: 18px 10px; border-radius: 14px; border: 0; color: #fff; background: #0E6A43; touch-action: none; user-select: none; -webkit-user-select: none; cursor: pointer; }
+.sim-btn.sim-back { background: #2F6FD0; } .sim-btn.is-on { filter: brightness(.85); transform: scale(.98); }
+.sim-end { border: 1px solid var(--line); background: var(--surface); }
+.sim-res { margin-top: 14px; padding: 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.sim-res h3 { margin: 0 0 6px; } .sim-stars { color: #E9B43A; letter-spacing: 2px; } .sim-res ul { margin: 8px 0 0; padding-inline-start: 20px; }
+.sim-peek { font: inherit; margin-inline-start: 6px; }
 .prem-zone { display: none; } .has-pass .prem-zone { display: block; } .has-pass .prem-lock { display: none; }
 .prem-lock { text-align: center; max-width: 560px; margin: 0 auto; padding: 22px 18px; border: 1px solid #f0c98a; background: #fff8e8; border-radius: 18px; }
 .prem-lock .pl-ic { font-size: 34px; } .prem-lock h3 { margin: 6px 0; } .prem-lock .pl-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
