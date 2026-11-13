@@ -1606,10 +1606,11 @@ var RokhCode = (function () {
 
   /* home: launch offer, live count of remaining trial places (functions/api/essai.js?info=1) */
   (function () {
-    var h = $("#offerHero"), c = $(".apk-offer-card"); if (!h && !c) return;
+    // R4-007 (13/11/2026): every mention of the "10 places" gift disappears when no place is left (.trial-ad = a line of the "Nouveauté" pop-up)
+    var h = $("#offerHero"), c = $(".apk-offer-card"), ads = $$(".trial-ad"); if (!h && !c && !ads.length) return;
     fetch((window.RokhNative ? "https://rokhssati.com" : "") + "/api/essai?info=1", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
       var n = +j.left; if (isNaN(n)) return;
-      if (n <= 0) { if (h) h.hidden = true; if (c) c.hidden = true; return; }
+      if (n <= 0) { if (h) h.hidden = true; if (c) c.hidden = true; ads.forEach(function (a) { var li = a.closest("li") || a; li.hidden = true; }); return; }
       var html = '<span class="l-ar">بقيت ' + n + ' أماكن فقط</span><span class="l-fr" lang="fr">Plus que ' + n + ' place' + (n > 1 ? "s" : "") + '</span><span class="l-dz" lang="ar-DZ">بقاو غير ' + n + ' بلايص</span>';
       $$("#offerLeft, #offerLeft2").forEach(function (e) { e.innerHTML = html; e.hidden = false; });
     }).catch(function () {});
