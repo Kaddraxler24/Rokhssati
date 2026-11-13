@@ -1387,6 +1387,12 @@ var RokhCode = (function () {
       }
       b.hidden = false; b.firstChild.textContent = t("inNew"); b.lastChild.textContent = t("inSee");
     }
+    // 13/11/2026: read receipt → Gestion shows « lu le … ». Sent once per new reply; the reply date only, nothing else.
+    function ack(at) {
+      if (lsGet("rokhssati-box-acked") === at) return;
+      fetch(API_BASE + "/api/inbox", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ box: box, seen: at }) })
+        .then(function (r) { if (r.ok) lsSet("rokhssati-box-acked", at); }).catch(function () {});
+    }
     function check(force) {
       box = inboxBox(false);
       if (!box) { draw(); return; }
@@ -1397,7 +1403,7 @@ var RokhCode = (function () {
         if (!j.ok) return;
         items = j.items || [];
         var lastR = items.filter(function (x) { return x.from === "r"; }).map(function (x) { return x.at; }).sort().pop() || "";
-        if (list) { if (lastR) { lsSet(SEEN, lastR); if (window.RokhNative && typeof window.RokhNative.seen === "function") { try { window.RokhNative.seen(lastR); } catch (e) {} } } lsSet("rokhssati-box-unread", "0"); bar(false); }
+        if (list) { if (lastR) { lsSet(SEEN, lastR); ack(lastR); if (window.RokhNative && typeof window.RokhNative.seen === "function") { try { window.RokhNative.seen(lastR); } catch (e) {} } } lsSet("rokhssati-box-unread", "0"); bar(false); }
         else { var unread = lastR && lastR > (lsGet(SEEN) || ""); lsSet("rokhssati-box-unread", unread ? "1" : "0"); bar(unread); }
         draw();
       }).catch(function () { if (list) { items = "net"; draw(); } });
