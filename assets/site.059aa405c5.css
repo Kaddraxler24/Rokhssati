@@ -1015,6 +1015,9 @@ html.news-open { overflow: hidden; }
 .cr-epr span:last-child { color: var(--muted); }
 .cr-steps .cr-fig { justify-content: flex-start; margin: 4px 0 10px; }
 .cr-steps .cr-fig svg { max-width: 420px; }
+.mv-tier { display: inline-block; margin-inline-start: 6px; font-size: .82em; font-weight: 700; padding: 2px 10px; border-radius: 999px; }
+.mv-tier.is-free { background: #e3f3ea; color: #0E6A43; } .mv-tier.is-prem { background: #fbefd2; color: #7a5300; }
+.mv-legend { margin-top: 14px; font-size: .95em; color: var(--muted, #555); }
 .cr-det { margin: 12px 0 0; display: grid; gap: 6px; }
 .cr-det > div { background: var(--surface, #fff); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; }
 .cr-det dt { font-weight: 700; font-size: .92em; }
