@@ -1014,6 +1014,7 @@ html.news-open { overflow: hidden; }
 .cr-epr b { font-size: 18px; }
 .cr-epr span:last-child { color: var(--muted); }
 .cr-epr .ep-new { font-style: normal; font-size: .72rem; font-weight: 800; padding: 2px 9px; border-radius: 999px; background: var(--sign); color: #fff; vertical-align: middle; margin-inline-start: 4px; }
+.cr-epr .ep-soon { font-style: normal; font-size: .72rem; font-weight: 800; padding: 2px 9px; border-radius: 999px; background: var(--amber-soft); color: var(--amber-ink); vertical-align: middle; margin-inline-start: 4px; }
 .cr-epr span.ep-free { color: #0E6A43; font-size: .86rem; font-weight: 700; }
 .ep-home li:nth-child(2) > a { border: 2px solid var(--sign); }
 @media (max-width: 560px) { .ep-home { gap: 8px; } .ep-home li > a, .ep-home li > div { display: grid; grid-template-columns: 34px 1fr; column-gap: 10px; row-gap: 2px; padding: 12px 14px; } .ep-home .cr-ic { grid-row: span 3; font-size: 24px; } .ep-home b { font-size: 16px; } .ep-home span { font-size: .86rem; } }
