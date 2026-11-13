@@ -1053,6 +1053,20 @@ html.news-open { overflow: hidden; }
 .sim-res { margin-top: 14px; padding: 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
 .sim-res h3 { margin: 0 0 6px; } .sim-stars { color: #E9B43A; letter-spacing: 2px; } .sim-res ul { margin: 8px 0 0; padding-inline-start: 20px; }
 @media (max-width: 400px) { .sim-wheel { width: 136px; height: 136px; } .sim-gauge { width: 136px; } .sim-dash { gap: 10px; padding: 12px 10px; } .sim-pedal { padding: 14px 10px; font-size: 1em; } }
+/* simulateur v3.2 : commandes en verre */
+.ck .sim-pedal { background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.04)), repeating-linear-gradient(180deg, rgba(0,0,0,.22) 0 3px, rgba(0,0,0,0) 3px 9px), rgba(18,24,21,.38);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4); backdrop-filter: blur(12px) saturate(1.4); border: 1px solid rgba(255,255,255,.32); box-shadow: 0 10px 24px -10px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 0 rgba(0,0,0,.25); text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+.ck .sim-pedal .sp-gear { box-shadow: 0 2px 8px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.4); }
+.ck .sim-fwd .sp-gear { background: linear-gradient(180deg, #19a065, #0b5c39); } .ck .sim-back .sp-gear { background: linear-gradient(180deg, #4c8af0, #1f56b3); }
+.ck .sim-pedal.is-on { transform: translateY(3px) scale(.98); box-shadow: 0 3px 10px -4px rgba(0,0,0,.6), inset 0 2px 8px rgba(0,0,0,.35); }
+.ck .sim-fwd.is-on { outline: none; border-color: #3ddc97; box-shadow: 0 0 0 2px rgba(61,220,151,.55), 0 0 22px rgba(61,220,151,.45), inset 0 2px 8px rgba(0,0,0,.35); }
+.ck .sim-back.is-on { outline: none; border-color: #7fb0ff; box-shadow: 0 0 0 2px rgba(127,176,255,.55), 0 0 22px rgba(127,176,255,.45), inset 0 2px 8px rgba(0,0,0,.35); }
+.ck-dash-bg { opacity: .9; }
+.ck-cluster { background: rgba(14,20,17,.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.14); border-radius: 16px; padding: 6px 10px 4px; }
+.ck .sim-wheel { filter: drop-shadow(0 8px 14px rgba(0,0,0,.55)); opacity: .96; }
+.ck-b { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.35); }
+.ck-b:hover { background: rgba(255,255,255,.24); }
+.ck-quit { background: rgba(200,40,58,.55) !important; }
 .sim-peek { font: inherit; margin-inline-start: 6px; }
 /* simulateur v3 : poste de conduite (paysage, plein écran) */
 html.ck-on, html.ck-on body { overflow: hidden !important; }
