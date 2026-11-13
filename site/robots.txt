@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /api/
-Disallow: /gestion
-Disallow: /gestion.html
-
-Sitemap: https://rokhssati.com/sitemap.xml

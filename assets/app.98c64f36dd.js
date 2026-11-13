@@ -1,4 +1,4 @@
-var ROKH_PUB = {"kty":"EC","crv":"P-256","x":"G6Y-YEe9vEC8pCKoyuliG0ntFX7OIXdOELw5r6LVcqk","y":"nmMVXzQidwBoMwDDXmjdTa2tsk23KJiHnA0D04PxuLE"};
+var ROKH_PUB = {"kty":"EC","crv":"P-256","x":"nMBJqaUUayqgjVWvqONwRGrCL89aygeP3hjLNIaaU2g","y":"4VeNs_MKat3e9p8fvZ_gPCLwfEB-lTzKMVTjkQVNDvM"};
 /* Rokhssati code kit: phone-locked activation codes (pure JS, works offline everywhere).
    code = 12 base32 chars = 14 bits end-day + 46 bits HMAC-SHA256(key, deviceId|day). */
 var RokhCode = (function () {
@@ -80,21 +80,21 @@ var RokhCode = (function () {
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
   var UI = {
-    ar: { codeNet: "يلزم الاتصال بالإنترنت لتفعيل الرمز. حاول مرة أخرى.", codeWait: "جارٍ التحقق…", ltPass: "ممتاز! أنت جاهز لهذا الاختبار.", ltFail: "راجع الأخطاء وأعد الاختبار.", lockExam: "الامتحان التجريبي يُفتح برمز التفعيل.", lockMore: "النسخة المجانية: %n أسئلة تجريبية، دائمًا نفسها. فعّل رمزًا لكل التدريب والامتحانات التجريبية.", unlock: "تفعيل رمز", codeOk: "تم التفعيل حتى %d.", codeKo: "الرمز غير صحيح أو لا يخص هذا الجهاز.", codeExp: "انتهت صلاحية هذا الرمز.", codeMany: "محاولات كثيرة. انتظر ساعة ثم أعد المحاولة، أو راسلنا من صفحة الاتصال.", payOk: "تم إرسال الوصل. ستصلك رسالة برمز التفعيل بعد التحقق.", payKo: "تعذّر الإرسال من هنا. أرسل صورة الوصل عبر واتساب أو رسالة نصية.", active: "التفعيل صالح حتى %d.", sitQ: "ما هو ترتيب المرور؟", signQ: "ماذا تعني هذه الإشارة؟", right: "✓ إجابة صحيحة", wrong: "✗ ليس تمامًا", markRight: "صحيح", markWrong: "اختيارك", next: "السؤال التالي", last: "عرض النتيجة", validate: "تأكيد",
-          score: "نتيجتك", restart: "أعد السلسلة", great: "ممتاز! أنت تعرف القانون جيدًا.", mid: "بداية جيدة. راجع الدروس المعنية.", low: "الوقت مناسب للمراجعة.",
+    ar: { codeNet: "يلزم الاتصال بالإنترنت لتفعيل الرمز. حاول مرة أخرى.", codeWait: "جارٍ التحقق…", ltPass: "ممتاز! أنت جاهز لهذا الاختبار.", ltFail: "راجع الأخطاء وأعد الاختبار.", lockExam: "الامتحانات التجريبية من البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز).", lockMore: "النسخة المجانية: %n أسئلة تجريبية، دائمًا نفسها. كل التدريب والامتحانات التجريبية في البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز).", unlock: "احصل على الدخول المُهدى", codeOk: "تم التفعيل حتى %d.", codeKo: "الرمز لا يطابق هذا الجهاز: تحقق من كل حرف، وأن رقم الجهاز الذي أرسلته لنا هو %dev.", codeExp: "انتهت صلاحية هذا الرمز (%d). اطلب رمزًا جديدًا من صفحة الاتصال.", codeForm: "الرمز يتكون من 12 حرفًا (حروف وأرقام، دون O و I و 0 و 1). تحقق من الكتابة.", codeOther: "هذا الرمز مستعمل على جهاز آخر. كل رمز يعمل على جهاز واحد: اطلب رمزًا لهذا الجهاز (%dev).", codeSrv: "مشكلة في الخادم، ليست منك. أعد المحاولة بعد قليل.", codeMany: "محاولات كثيرة. انتظر ساعة ثم أعد المحاولة، أو راسلنا من صفحة الاتصال.", payOk: "تم إرسال الوصل. ستصلك رسالة برمز التفعيل بعد التحقق.", payKo: "تعذّر الإرسال من هنا. أرسل صورة الوصل عبر واتساب أو رسالة نصية.", active: "التفعيل صالح حتى %d.", sitQ: "ما هو ترتيب المرور؟", signQ: "ماذا تعني هذه الإشارة؟", right: "✓ إجابة صحيحة", wrong: "✗ ليس تمامًا", markRight: "صحيح", markWrong: "اختيارك", next: "السؤال التالي", last: "عرض النتيجة", validate: "تأكيد",
+          score: "نتيجتك", restart: "أعد السلسلة", revCh: "📘 راجع الدرس: ", great: "ممتاز! أنت تعرف القانون جيدًا.", mid: "بداية جيدة. راجع الدروس المعنية.", low: "الوقت مناسب للمراجعة.",
           time: "الوقت", recap: "التصحيح", yours: "إجابتك", none: "بدون إجابة", correct: "الإجابة الصحيحة", pick: "اختر إجابة.", examNote: "التصحيح في نهاية الامتحان.",
           ok: "لا توجد مخالفة", d2: "مخالفة من الدرجة الثانية", d3: "مخالفة من الدرجة الثالثة", d4: "مخالفة من الدرجة الرابعة", delit: "جنحة تُحال على القضاء", cur: "دج", inLimit: "سرعتك ضمن الحد المسموح.", check: "أدخل أرقامًا صحيحة.",
-          formOk: "شكرًا!", formKo: "يرجى كتابة رسالتك.", formKoAE: "اترك رقم هاتف أو بريدًا لنتصل بمدرستك.", cSend: "جارٍ الإرسال…", cOk: "وصلتنا رسالتك، سنرد عليك قريبًا.", cNet: "تعذر الإرسال. تحقق من الإنترنت وأعد المحاولة.", empty: "لا توجد أسئلة لهذا المحور بعد.", sig: "⚑ أبلغ عن خطأ", sigWhy: "ما المشكلة؟", sigR: ["الجواب خاطئ", "خطأ في الترجمة", "الصورة غير واضحة", "شيء آخر"], sigNote: "تفاصيل (اختياري)", sigSend: "أرسل", sigOk: "شكرًا! سنراجع هذا السؤال.", inNew: "ردّت عليك رخصتي.", inSee: "اقرأ الرد", inMe: "أنت", inR: "رخصتي", inEmpty: "لم ترسل أي رسالة من هذا الجهاز بعد.", inNet: "تعذر تحميل الرسائل. تحقق من الإنترنت.", resume: "عندك امتحان تجريبي لم يكتمل: السؤال %i من %n، بقي %t.", resumeGo: "أكمل الامتحان", resumeNew: "امتحان جديد", cxNone: "اختر محورًا واحدًا على الأقل.", cxLock: "الامتحان المخصّص متاح برمز التفعيل.", zoom: "تكبير الرسم", zoomClose: "إغلاق", trMaj: "حدّث التطبيق إلى آخر نسخة للاستفادة من العرض.", trLeft: "بقي %n من 10 عروض مجانية.", trNone: "انتهت العروض المجانية. شكرًا لاهتمامك!", trOk: "تم تفعيل البريميوم حتى %d.", trDeja: "هذا الهاتف استفاد من العرض من قبل.", trNet: "يلزم الاتصال بالإنترنت. حاول مرة أخرى.", favAdd: "أضف إلى المفضلة", favDel: "احذف من المفضلة", favMax: "النسخة المجانية: 20 سؤالًا في المفضلة كحد أقصى. فعّل رمزًا لمفضلة غير محدودة.", favEmpty: "لا توجد أسئلة في المفضلة بعد. اضغط على النجمة ☆ أثناء التدريب لإضافة سؤال." },
-    fr: { codeNet: "Une connexion internet est nécessaire pour activer le code. Réessayez.", codeWait: "Vérification…", ltPass: "Bravo, vous êtes prêt pour ce test.", ltFail: "Revoyez vos erreurs et refaites le test.", lockExam: "L'examen blanc s'ouvre avec un code d'activation.", lockMore: "Version gratuite : %n questions d'essai, toujours les mêmes. Activez un code pour tout l'entraînement et les examens blancs.", unlock: "Activer un code", codeOk: "Activé jusqu'au %d.", codeKo: "Code incorrect, ou il n'est pas fait pour cet appareil.", codeExp: "Ce code a expiré.", codeMany: "Trop d'essais. Attendez une heure avant de réessayer, ou écrivez-nous depuis la page Contact.", payOk: "Reçu envoyé. Vous recevrez votre code par SMS après vérification.", payKo: "Envoi impossible ici. Envoyez la photo du reçu par WhatsApp ou SMS.", active: "Activation valable jusqu'au %d.", sitQ: "Dans quel ordre les véhicules passent-ils ?", signQ: "Que signifie ce panneau ?", right: "✓ Bonne réponse", wrong: "✗ Pas tout à fait", markRight: "Correct", markWrong: "Votre choix", next: "Question suivante", last: "Voir mon score", validate: "Valider",
-          score: "Votre score", restart: "Recommencer", great: "Excellent ! Vous connaissez bien le code.", mid: "Bon début. Revoyez les leçons concernées.", low: "C'est le moment de réviser.",
+          formOk: "شكرًا!", formKo: "يرجى كتابة رسالتك.", formKoAE: "اترك رقم هاتف أو بريدًا لنتصل بمدرستك.", cSend: "جارٍ الإرسال…", cOk: "وصلتنا رسالتك، سنرد عليك قريبًا.", cNet: "تعذر الإرسال. تحقق من الإنترنت وأعد المحاولة.", empty: "لا توجد أسئلة لهذا المحور بعد.", sig: "⚑ أبلغ عن خطأ", sigWhy: "ما المشكلة؟", sigR: ["الجواب خاطئ", "خطأ في الترجمة", "الصورة غير واضحة", "شيء آخر"], sigNote: "تفاصيل (اختياري)", sigSend: "أرسل", sigOk: "شكرًا! سنراجع هذا السؤال.", inNew: "ردّت عليك رخصتي.", inSee: "اقرأ الرد", inMe: "أنت", inR: "رخصتي", inEmpty: "لم ترسل أي رسالة من هذا الجهاز بعد.", inNet: "تعذر تحميل الرسائل. تحقق من الإنترنت.", resume: "عندك امتحان تجريبي لم يكتمل: السؤال %i من %n، بقي %t.", resumeGo: "أكمل الامتحان", resumeNew: "امتحان جديد", cxNone: "اختر محورًا واحدًا على الأقل.", cxLock: "الامتحان المخصّص من البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز).", zoom: "تكبير الرسم", zoomClose: "إغلاق", trMaj: "حدّث التطبيق إلى آخر نسخة للاستفادة من العرض.", trLeft: "بقي %n من 10 عروض مجانية.", trNone: "انتهت العروض المجانية. شكرًا لاهتمامك!", trOk: "تم تفعيل البريميوم حتى %d.", trDeja: "هذا الهاتف استفاد من العرض من قبل.", trNet: "يلزم الاتصال بالإنترنت. حاول مرة أخرى.", favAdd: "أضف إلى المفضلة", favDel: "احذف من المفضلة", favMax: "النسخة المجانية: 20 مفضّلة كحد أقصى. المفضّلات غير المحدودة في البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز).", favEmpty: "لا توجد أسئلة في المفضلة بعد. اضغط على النجمة ☆ أثناء التدريب لإضافة سؤال." },
+    fr: { codeNet: "Une connexion internet est nécessaire pour activer le code. Réessayez.", codeWait: "Vérification…", ltPass: "Bravo, vous êtes prêt pour ce test.", ltFail: "Revoyez vos erreurs et refaites le test.", lockExam: "Les examens blancs font partie du Premium, offert pendant le lancement (essai 3 jours ou code).", lockMore: "Version gratuite : %n questions d'essai, toujours les mêmes. Tout l'entraînement et les examens blancs : Premium, offert pendant le lancement (essai 3 jours ou code).", unlock: "Obtenir l'accès offert", codeOk: "Activé jusqu'au %d.", codeKo: "Ce code ne correspond pas à cet appareil : vérifiez chaque caractère, et que le numéro d'appareil envoyé est bien %dev.", codeExp: "Ce code a expiré (%d). Demandez-en un nouveau depuis la page Contact.", codeForm: "Un code fait 12 caractères (lettres et chiffres, sans O, I, 0 ni 1). Vérifiez la saisie.", codeOther: "Ce code est déjà utilisé sur un autre appareil. Un code ne marche que sur un appareil : demandez-en un pour celui-ci (%dev).", codeSrv: "Problème du serveur, pas de votre côté. Réessayez dans un moment.", codeMany: "Trop d'essais. Attendez une heure avant de réessayer, ou écrivez-nous depuis la page Contact.", payOk: "Reçu envoyé. Vous recevrez votre code par SMS après vérification.", payKo: "Envoi impossible ici. Envoyez la photo du reçu par WhatsApp ou SMS.", active: "Activation valable jusqu'au %d.", sitQ: "Dans quel ordre les véhicules passent-ils ?", signQ: "Que signifie ce panneau ?", right: "✓ Bonne réponse", wrong: "✗ Pas tout à fait", markRight: "Correct", markWrong: "Votre choix", next: "Question suivante", last: "Voir mon score", validate: "Valider",
+          score: "Votre score", restart: "Recommencer", revCh: "📘 Revoir le chapitre : ", great: "Excellent ! Vous connaissez bien le code.", mid: "Bon début. Revoyez les leçons concernées.", low: "C'est le moment de réviser.",
           time: "Temps", recap: "Correction", yours: "Votre réponse", none: "Sans réponse", correct: "Bonne réponse", pick: "Choisissez une réponse.", examNote: "Correction à la fin de l'examen.",
           ok: "Pas d'infraction", d2: "Contravention du 2e degré", d3: "Contravention du 3e degré", d4: "Contravention du 4e degré", delit: "Délit jugé par le tribunal", cur: "DA", inLimit: "Vous êtes dans la limite.", check: "Entrez des valeurs valides.",
-          formOk: "Merci !", formKo: "Écrivez votre message.", formKoAE: "Laissez un téléphone ou un e-mail pour que nous recontactions votre auto-école.", cSend: "Envoi…", cOk: "Message reçu, nous vous répondons bientôt.", cNet: "Envoi impossible. Vérifiez votre connexion et réessayez.", empty: "Pas encore de questions pour ce thème.", sig: "⚑ Signaler une erreur", sigWhy: "Quel est le problème ?", sigR: ["La réponse est fausse", "Erreur de traduction", "Image peu claire", "Autre chose"], sigNote: "Détails (facultatif)", sigSend: "Envoyer", sigOk: "Merci ! Nous allons vérifier cette question.", inNew: "Rokhssati vous a répondu.", inSee: "Lire la réponse", inMe: "Vous", inR: "Rokhssati", inEmpty: "Aucun message envoyé depuis cet appareil pour l'instant.", inNet: "Impossible de charger vos messages. Vérifiez votre connexion.", resume: "Vous avez un examen blanc en cours : question %i sur %n, il reste %t.", resumeGo: "Reprendre l'examen", resumeNew: "Nouvel examen", cxNone: "Choisissez au moins un thème.", cxLock: "L'examen personnalisé s'ouvre avec un code d'activation.", zoom: "Agrandir le schéma", zoomClose: "Fermer", trMaj: "Mettez l'appli à jour pour profiter de l'offre.", trLeft: "Encore %n essai(s) gratuit(s) sur 10.", trNone: "Les essais gratuits sont épuisés. Merci de votre intérêt !", trOk: "Premium activé jusqu'au %d.", trDeja: "Ce téléphone a déjà profité de l'offre.", trNet: "Une connexion internet est nécessaire. Réessayez.", favAdd: "Ajouter aux favoris", favDel: "Retirer des favoris", favMax: "Version gratuite : 20 favoris au maximum. Activez un code pour des favoris illimités.", favEmpty: "Aucun favori pour l'instant. Touchez l'étoile ☆ pendant l'entraînement pour garder une question." },
-    dz: { codeNet: "لازم الأنترنت باش تفعّل الكود. عاود جرّب.", codeWait: "راهو يتحقق…", ltPass: "مليح بزاف! راك واجد.", ltFail: "عاود شوف الغلطات وعاود الاختبار.", lockExam: "الامتحان التجريبي يتحل بكود التفعيل.", lockMore: "النسخة بلاش: %n أسئلة باش تجرّب، ديما هوما. فعّل كود باش تحل كامل التدريب والامتحانات التجريبية.", unlock: "فعّل الكود", codeOk: "تفعّل حتى %d.", codeKo: "الكود غالط ولا ماشي تاع هاد التيليفون.", codeExp: "هاد الكود فات وقتو.", codeMany: "جرّبت بزاف. استنى ساعة وعاود، ولا ابعثلنا من صفحة الاتصال.", payOk: "الوصل تبعث. يجيك الكود في ميساج من بعد ما نتأكدو.", payKo: "ما قدرناش نبعثو من هنا. ابعث تصويرة الوصل في واتساب ولا ميساج.", active: "التفعيل يخدم حتى %d.", sitQ: "شكون يفوت الأول؟", signQ: "واش معناه هاد البانو؟", right: "✓ صحيح!", wrong: "✗ ماشي هاكا", markRight: "صحيح", markWrong: "اخترت هادي", next: "السؤال اللي بعدو", last: "شوف النتيجة", validate: "أكّد",
-          score: "النتيجة تاعك", restart: "عاود من الأول", great: "برافو! راك تعرف القانون مليح.", mid: "مليح، راجع الدروس اللي غلطت فيهم.", low: "لازم تراجع شوية.",
+          formOk: "Merci !", formKo: "Écrivez votre message.", formKoAE: "Laissez un téléphone ou un e-mail pour que nous recontactions votre auto-école.", cSend: "Envoi…", cOk: "Message reçu, nous vous répondons bientôt.", cNet: "Envoi impossible. Vérifiez votre connexion et réessayez.", empty: "Pas encore de questions pour ce thème.", sig: "⚑ Signaler une erreur", sigWhy: "Quel est le problème ?", sigR: ["La réponse est fausse", "Erreur de traduction", "Image peu claire", "Autre chose"], sigNote: "Détails (facultatif)", sigSend: "Envoyer", sigOk: "Merci ! Nous allons vérifier cette question.", inNew: "Rokhssati vous a répondu.", inSee: "Lire la réponse", inMe: "Vous", inR: "Rokhssati", inEmpty: "Aucun message envoyé depuis cet appareil pour l'instant.", inNet: "Impossible de charger vos messages. Vérifiez votre connexion.", resume: "Vous avez un examen blanc en cours : question %i sur %n, il reste %t.", resumeGo: "Reprendre l'examen", resumeNew: "Nouvel examen", cxNone: "Choisissez au moins un thème.", cxLock: "L'examen personnalisé fait partie du Premium, offert pendant le lancement (essai 3 jours ou code).", zoom: "Agrandir le schéma", zoomClose: "Fermer", trMaj: "Mettez l'appli à jour pour profiter de l'offre.", trLeft: "Encore %n essai(s) gratuit(s) sur 10.", trNone: "Les essais gratuits sont épuisés. Merci de votre intérêt !", trOk: "Premium activé jusqu'au %d.", trDeja: "Ce téléphone a déjà profité de l'offre.", trNet: "Une connexion internet est nécessaire. Réessayez.", favAdd: "Ajouter aux favoris", favDel: "Retirer des favoris", favMax: "Version gratuite : 20 favoris au maximum. Favoris illimités avec le Premium, offert pendant le lancement (essai 3 jours ou code).", favEmpty: "Aucun favori pour l'instant. Touchez l'étoile ☆ pendant l'entraînement pour garder une question." },
+    dz: { codeNet: "لازم الأنترنت باش تفعّل الكود. عاود جرّب.", codeWait: "راهو يتحقق…", ltPass: "مليح بزاف! راك واجد.", ltFail: "عاود شوف الغلطات وعاود الاختبار.", lockExam: "الامتحانات التجريبية في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود).", lockMore: "النسخة بلاش: %n أسئلة باش تجرّب، ديما هوما. كامل التدريب والامتحانات في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود).", unlock: "خوذ الدخول بلاش", codeOk: "تفعّل حتى %d.", codeKo: "هاد الكود ماشي تاع هاد التيليفون: شوف كل حرف، وشوف بلي النيمرو اللي بعثتهولنا هو %dev.", codeExp: "هاد الكود فات وقتو (%d). اطلب واحد جديد من صفحة الاتصال.", codeForm: "الكود فيه 12 حرف (حروف وأرقام، بلا O و I و 0 و 1). شوف واش كتبتو مليح.", codeOther: "هاد الكود مستعمل في تيليفون آخر. كل كود يخدم في تيليفون واحد: اطلب كود لهاد التيليفون (%dev).", codeSrv: "كاين مشكل في السيرفر، ماشي منك. عاود من بعد شوية.", codeMany: "جرّبت بزاف. استنى ساعة وعاود، ولا ابعثلنا من صفحة الاتصال.", payOk: "الوصل تبعث. يجيك الكود في ميساج من بعد ما نتأكدو.", payKo: "ما قدرناش نبعثو من هنا. ابعث تصويرة الوصل في واتساب ولا ميساج.", active: "التفعيل يخدم حتى %d.", sitQ: "شكون يفوت الأول؟", signQ: "واش معناه هاد البانو؟", right: "✓ صحيح!", wrong: "✗ ماشي هاكا", markRight: "صحيح", markWrong: "اخترت هادي", next: "السؤال اللي بعدو", last: "شوف النتيجة", validate: "أكّد",
+          score: "النتيجة تاعك", restart: "عاود من الأول", revCh: "📘 راجع الدرس : ", great: "برافو! راك تعرف القانون مليح.", mid: "مليح، راجع الدروس اللي غلطت فيهم.", low: "لازم تراجع شوية.",
           time: "الوقت", recap: "التصحيح", yours: "الجواب تاعك", none: "ما جاوبتش", correct: "الجواب الصحيح", pick: "اختار جواب.", examNote: "التصحيح في اللخر تاع الامتحان.",
           ok: "ما كانش خطية", d2: "خطية من الدرجة الثانية", d3: "خطية من الدرجة الثالثة", d4: "خطية من الدرجة الرابعة", delit: "جنحة تروح للمحكمة", cur: "دج", inLimit: "راك في الحد المسموح.", check: "دخّل أرقام صحاح.",
-          formOk: "يعطيك الصحة!", formKo: "اكتب الميساج.", formKoAE: "خلّي نيمرو ولا إيميل باش نعيطو للأوطو إيكول تاعك.", cSend: "راهو يتبعث…", cOk: "وصلنا الميساج، نردو عليك قريب.", cNet: "ما تبعثش. شوف الأنترنت وعاود.", empty: "مازال ما كانش أسئلة لهاد المحور.", sig: "⚑ بلّغ على غلطة", sigWhy: "واش هو المشكل؟", sigR: ["الجواب غالط", "غلطة في الترجمة", "التصويرة ماشي واضحة", "حاجة أخرى"], sigNote: "تفاصيل (إذا حبيت)", sigSend: "ابعث", sigOk: "يعطيك الصحة! راح نشوفو هاد السؤال.", inNew: "رخصتي ردّت عليك.", inSee: "اقرا الرد", inMe: "أنت", inR: "رخصتي", inEmpty: "مازال ما بعثت حتى ميساج من هاد الجهاز.", inNet: "ما قدرناش نجيبو الميساجات. شوف الأنترنت.", resume: "عندك امتحان تجريبي ما كمّلتوش: السؤال %i من %n، بقات %t.", resumeGo: "كمّل الامتحان", resumeNew: "امتحان جديد", cxNone: "اختار محور واحد على الأقل.", cxLock: "الامتحان على كيفك يتحل بكود التفعيل.", zoom: "كبّر الرسمة", zoomClose: "سكّر", trMaj: "حدّث التطبيق لآخر نسخة باش تستافد من العرض.", trLeft: "باقي %n من 10 عروض بلاش.", trNone: "العروض البلاش كملو. يعطيك الصحة!", trOk: "البريميوم تفعّل حتى %d.", trDeja: "هاد التيليفون خدا العرض من قبل.", trNet: "لازم الأنترنت. عاود جرّب.", favAdd: "زيد للمفضلة", favDel: "نحّي من المفضلة", favMax: "النسخة بلاش: 20 سؤال في المفضلة ماكسيموم. فعّل كود باش تولي بلا حدود.", favEmpty: "مازال ما كانش أسئلة في المفضلة. اضغط على النجمة ☆ وقت التدريب باش تخبّي سؤال." }
+          formOk: "يعطيك الصحة!", formKo: "اكتب الميساج.", formKoAE: "خلّي نيمرو ولا إيميل باش نعيطو للأوطو إيكول تاعك.", cSend: "راهو يتبعث…", cOk: "وصلنا الميساج، نردو عليك قريب.", cNet: "ما تبعثش. شوف الأنترنت وعاود.", empty: "مازال ما كانش أسئلة لهاد المحور.", sig: "⚑ بلّغ على غلطة", sigWhy: "واش هو المشكل؟", sigR: ["الجواب غالط", "غلطة في الترجمة", "التصويرة ماشي واضحة", "حاجة أخرى"], sigNote: "تفاصيل (إذا حبيت)", sigSend: "ابعث", sigOk: "يعطيك الصحة! راح نشوفو هاد السؤال.", inNew: "رخصتي ردّت عليك.", inSee: "اقرا الرد", inMe: "أنت", inR: "رخصتي", inEmpty: "مازال ما بعثت حتى ميساج من هاد الجهاز.", inNet: "ما قدرناش نجيبو الميساجات. شوف الأنترنت.", resume: "عندك امتحان تجريبي ما كمّلتوش: السؤال %i من %n، بقات %t.", resumeGo: "كمّل الامتحان", resumeNew: "امتحان جديد", cxNone: "اختار محور واحد على الأقل.", cxLock: "الامتحان على كيفك في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود).", zoom: "كبّر الرسمة", zoomClose: "سكّر", trMaj: "حدّث التطبيق لآخر نسخة باش تستافد من العرض.", trLeft: "باقي %n من 10 عروض بلاش.", trNone: "العروض البلاش كملو. يعطيك الصحة!", trOk: "البريميوم تفعّل حتى %d.", trDeja: "هاد التيليفون خدا العرض من قبل.", trNet: "لازم الأنترنت. عاود جرّب.", favAdd: "زيد للمفضلة", favDel: "نحّي من المفضلة", favMax: "النسخة بلاش: 20 مفضّلة برك. بلا حدود في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود).", favEmpty: "مازال ما كانش أسئلة في المفضلة. اضغط على النجمة ☆ وقت التدريب باش تخبّي سؤال." }
   };
   var t = function (k) { return UI[lang][k]; };
   var fmt = function (n) { return lang === "fr" ? n.toLocaleString("fr-FR").replace(/ | /g, " ") : String(n); };
@@ -112,23 +112,119 @@ var RokhCode = (function () {
     function flush() {
       if (off()) { try { localStorage.removeItem(QK); } catch (e) {} return; }
       var q = jget(QK); if (!Object.keys(q).length) return;
+      q._p = window.RokhNative ? "a" : "w";   // appli / site (séparés dans Gestion, 09/11/2026)
       var url = (window.RokhNative ? "https://rokhssati.com" : "") + "/api/ev", body = JSON.stringify(q), sent = false;
       try { sent = navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type: "text/plain" })); } catch (e) {}
       if (!sent) { try { fetch(url, { method: "POST", body: body, keepalive: true }); } catch (e) {} }
       try { localStorage.removeItem(QK); } catch (e) {}
     }
+    try { if (window.RokhNative && typeof window.RokhNative.setNoTrack === "function") window.RokhNative.setNoTrack(off()); } catch (e) {}   // 1.4.28: same refusal for the app's opens-per-version count
     (function visit() {   // new visitor / came back after 1 day / after 7 days (each counted once per browser)
       if (off()) return;
       var f = null; try { f = localStorage.getItem("rokhssati-first"); } catch (e) { return; }
       var today = Math.floor(Date.now() / 86400000);
-      if (!f) { try { localStorage.setItem("rokhssati-first", String(today)); } catch (e) {} once("v_new"); return; }
+      /* cohortes (ROK-01, 10/11/2026) : chaque compteur porte aussi le jour d'arrivée (AAAAMMJJ, UTC), pour lire J+1 / J+7 par cohorte.
+         Une date de cohorte, pas un identifiant. vc = nouveau visiteur, r1c = revenu le lendemain, r7c = revenu 7 jours ou plus après. */
+      var coh = function (n) { return new Date(n * 86400000).toISOString().slice(0, 10).replace(/-/g, ""); };
+      if (!f) {
+        try { localStorage.setItem("rokhssati-first", String(today)); } catch (e) {} once("v_new"); once("vc:" + coh(today));
+        // RKV3-03 (13/11/2026): where the new visitor came from (utm_source, else the referring site), kept on this device only,
+        // so activation can be read per source (a1s:). A category, never the full address.
+        var cl = function (x) { return String(x || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 20); }, src = "direct", sp = null;
+        try { sp = new URLSearchParams(location.search); } catch (e) {}
+        var us = sp && cl(sp.get("utm_source")), uc = sp && cl(sp.get("utm_campaign")), ref = "";
+        try { ref = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) {}
+        if (window.RokhNative) src = "app";
+        else if (us && us.length >= 2) src = us;
+        else if (/(^|\.)(facebook|fb|messenger|instagram)\./.test(ref) || /^(l|lm|m)\.facebook\./.test(ref)) src = "facebook";
+        else if (/(^|\.)google\./.test(ref)) src = "google";
+        else if (/(^|\.)(bing|msn)\./.test(ref)) src = "bing";
+        else if (/(^|\.)(youtube|tiktok|whatsapp|t)\./.test(ref)) src = ref.split(".").slice(-2)[0];
+        else if (ref && ref.indexOf("rokhssati") < 0) src = "autre";
+        try { localStorage.setItem("rokhssati-src", src); } catch (e) {}
+        once("src:" + src); if (uc && uc.length >= 2) once("cp:" + uc);
+        return;
+      }
       var d = today - (+f || today);
       if (d >= 1) once("r1"); if (d >= 7) once("r7");
+      if (+f) { if (d === 1) once("r1c:" + coh(+f)); if (d >= 7) once("r7c:" + coh(+f)); }
+    })();
+    (function nav() {   // parcours anonyme (09/11/2026) : écran vu, écran d'entrée, enchaînement A>B, temps par tranches de 5 s. Aucun identifiant.
+      if (off()) return;
+      var p = ((location.pathname.split("/").pop() || "index").replace(/\.html?$/, "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 32)) || "index";
+      var prev = null; try { prev = sessionStorage.getItem("rokhssati-nav"); } catch (e) { return; }
+      if (prev === null) { add(window.RokhNative ? "ss_app" : "ss_web"); add("en:" + p); }
+      else if (prev !== p) add("nv:" + prev + ">" + p);
+      try { sessionStorage.setItem("rokhssati-nav", p); } catch (e) {}
+      add("pv:" + p);
+      var t0 = Date.now();
+      function stamp() { if (!t0) return; var u = Math.min(120, Math.round((Date.now() - t0) / 5000)); t0 = 0; if (u > 0) add("t5:" + p, u); }
+      document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") stamp(); else t0 = Date.now(); });
+      window.addEventListener("pagehide", stamp);
     })();
     document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") flush(); });
     window.addEventListener("pagehide", flush);
     setTimeout(flush, 4000);
-    return { add: add, once: once, flush: flush };
+    // NF-09 (13/11/2026): count script errors from our own files (no message, no address), at most one per page
+    var jsErr = false;
+    window.addEventListener("error", function (e) { if (jsErr || !e || !/\/assets\/|rokhssati|appassets/.test(String(e.filename || ""))) return; jsErr = true; add("jserr"); });
+    function cohort(name) {
+      var f = null, sr = ""; try { f = +localStorage.getItem("rokhssati-first"); sr = localStorage.getItem("rokhssati-src") || ""; } catch (e) {}
+      if (f) once(name + ":" + new Date(f * 86400000).toISOString().slice(0, 10).replace(/-/g, ""));
+      if (name === "a1c" && sr) once("a1s:" + sr);   // activation per source (only visitors whose source is known, from 13/11/2026)
+    }
+    return { add: add, once: once, flush: flush, cohort: cohort };
+  })();
+
+  /* ---------- test d'intérêt Premium (09/11/2026) : prix prévus, rien n'est vendu. Un vote par navigateur. ---------- */
+  (function prAd() {
+    function init() {
+      [].forEach.call(document.querySelectorAll('.pr-ad[data-gate="learned"]'), function (ad) {   // P0 : pas de Premium au premier passage
+        var ok = false; try { ok = localStorage.getItem("rokhssati-learned") === "1" || JSON.parse(localStorage.getItem("rokhssati-history") || "[]").length > 0; } catch (e) {}
+        var sec = ad.closest("section") || ad; if (!ok) { sec.hidden = true; ad.remove(); }
+      });
+      var ads = document.querySelectorAll(".pr-ad"); if (!ads.length) return;
+      Measure.once("pr_v");
+      var done = {}; try { done = JSON.parse(localStorage.getItem("rokhssati-pr") || "{}") || {}; } catch (e) {}
+      function paint() {
+        [].forEach.call(document.querySelectorAll(".pr-ad [data-pr]"), function (b) { b.classList.toggle("is-on", !!done[b.getAttribute("data-pr")]); });
+        [].forEach.call(document.querySelectorAll(".pr-ad .pr-thanks"), function (t) { t.hidden = !(done.pr_i || done.pr_m1 || done.pr_m3 || done.pr_y) || !!done.sent; });
+      }
+      [].forEach.call(document.querySelectorAll(".pr-ad [data-pr]"), function (b) {
+        b.addEventListener("click", function () {
+          var k = b.getAttribute("data-pr");
+          if (k === "pr_i") delete done.pr_n; if (k === "pr_n") { delete done.pr_i; delete done.pr_m1; delete done.pr_m3; delete done.pr_y; }
+          if (/^pr_(m1|m3|y)$/.test(k)) { delete done.pr_m1; delete done.pr_m3; delete done.pr_y; done.pr_i = 1; Measure.once("pr_i"); }
+          done[k] = 1; Measure.once(k);
+          try { localStorage.setItem("rokhssati-pr", JSON.stringify(done)); } catch (e) {}
+          paint(); Measure.flush();
+        });
+      });
+      // « qui est intéressé » : contact laissé volontairement (e-mail ou téléphone) + formule choisie → Gestion (contact.js, kind "premium")
+      var MM = { ar: ["شكرًا! سنخبرك عند صدور البريميوم.", "اكتب بريدًا إلكترونيًا أو رقم هاتف صحيحًا.", "تعذّر الإرسال. تحقق من الاتصال بالإنترنت."],
+                 fr: ["Merci ! Nous vous préviendrons à la sortie du Premium.", "Écrivez un e-mail ou un numéro de téléphone valide.", "Envoi impossible. Vérifiez votre connexion internet."],
+                 dz: ["صحّيت! نخبروك كي يخرج البريميوم.", "اكتب إيمايل ولا نيمرو صحيح.", "ما تبعثش. شوف الأنترنت."] };
+      [].forEach.call(document.querySelectorAll(".pr-ad .pr-form"), function (f) {
+        f.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var m = MM[lang] || MM.fr, out = f.querySelector(".pr-msg"), v = f.querySelector(".pr-contact").value.trim();
+          var mail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v) ? v : "", tel = !mail && /^\+?[0-9 .-]{9,18}$/.test(v) ? v.replace(/[ .-]/g, "") : "";
+          out.hidden = false;
+          if (!mail && !tel) { out.dataset.state = "ko"; out.textContent = m[1]; return; }
+          var pick = done.pr_y ? "y" : done.pr_m3 ? "m3" : done.pr_m1 ? "m1" : "";
+          fetch((window.RokhNative ? "https://rokhssati.com" : "") + "/api/contact", { method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ kind: "premium", email: mail, phone: tel, formule: pick, src: window.RokhNative ? "appli" : "site", lang: lang, hp: f.querySelector(".pr-hp").value }) })
+            .then(function (r) { return r.json(); }).then(function (j) {
+              out.dataset.state = j && j.ok ? "ok" : "ko"; out.textContent = j && j.ok ? m[0] : m[1];
+              if (j && j.ok) { done.sent = 1; try { localStorage.setItem("rokhssati-pr", JSON.stringify(done)); } catch (e) {} Measure.once("pr_c"); Measure.flush();
+                setTimeout(function () { [].forEach.call(document.querySelectorAll(".pr-ad .pr-ask"), function (q) { var p = document.createElement("p"); p.className = "pr-done"; p.textContent = m[0]; q.parentNode.replaceChild(p, q); }); paint(); }, 1200); }
+            }).catch(function () { out.dataset.state = "ko"; out.textContent = m[2]; });
+        });
+      });
+      if (done.sent) [].forEach.call(document.querySelectorAll(".pr-ad .pr-ask"), function (q) { var p = document.createElement("p"); p.className = "pr-done"; p.textContent = (MM[lang] || MM.fr)[0]; q.parentNode.replaceChild(p, q); });
+      paint();
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
   })();
 
   /* ---------- progress & history store (this device only) ---------- */
@@ -138,6 +234,7 @@ var RokhCode = (function () {
     function set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
     function day(d) { d = d || new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
     function markDay() { var a = get(DK, []), td = day(); if (a.indexOf(td) < 0) { a.push(td); set(DK, a.slice(-120)); } }
+    function learned() { try { localStorage.setItem("rokhssati-learned", "1"); } catch (e) {} }   // P0 : 1re interaction pédagogique (Premium montré ensuite)
     function prog() { var p = get(PK, {}); p.read = p.read || {}; p.done = p.done || {}; p.qs = p.qs || {}; return p; }
     return {
       day: day,
@@ -146,13 +243,15 @@ var RokhCode = (function () {
       read: function (theme, chap, step, n) {
         var p = prog();
         if ((p.read[chap] || 0) < step) p.read[chap] = Math.min(step, n);
+        if (step >= 2) learned();
         p.last = { theme: theme, chap: chap, step: step, ts: Date.now() };
-        if (step >= n && !p.done[chap]) { p.done[chap] = Date.now(); Measure.add("c_done"); Measure.once("cd:" + chap); Measure.once("a1"); }
+        if (step >= n && !p.done[chap]) { p.done[chap] = Date.now(); Measure.add("c_done"); Measure.once("cd:" + chap); Measure.once("a1"); Measure.cohort("a1c"); }
         set(PK, p); markDay();
       },
       chapQ: function (qid, ok) { var p = prog(); p.qs[qid] = ok ? 1 : 0; set(PK, p); this.answer(qid, ok); },
       answer: function (qid, ok, theme) {
         if (!qid) return;
+        learned();
         if (theme) { var ts = get(TK, {}), x = ts[theme] || (ts[theme] = { r: 0, w: 0 }); if (ok) x.r++; else x.w++; set(TK, ts); }
         var e = get(EK, {});
         if (ok) delete e[qid]; else { e[qid] = (e[qid] || 0) + 1; Measure.once("qko:" + qid); }
@@ -161,9 +260,10 @@ var RokhCode = (function () {
       errors: function () { return get(EK, {}); },
       test: function (kind, theme, score, total) {
         if (!total) return;
+        learned();
         var h = get(HK, []);
         h.push({ ts: Date.now(), kind: kind, theme: theme || "all", score: score, total: total });
-        Measure.add(kind === "exam" ? "e_end" : "t_end"); Measure.once("a1");
+        Measure.add(kind === "exam" ? "e_end" : "t_end"); Measure.once("a1"); Measure.cohort("a1c");
         if (kind === "exam") { Measure.add("e_pts", score); Measure.add("e_tot", total); }
         set(HK, h.slice(-200)); markDay();
       },
@@ -283,9 +383,12 @@ var RokhCode = (function () {
       els.clock.textContent = t("time") + " " + m + ":" + (s < 10 ? "0" : "") + s;
     }
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
-    var recorded = false, begun = false;
+    var recorded = false, begun = false, exited = false;
+    // RKV3-04 (13/11/2026): an exam left before its score (page closed / app in background / another series) counts "e_exit" once
+    function exitMark() { if (exam && meta.track && begun && !recorded && !exited && alive && idx < questions.length) { exited = true; Measure.add("e_exit"); } }
+    if (exam) window.addEventListener("pagehide", exitMark);
     function start() {
-      stop(); idx = 0; picked = null; answers = []; left = seconds || 0; recorded = false;
+      stop(); idx = 0; picked = null; answers = []; left = seconds || 0; recorded = false; exited = false;
       begun = !!meta.resume;   // a series counts as "started" at its first answer (not when the page merely shows it)
       if (meta.resume) { idx = meta.resume.idx || 0; answers = meta.resume.answers || []; left = meta.resume.left || left; meta.resume = null; }
       if (exam && questions.length) timer = setInterval(tick, 1000);
@@ -320,6 +423,7 @@ var RokhCode = (function () {
     var sigBox = null;
     if (meta.track && els.fb) {
       var wrapApi = root.closest("[data-api]"), sigApi = []; try { sigApi = JSON.parse(wrapApi ? wrapApi.getAttribute("data-api") : "[]"); } catch (e) {}
+      $$(".q-sig", els.fb).forEach(function (o) { o.remove(); });   /* Quiz() is re-run on the same box (theme, restart): keep a single report link */
       sigBox = document.createElement("div"); sigBox.className = "q-sig";
       sigBox.innerHTML = '<button type="button" class="q-sig-btn"></button><div class="q-sig-form" hidden><label></label><select></select><textarea rows="2"></textarea><button type="button" class="btn btn-ghost q-sig-send"></button></div><p class="q-sig-msg muted" hidden></p>';
       els.fb.appendChild(sigBox);
@@ -390,7 +494,7 @@ var RokhCode = (function () {
         b.setAttribute("aria-pressed", String(picked === i));
         b.addEventListener("click", function () {
           if (!exam && picked !== null) return;
-          if (!begun && meta.track) { begun = true; Measure.add(exam ? "e_start" : "t_start"); }
+          if (!begun && meta.track) { begun = true; Measure.add(exam ? "e_start" : "t_start"); if (meta.quick) Measure.add("qk_s"); }
           picked = i; if (!exam) { answers[idx] = i; if (meta.track) Track.answer(q.id, i === q.ok, q.theme); } render();
           if (!exam) els.next.focus();
         });
@@ -414,11 +518,31 @@ var RokhCode = (function () {
         recorded = true;
         if (exam) questions.forEach(function (q, i) { if (answers[i] !== undefined) Track.answer(q.id, answers[i] === q.ok, q.theme); });
         Track.test(exam ? "exam" : "train", meta.theme, score, questions.length);
+        if (meta.quick) Measure.add("qk_e");
         if (meta.onDone) meta.onDone();
       }
       els.num.textContent = score + " / " + questions.length;
       var r = score / questions.length;
       els.msg.textContent = r >= 0.85 ? t("great") : r >= 0.5 ? t("mid") : t("low");
+      // ROK-06 (13/11/2026): the main button leads to the chapter that teaches the 1st mistake (else: the courses, as before)
+      var learn = $(".q-learn", root);
+      if (learn) {
+        if (learn.dataset.def === undefined) { learn.dataset.def = learn.innerHTML; learn.dataset.href = learn.getAttribute("href"); }
+        learn.innerHTML = learn.dataset.def; learn.setAttribute("href", learn.dataset.href); learn.onclick = null;
+        var ch = null;   // 1st mistake that a chapter teaches: bank question, sign, or "ordre de passage" situation
+        if (DATA) questions.some(function (q, i) {
+          if (answers[i] === q.ok) return false;
+          ch = (DATA.qch && DATA.qch[q.id]) || (q.sign && DATA.sch && DATA.sch[q.sign]) || (q.theme === "situations" && DATA.sitch) || null;
+          return !!ch;
+        });
+        if (ch) {
+          var title = "";
+          try { (JSON.parse(document.getElementById("courseIndex").textContent) || []).forEach(function (th) { if (th.slug === ch[0]) th.chapters.forEach(function (c) { if (c.id === ch[1]) title = c.t[lang] || c.t.fr; }); }); } catch (e) {}
+          learn.setAttribute("href", "theme-" + ch[0] + ".html#c=" + ch[1]);
+          learn.textContent = title ? t("revCh") + title : t("revCh").replace(/\s*:\s*$/, "");
+          learn.onclick = function () { Measure.add("rv_ch"); };
+        }
+      }
       if (els.recap) {
         els.recap.innerHTML = "";
         els.recap.hidden = !exam;
@@ -445,7 +569,7 @@ var RokhCode = (function () {
     });
     els.restart.addEventListener("click", start);
     listeners.push(function () { if (alive) { render(); drawClock(); } });
-    return { start: start, stop: stop, kill: function () { alive = false; stop(); } };
+    return { start: start, stop: stop, kill: function () { exitMark(); alive = false; stop(); } };
   }
 
   /* ---------- pass (premium) ---------- */
@@ -526,6 +650,7 @@ var RokhCode = (function () {
       function pool(th) {
         if (th === "signs") return signQuestions();
         if (th === "situations") return DATA.situations.slice();
+        if (th === "rapide") return quick();
         if (th === "favs") { var fv = Track.favs(); return DATA.questions.concat(DATA.situations, signQuestions()).filter(function (q) { return fv[q.id]; }); }
         if (th === "all") return DATA.questions.concat(DATA.situations);
         if (th === "errors") {
@@ -533,6 +658,13 @@ var RokhCode = (function () {
           return DATA.questions.concat(DATA.situations, signQuestions()).filter(function (q) { return errs[q.id]; });
         }
         return DATA.questions.filter(function (q) { return q.theme === th; });
+      }
+      /* « Teste-toi en 2 minutes » (owner 08/11/2026): always the SAME 5 questions, for everyone (owner: « pas de truc
+         aléatoire qui donne accès à tous »), all already free: the 1st question of 3 themes + the 1st sign + the 1st situation. */
+      var QUICK_TH = ["circulation", "conducteur", "usagers"];
+      function quick() {
+        var first = function (th) { for (var i = 0; i < DATA.questions.length; i++) if (DATA.questions[i].theme === th) return DATA.questions[i]; return null; };
+        return [first(QUICK_TH[0]), signQuestions()[0], first(QUICK_TH[1]), DATA.situations[0], first(QUICK_TH[2])].filter(Boolean);
       }
       /* lot 4 (cahier v2 § 8): mock exam balanced across themes, avoiding the last exams' questions; resumable */
       var EXK = "rokhssati-exam-run", RECENT = "rokhssati-exam-recent";
@@ -599,6 +731,7 @@ var RokhCode = (function () {
       });
       $(".rs-go", resumeBox).addEventListener("click", function () {
         var run = lsJ(EXK, null); if (!run) return;
+        Measure.add("e_res");
         if (current) current.kill();
         resumeBox.hidden = true; lockBox.hidden = true;
         var ex = $("#modeExam"); if (ex) ex.checked = true;
@@ -613,18 +746,20 @@ var RokhCode = (function () {
         if (current) current.kill();
         var th = sel.value;
         var exam = (modes.filter(function (m) { return m.checked; })[0] || {}).value === "exam";
+        if (th === "rapide" && exam) { exam = false; var pr = $("#modePractice"); if (pr) pr.checked = true; }
         var qs = pool(th);
         if (exam || th === "signs" || th === "all" || th === "errors" || th === "favs") qs = shuffle(qs);
         var premium = !!pass(), limit = DATA.free[th] || DATA.free.default, msg = "";
         if (!premium && exam) { qs = []; msg = t("lockExam"); }
         else if (th === "favs" && !qs.length) msg = t("favEmpty");
+        else if (th === "rapide") { /* already limited to the free questions (quick()) */ }
         else if (!premium && th !== "favs") {
           // free (owner 07/11/2026): a short trial, always the same `limit` questions per category, in a random order
           var fixed = pool(th).slice(0, limit);
           if (pool(th).length > limit) msg = t("lockMore").replace("%n", limit);
           qs = shuffle(fixed);
         }
-        var meta = { track: true, theme: th };
+        var meta = { track: true, theme: th, quick: th === "rapide" };
         if (exam && premium) { qs = buildExam(th, 30).map(mix); meta = examMeta(th, qs, null); lsW(EXK, null); resumeBox.hidden = true; }
         else { if (exam) qs = qs.slice(0, 30); qs = qs.map(mix); }
         lockBox.hidden = !msg; $(".lock-msg", lockBox).textContent = msg;
@@ -676,10 +811,12 @@ var RokhCode = (function () {
             if (ok) {
               try { localStorage.setItem("rokhssati-pass", JSON.stringify(p)); } catch (e) {}
               msg.dataset.state = "ok"; msg.textContent = t("codeOk").replace("%d", fmtDate(p.until));
-            } else if (r && r.err === "exp") { msg.dataset.state = "ko"; msg.textContent = t("codeExp"); }
-            else if (r && r.err === "trop") { msg.dataset.state = "ko"; msg.textContent = t("codeMany"); }
-            else if (r && (r.err === "code" || r.err === "dev")) { msg.dataset.state = "ko"; msg.textContent = t("codeKo"); }
-            else { msg.dataset.state = "ko"; msg.textContent = t("codeNet"); }
+            } else {   // RKV3-11 (13/11/2026): say why, never show or log the code itself
+              msg.dataset.state = "ko";
+              var k = !r ? "codeNet" : r.err === "exp" ? "codeExp" : r.err === "trop" ? "codeMany" : r.err === "config" ? "codeSrv"
+                : r.err === "code" || r.err === "dev" ? (r.why === "forme" ? "codeForm" : r.why === "autre" ? "codeOther" : "codeKo") : "codeNet";
+              msg.textContent = t(k).replace("%dev", DEV).replace("%d", r && r.until ? fmtDate(r.until) : "");
+            }
           });
         })
         .catch(function () { msg.dataset.state = "ko"; msg.textContent = t("codeNet"); })
@@ -759,10 +896,18 @@ var RokhCode = (function () {
     function opts() { $$("option[data-fr]", f).forEach(function (o) { o.textContent = o.getAttribute("data-" + lang) || o.getAttribute("data-fr"); }); }
     opts();
     listeners.push(function () { opts(); if (!m.hidden && m.dataset.k) m.textContent = t(m.dataset.k); });
+    var ks = f.querySelector("select[name=kind]"), dw = f.querySelector(".dem-field");
+    if (ks && dw) { var sync = function () { dw.hidden = ks.value !== "code"; }; ks.addEventListener("change", sync); sync(); }
+    var dsel = f.querySelector("select[name=demande]"), star = f.querySelector(".req");
+    function req() { var free = dsel && !(dw && dw.hidden) && (dsel.value === "essai-3j" || dsel.value === "mois"); if (star) star.hidden = !!free; }
+    if (dsel) dsel.addEventListener("change", req); if (ks) ks.addEventListener("change", req); req();
     f.addEventListener("submit", function (e) {
       e.preventDefault(); if (busy) return;
       var d = { kind: f.getAttribute("data-kind") || "autre", dev: DEV, lang: document.documentElement.lang || "", box: inboxBox(true) };
       Array.prototype.forEach.call(f.elements, function (el) { if (el.name) d[el.name === "message" ? "msg" : el.name] = el.value.trim(); });
+      var dm = f.querySelector("[name=demande]"), dmw = dm && dm.closest(".dem-field"), ta = f.querySelector("[name=message]");
+      if (dm && (d.kind !== "code" || (dmw && dmw.hidden))) delete d.demande;
+      if (ta) ta.required = !(d.demande === "essai-3j" || d.demande === "mois");   // a code request needs no message
       if (!f.checkValidity()) { show("formKo"); return; }
       if (d.kind === "auto-ecole" && !d.phone && !d.email) { show("formKoAE"); return; }   // phone/e-mail optional, except for driving schools
       busy = true; show("cSend");
@@ -783,25 +928,25 @@ var RokhCode = (function () {
           start: "ابدأ الدرس", resume: "واصل الدرس", review: "راجع من البداية", readOf: "%a من %b فصول منتهية", cont: "واصل: %t", startCourse: "ابدأ الدروس",
           k_ch: "فصول منتهية", k_tests: "اختبارات", k_avg: "المعدل", k_best: "أفضل نتيجة", k_err: "أخطاء للمراجعة", histEmpty: "لم تجر أي اختبار بعد. ابدأ سلسلة من صفحة التدريب.",
           h_date: "التاريخ", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
-          all: "كل المحاور", custom: "امتحان مخصّص", favs: "مفضلتي", signs: "الإشارات", situations: "ترتيب المرور", errors: "أخطائي", reset: "مسح كل التقدم", resetSure: "متأكد؟ اضغط مرة أخرى",
-          noErr: "لا توجد أخطاء للمراجعة.", days: ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "أنهيت هذا المحور!", thDoneTxt: "اختبر نفسك الآن على أسئلته.", thFree: "3 أسئلة تجريبية مجانية؛ كل الأسئلة والامتحانات التجريبية برمز التفعيل.",
-          wk_t: "نقاط الضعف", wk_none: "أجب على 5 أسئلة على الأقل في محور لنحلّل نتائجك.", wk_rev: "راجع الدرس", wk_tr: "تدرّب", wk_q: "أجوبة", wk_free: "النسخة المجانية: المحور الأضعف فقط. فعّل رمزًا لتحليل كل المحاور.", wk_first: "للمراجعة أولًا", k_more: "إحصائيات مفصّلة", prem: "برمز التفعيل", bkCopied: "تم نسخ الرمز. احفظه في مكان آمن (رسالة لنفسك مثلًا).", bkSure: "سيُستبدل تقدمك الحالي. اضغط مرة أخرى للتأكيد.", bkOk: "تم استرجاع تقدمك.", bkBad: "هذا الرمز غير صالح. انسخه كاملًا.", histFree: "النسخة المجانية: آخر 3 نتائج فقط. فعّل رمزًا لرؤية كل السجل والمعدل وأفضل نتيجة." },
+          all: "كل المحاور", rapide: "اختبار دقيقتين", custom: "امتحان مخصّص", favs: "مفضلتي", signs: "الإشارات", situations: "ترتيب المرور", errors: "أخطائي", reset: "مسح كل التقدم", resetSure: "متأكد؟ اضغط مرة أخرى",
+          noErr: "لا توجد أخطاء للمراجعة.", days: ["أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "أنهيت هذا المحور!", thDoneTxt: "اختبر نفسك الآن على أسئلته.", thFree: "3 أسئلة تجريبية مجانية؛ كل الأسئلة والامتحانات التجريبية في البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز).",
+          wk_t: "نقاط الضعف", wk_none: "أجب على 5 أسئلة على الأقل في محور لنحلّل نتائجك.", wk_rev: "راجع الدرس", wk_tr: "تدرّب", wk_q: "أجوبة", wk_free: "النسخة المجانية: المحور الأضعف فقط. تحليل كل المحاور في البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز).", wk_first: "للمراجعة أولًا", k_more: "إحصائيات مفصّلة", prem: "بريميوم (قريبًا)", bkCopied: "تم نسخ الرمز. احفظه في مكان آمن (رسالة لنفسك مثلًا).", bkSure: "سيُستبدل تقدمك الحالي. اضغط مرة أخرى للتأكيد.", bkOk: "تم استرجاع تقدمك.", bkBad: "هذا الرمز غير صالح. انسخه كاملًا.", histFree: "النسخة المجانية: آخر 3 نتائج فقط. السجل الكامل والمعدل وأفضل نتيجة في البريميوم، مُهدى خلال الإطلاق (تجربة 3 أيام أو رمز)." },
     fr: { prev: "Précédent", next: "Suivant", finish: "Terminer le chapitre", check: "Vérifier", done: "Chapitre terminé !", doneTxt: "Bravo. Vous pouvez passer au chapitre suivant.",
           nextChap: "Chapitre suivant", nextTheme: "Thème suivant", back: "Retour aux chapitres", train: "S'entraîner sur ce thème", right: "Bonne réponse", wrong: "Pas tout à fait",
           start: "Commencer le cours", resume: "Reprendre le cours", review: "Revoir depuis le début", readOf: "%a sur %b chapitres terminés", cont: "Reprendre : %t", startCourse: "Commencer les cours",
           k_ch: "Chapitres terminés", k_tests: "Tests passés", k_avg: "Moyenne", k_best: "Meilleur score", k_err: "Erreurs à revoir", histEmpty: "Aucun test pour l'instant. Lancez une série depuis la page Entraînement.",
           h_date: "Date", h_type: "Type", h_theme: "Thème", h_score: "Score", t_train: "Entraînement", t_exam: "Examen blanc", t_livre: "Test du livre",
-          all: "Tous les thèmes", custom: "Examen personnalisé", favs: "Mes favoris", signs: "Panneaux", situations: "Ordre de passage", errors: "Mes erreurs", reset: "Effacer ma progression", resetSure: "Sûr ? Cliquez encore",
-          noErr: "Aucune erreur à revoir.", days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"], step: "Fiche", thDone: "Thème terminé !", thDoneTxt: "Testez-vous maintenant sur ses questions.", thFree: "3 questions d'essai gratuites ; toutes les questions et les examens blancs avec un code.",
-          wk_t: "Points faibles", wk_none: "Répondez à au moins 5 questions d'un thème pour que nous analysions vos résultats.", wk_rev: "Revoir le cours", wk_tr: "S'entraîner", wk_q: "réponses", wk_free: "Version gratuite : seulement le thème le plus faible. Activez un code pour l'analyse de tous les thèmes.", wk_first: "À revoir en priorité", k_more: "Statistiques détaillées", prem: "Avec un code", bkCopied: "Code copié. Gardez-le en lieu sûr (par exemple dans un message à vous-même).", bkSure: "Votre progression actuelle sera remplacée. Touchez encore pour confirmer.", bkOk: "Progression restaurée.", bkBad: "Ce code n'est pas valide. Copiez-le en entier.", histFree: "Version gratuite : seulement les 3 derniers résultats. Activez un code pour tout l'historique, la moyenne et le meilleur score." },
+          all: "Tous les thèmes", rapide: "Test 2 minutes", custom: "Examen personnalisé", favs: "Mes favoris", signs: "Panneaux", situations: "Ordre de passage", errors: "Mes erreurs", reset: "Effacer ma progression", resetSure: "Sûr ? Cliquez encore",
+          noErr: "Aucune erreur à revoir.", days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"], step: "Fiche", thDone: "Thème terminé !", thDoneTxt: "Testez-vous maintenant sur ses questions.", thFree: "3 questions d'essai gratuites ; toutes les questions et les examens blancs avec le Premium, offert pendant le lancement (essai 3 jours ou code).",
+          wk_t: "Points faibles", wk_none: "Répondez à au moins 5 questions d'un thème pour que nous analysions vos résultats.", wk_rev: "Revoir le cours", wk_tr: "S'entraîner", wk_q: "réponses", wk_free: "Version gratuite : seulement le thème le plus faible. L'analyse de tous les thèmes avec le Premium, offert pendant le lancement (essai 3 jours ou code).", wk_first: "À revoir en priorité", k_more: "Statistiques détaillées", prem: "Premium (bientôt)", bkCopied: "Code copié. Gardez-le en lieu sûr (par exemple dans un message à vous-même).", bkSure: "Votre progression actuelle sera remplacée. Touchez encore pour confirmer.", bkOk: "Progression restaurée.", bkBad: "Ce code n'est pas valide. Copiez-le en entier.", histFree: "Version gratuite : seulement les 3 derniers résultats. Historique complet, moyenne et meilleur score avec le Premium, offert pendant le lancement (essai 3 jours ou code)." },
     dz: { prev: "اللي قبل", next: "اللي بعد", finish: "كمّل الفصل", check: "شوف", done: "كملت الفصل!", doneTxt: "برافو. تقدر تفوت للفصل اللي جاي.",
           nextChap: "الفصل اللي جاي", nextTheme: "المحور اللي جاي", back: "ارجع للفصول", train: "تدرّب على هاد المحور", right: "صحيح!", wrong: "ماشي هاكا",
           start: "ابدا الدرس", resume: "كمّل الدرس", review: "عاود من الأول", readOf: "%a من %b فصول كملتهم", cont: "كمّل: %t", startCourse: "ابدا الدروس",
           k_ch: "فصول كملتهم", k_tests: "الاختبارات", k_avg: "المعدل", k_best: "أحسن نتيجة", k_err: "غلطات تعاودهم", histEmpty: "مازال ما درت حتى اختبار. ابدا سلسلة من صفحة التدريب.",
           h_date: "النهار", h_type: "النوع", h_theme: "المحور", h_score: "النتيجة", t_train: "تدريب", t_exam: "امتحان تجريبي", t_livre: "اختبار الكتاب",
-          all: "كامل المحاور", custom: "امتحان على كيفك", favs: "المفضلة تاعي", signs: "البانوات", situations: "شكون يفوت الأول", errors: "الغلطات تاعي", reset: "امسح كلش", resetSure: "متأكد؟ اضغط مرة أخرى",
-          noErr: "ما كانش غلطات تعاودهم.", days: ["حد", "تنين", "ثلاث", "ربع", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "كمّلت هاد المحور!", thDoneTxt: "جرّب روحك دروك على الأسئلة تاعو.", thFree: "3 أسئلة تجريبية بلاش؛ كامل الأسئلة والامتحانات التجريبية بكود التفعيل.",
-          wk_t: "النقاط الضعيفة", wk_none: "جاوب على 5 أسئلة على الأقل في محور باش نحلّلو النتائج تاعك.", wk_rev: "عاود الدرس", wk_tr: "تدرّب", wk_q: "أجوبة", wk_free: "النسخة بلاش: غير المحور الأضعف. فعّل كود باش تشوف التحليل تاع كامل المحاور.", wk_first: "راجعو قبل", k_more: "إحصائيات مفصّلة", prem: "بكود التفعيل", bkCopied: "الكود تنسخ. خبّيه في بلاصة آمنة (ميساج لروحك مثلًا).", bkSure: "التقدم تاعك دروك راح يتبدّل. اضغط مرة أخرى باش تأكد.", bkOk: "التقدم تاعك رجع.", bkBad: "هاد الكود ماشي صحيح. انسخو كامل.", histFree: "النسخة بلاش: غير آخر 3 نتائج. فعّل كود باش تشوف كامل التاريخ، المعدل وأحسن نتيجة." }
+          all: "كامل المحاور", rapide: "تيست دقيقتين", custom: "امتحان على كيفك", favs: "المفضلة تاعي", signs: "البانوات", situations: "شكون يفوت الأول", errors: "الغلطات تاعي", reset: "امسح كلش", resetSure: "متأكد؟ اضغط مرة أخرى",
+          noErr: "ما كانش غلطات تعاودهم.", days: ["حد", "تنين", "ثلاث", "ربع", "خميس", "جمعة", "سبت"], step: "بطاقة", thDone: "كمّلت هاد المحور!", thDoneTxt: "جرّب روحك دروك على الأسئلة تاعو.", thFree: "3 أسئلة بلاش باش تجرّب؛ كامل الأسئلة والامتحانات في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود).",
+          wk_t: "النقاط الضعيفة", wk_none: "جاوب على 5 أسئلة على الأقل في محور باش نحلّلو النتائج تاعك.", wk_rev: "عاود الدرس", wk_tr: "تدرّب", wk_q: "أجوبة", wk_free: "النسخة بلاش: غير المحور الأضعف. تحليل كامل المحاور في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود).", wk_first: "راجعو قبل", k_more: "إحصائيات مفصّلة", prem: "بريميوم (قريب)", bkCopied: "الكود تنسخ. خبّيه في بلاصة آمنة (ميساج لروحك مثلًا).", bkSure: "التقدم تاعك دروك راح يتبدّل. اضغط مرة أخرى باش تأكد.", bkOk: "التقدم تاعك رجع.", bkBad: "هاد الكود ماشي صحيح. انسخو كامل.", histFree: "النسخة بلاش: غير آخر 3 نتائج. السجل كامل والمعدل وأحسن نتيجة في البريميوم، بلاش في الإطلاق (تجربة 3 أيام ولا كود)." }
   };
   var u = function (k) { return CU[lang][k]; };
   var CI = null;
@@ -1030,7 +1175,7 @@ var RokhCode = (function () {
       var n = cur.slides.length, end = cur.i >= n;
       stage.innerHTML = "";
       if (end) stage.appendChild(endCard());
-      else { var ob = cur.i === 0 && cur.li && $(".cobj", cur.li); if (ob) stage.appendChild(ob.cloneNode(true)); var node = cur.slides[cur.i].cloneNode(true); stage.appendChild(node); if (node.classList.contains("slide-q")) wireQ(node); }
+      else { var ob = cur.li && $(".cobj", cur.li); if (ob) stage.appendChild(ob.cloneNode(true)); var node = cur.slides[cur.i].cloneNode(true); stage.appendChild(node); $$(".s-check", node).forEach(initCheck); if (node.classList.contains("slide-q")) wireQ(node); }
       stage.scrollTop = 0;
       $$("i", steps).forEach(function (s, k) { s.className = k < cur.i ? "seen" : k === cur.i ? "now" : ""; });
       $(".v-count", viewer).textContent = end ? n + " / " + n : (cur.i + 1) + " / " + n;
@@ -1125,6 +1270,18 @@ var RokhCode = (function () {
     if (!pgRing) return;
     var p = Track.prog(), g = globalStats(p), h = Track.history(), errs = Object.keys(Track.errors()).length;
     setRing(pgRing, g.pct);
+    // audit PO (P2), 13/11/2026: a new learner sees where to start instead of a bare "0 %"
+    var empty = !g.done && !h.length && !Object.keys(p.read || {}).length, eb = $("#pgEmpty");
+    if (empty && !eb) {
+      eb = document.createElement("div"); eb.id = "pgEmpty"; eb.className = "pg-empty";
+      eb.innerHTML = '<p></p><p class="pg-actions"><a class="btn btn-primary" href="entrainement.html#rapide"></a> <a class="btn btn-ghost" href="code-de-la-route.html"></a></p>';
+      var top = pgRing.closest(".stats-top"); top.parentNode.insertBefore(eb, top);
+    }
+    if (eb) {
+      eb.hidden = !empty;
+      var E = { ar: ["سيظهر تقدّمك هنا. ابدأ باختبار من دقيقتين أو بأول درس.", "⏱ اختبر نفسك في دقيقتين", "📘 الدروس"], fr: ["Votre progression apparaîtra ici. Commencez par le test de 2 minutes ou par un premier chapitre.", "⏱ Teste-toi en 2 minutes", "📘 Les cours"], dz: ["التقدّم تاعك يبان هنا. ابدا بتاست تاع دقيقتين ولا بأول درس.", "⏱ جرّب روحك في دقيقتين", "📘 الدروس"] }[lang] || [];
+      var ps = eb.querySelectorAll("p, a"); ps[0].textContent = E[0]; ps[2].textContent = E[1]; ps[3].textContent = E[2];
+    }
     var pcts = h.map(function (x) { return x.score / x.total; });
     var avg = pcts.length ? pcts.reduce(function (a, b) { return a + b; }, 0) / pcts.length : 0;
     var best = pcts.length ? Math.max.apply(null, pcts) : 0;
@@ -1280,6 +1437,18 @@ var RokhCode = (function () {
         d.querySelector("b").textContent = it.from === "r" ? t("inR") : t("inMe");
         d.querySelector("small").textContent = fmtDate(new Date(it.at).getTime());
         d.querySelector("p").textContent = it.text;
+        // RKV3-28 (13/11/2026): optional "did this help?" under our latest reply, anonymous counters rep_up / rep_dn, asked once per reply
+        if (it.from === "r" && it === items.filter(function (x) { return x.from === "r"; }).pop()) {
+          var FK = "rokhssati-fb-" + it.at, FB = { ar: ["هل ساعدك هذا الرد؟", "نعم", "لا", "شكرًا على رأيك!"], fr: ["Cette réponse vous a aidé ?", "Oui", "Non", "Merci pour votre avis !"], dz: ["هاد الرد عاونك؟", "إيه", "لا", "يعطيك الصحة على رأيك!"] }[lang] || [];
+          var fb = document.createElement("p"); fb.className = "in-fb muted";
+          if (lsGet(FK)) fb.textContent = FB[3];
+          else {
+            fb.innerHTML = '<span></span> <button type="button" class="btn btn-ghost in-up">👍 <b></b></button> <button type="button" class="btn btn-ghost in-dn">👎 <b></b></button>';
+            fb.firstChild.textContent = FB[0]; fb.querySelector(".in-up b").textContent = FB[1]; fb.querySelector(".in-dn b").textContent = FB[2];
+            $$("button", fb).forEach(function (bt) { bt.addEventListener("click", function () { Measure.add(bt.classList.contains("in-up") ? "rep_up" : "rep_dn"); lsSet(FK, "1"); fb.textContent = FB[3]; }); });
+          }
+          d.appendChild(fb);
+        }
         list.appendChild(d);
       });
     }
@@ -1293,6 +1462,12 @@ var RokhCode = (function () {
       }
       b.hidden = false; b.firstChild.textContent = t("inNew"); b.lastChild.textContent = t("inSee");
     }
+    // 13/11/2026: read receipt → Gestion shows « lu le … ». Sent once per new reply; the reply date only, nothing else.
+    function ack(at) {
+      if (lsGet("rokhssati-box-acked") === at) return;
+      fetch(API_BASE + "/api/inbox", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ box: box, seen: at }) })
+        .then(function (r) { if (r.ok) lsSet("rokhssati-box-acked", at); }).catch(function () {});
+    }
     function check(force) {
       box = inboxBox(false);
       if (!box) { draw(); return; }
@@ -1303,7 +1478,7 @@ var RokhCode = (function () {
         if (!j.ok) return;
         items = j.items || [];
         var lastR = items.filter(function (x) { return x.from === "r"; }).map(function (x) { return x.at; }).sort().pop() || "";
-        if (list) { if (lastR) { lsSet(SEEN, lastR); if (window.RokhNative && typeof window.RokhNative.seen === "function") { try { window.RokhNative.seen(lastR); } catch (e) {} } } lsSet("rokhssati-box-unread", "0"); bar(false); }
+        if (list) { if (lastR) { lsSet(SEEN, lastR); ack(lastR); if (window.RokhNative && typeof window.RokhNative.seen === "function") { try { window.RokhNative.seen(lastR); } catch (e) {} } } lsSet("rokhssati-box-unread", "0"); bar(false); }
         else { var unread = lastR && lastR > (lsGet(SEEN) || ""); lsSet("rokhssati-box-unread", unread ? "1" : "0"); bar(unread); }
         draw();
       }).catch(function () { if (list) { items = "net"; draw(); } });
@@ -1347,6 +1522,24 @@ var RokhCode = (function () {
     listeners.push(function () { $$(".is-zoomable").forEach(function (f) { f.setAttribute("aria-label", t("zoom")); }); });
   })();
 
+  /* Premium "prévenez-moi" list: e-mail only (functions/api/contact.js kind "premium"); nothing to pay, no pre-order */
+  (function () {
+    var f = $("#waitForm"); if (!f) return;
+    var M = { ar: ["سنخبرك عند صدور البريميوم. شكرًا!", "اكتب بريدًا إلكترونيًا صحيحًا.", "تعذّر الإرسال. تحقق من الاتصال بالإنترنت."],
+              fr: ["C'est noté : nous vous préviendrons à la sortie du Premium. Merci !", "Écrivez une adresse e-mail valide.", "Envoi impossible. Vérifiez votre connexion internet."],
+              dz: ["مليح: نخبروك كي يخرج البريميوم. يعطيك الصحة!", "اكتب إيمايل صحيح.", "ما تبعثش. شوف الأنترنت."] };
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var m = M[lang] || M.fr, out = $("#waitMsg"), mail = $("#waitMail").value.trim();
+      out.hidden = false;
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)) { out.dataset.state = "ko"; out.textContent = m[1]; return; }
+      fetch((window.RokhNative ? "https://rokhssati.com" : "") + "/api/contact", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind: "premium", email: mail, lang: lang, hp: $("#waitHp").value }) })
+        .then(function (r) { return r.json(); }).then(function (j) { out.dataset.state = j && j.ok ? "ok" : "ko"; out.textContent = j && j.ok ? m[0] : m[1]; if (j && j.ok) f.reset(); })
+        .catch(function () { out.dataset.state = "ko"; out.textContent = m[2]; });
+    });
+  })();
+
   /* Confidentialité: opt out / back in of the anonymous measurement (same switch as the owner's, "rokhssati-notrack") */
   (function () {
     var b = $("#mOpt"), st = $("#mOptState"); if (!b) return;
@@ -1354,7 +1547,7 @@ var RokhCode = (function () {
               fr: ["Vous participez à la mesure anonyme.", "Vous ne participez pas à la mesure (sur ce navigateur).", "Ne pas participer", "Participer de nouveau"],
               dz: ["راك تشارك في القياس المجهول.", "ما راكش تشارك في القياس (في هاد المتصفح).", "ما نحبش نشارك", "نشارك عاوتاني"] };
     function draw() { var off = false; try { off = localStorage.getItem("rokhssati-notrack") === "1"; } catch (e) {} var m = M[lang] || M.fr; st.textContent = off ? m[1] : m[0]; b.textContent = off ? m[3] : m[2]; }
-    b.addEventListener("click", function () { try { if (localStorage.getItem("rokhssati-notrack") === "1") localStorage.removeItem("rokhssati-notrack"); else { localStorage.setItem("rokhssati-notrack", "1"); localStorage.removeItem("rokhssati-evq"); } } catch (e) {} draw(); });
+    b.addEventListener("click", function () { try { if (localStorage.getItem("rokhssati-notrack") === "1") localStorage.removeItem("rokhssati-notrack"); else { localStorage.setItem("rokhssati-notrack", "1"); localStorage.removeItem("rokhssati-evq"); } } catch (e) {} try { if (window.RokhNative && window.RokhNative.setNoTrack) window.RokhNative.setNoTrack(localStorage.getItem("rokhssati-notrack") === "1"); } catch (e) {} draw(); });
     listeners.push(draw); draw();
   })();
 
@@ -1383,6 +1576,7 @@ var RokhCode = (function () {
       var a = e.target.closest && e.target.closest('a[href*="api/dl"]'); if (!a) return;
       var me = false; try { me = localStorage.getItem("rokhssati-notrack") === "1"; } catch (x) {}
       if (me && a.href.indexOf("me=1") < 0) a.href += (a.href.indexOf("?") < 0 ? "?" : "&") + "me=1";
+      if (a.href.indexOf("to=apkpure") >= 0) return;   // APKPure page: its own install flow, no guide
       setTimeout(guide, 300);
     }, true);
   })();
@@ -1410,12 +1604,31 @@ var RokhCode = (function () {
     }).catch(function () {});
   })();
 
+  /* R4-015 / US-P08 (13/11/2026): a returning learner sees "Reprendre : <chapitre>" on the home page (last chapter opened, or the next one if it is done) */
+  (function () {
+    var a = $("#heroResume"); if (!a) return;
+    function draw() {
+      var p = Track.prog(), L = p.last, ci = null; if (!L || !L.chap) { a.hidden = true; return; }
+      try { ci = JSON.parse(document.getElementById("courseIndex").textContent); } catch (e) {}
+      var list = []; (ci || []).forEach(function (th) { th.chapters.forEach(function (c) { list.push({ th: th.slug, c: c }); }); });
+      var i = -1; list.some(function (x, k) { if (x.c.id === L.chap) { i = k; return true; } return false; });
+      if (i < 0) { a.hidden = true; return; }
+      if (p.done[L.chap]) { var j = i + 1; while (j < list.length && p.done[list[j].c.id]) j++; if (j >= list.length) { a.hidden = true; return; } i = j; }
+      var x = list[i], R = { ar: "تابع: ", fr: "Reprendre : ", dz: "كمّل: " };
+      a.setAttribute("href", "theme-" + x.th + ".html#c=" + x.c.id);
+      a.querySelector("span").textContent = (R[lang] || R.fr) + (x.c.t[lang] || x.c.t.fr);
+      a.hidden = false;
+    }
+    draw(); listeners.push(draw);
+  })();
+
   /* home: launch offer, live count of remaining trial places (functions/api/essai.js?info=1) */
   (function () {
-    var h = $("#offerHero"), c = $(".apk-offer-card"); if (!h && !c) return;
+    // R4-007 (13/11/2026): every mention of the "10 places" gift disappears when no place is left (.trial-ad = a line of the "Nouveauté" pop-up)
+    var h = $("#offerHero"), c = $(".apk-offer-card"), ads = $$(".trial-ad"); if (!h && !c && !ads.length) return;
     fetch((window.RokhNative ? "https://rokhssati.com" : "") + "/api/essai?info=1", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
       var n = +j.left; if (isNaN(n)) return;
-      if (n <= 0) { if (h) h.hidden = true; if (c) c.hidden = true; return; }
+      if (n <= 0) { if (h) h.hidden = true; if (c) c.hidden = true; ads.forEach(function (a) { var li = a.closest("li") || a; li.hidden = true; }); return; }
       var html = '<span class="l-ar">بقيت ' + n + ' أماكن فقط</span><span class="l-fr" lang="fr">Plus que ' + n + ' place' + (n > 1 ? "s" : "") + '</span><span class="l-dz" lang="ar-DZ">بقاو غير ' + n + ' بلايص</span>';
       $$("#offerLeft, #offerLeft2").forEach(function (e) { e.innerHTML = html; e.hidden = false; });
     }).catch(function () {});
@@ -1473,6 +1686,102 @@ var RokhCode = (function () {
     if (!bar) return;
     function upd() { bar.hidden = navigator.onLine !== false; }
     window.addEventListener("online", upd); window.addEventListener("offline", upd); upd();
+  })();
+
+  /* ---------- course checklists (« La checklist avant de partir », 09/11/2026): ticks kept in this browser only ---------- */
+  function initCheck(box) {
+    if (box._ck) return; box._ck = true;
+    var key = "rokhssati-" + box.getAttribute("data-key"), ins = $$("input", box), n = $(".s-check-n b", box);
+    function load() { try { return JSON.parse(localStorage.getItem(key) || "[]") || []; } catch (e) { return []; } }
+    function draw() { var c = 0; ins.forEach(function (i) { if (i.checked) c++; }); n.textContent = c; box.classList.toggle("is-done", c === ins.length); }
+    var on = load(); ins.forEach(function (i) { i.checked = on.indexOf(+i.value) >= 0; i.addEventListener("change", function () {
+      var v = ins.filter(function (x) { return x.checked; }).map(function (x) { return +x.value; });
+      try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) {} draw(); }); });
+    $(".s-check-reset", box).addEventListener("click", function () { ins.forEach(function (i) { i.checked = false; }); try { localStorage.removeItem(key); } catch (e) {} draw(); });
+    draw();
+  }
+  $$(".s-check").forEach(initCheck);
+
+  /* ---------- Trouver une auto-école (owner 08/11/2026) ----------
+     Data: OpenStreetMap contributors (ODbL), refreshed monthly (tools/osm). The list loads when a wilaya is chosen;
+     the map (Leaflet + OSM tiles) only after a tap on "Afficher la carte", so nothing third-party loads before that. */
+  (function aeFinder() {
+    var box = document.getElementById("aeFinder"); if (!box) return;
+    var W = { ar: { pick: "اختر ولايتك لعرض مدارس السياقة.", none: "لا توجد مدرسة سياقة مسجّلة في هذه الولاية بعد.", n: "%n مدرسة سياقة", n1: "مدرسة سياقة واحدة", f: "%f من %n",
+                    call: "اتصال", map: "على الخريطة", net: "تعذّر تحميل القائمة. تحقق من الإنترنت وأعد المحاولة.", load: "جارٍ التحميل…", q: "البلدية أو الاسم", mapBtn: "اعرض الخريطة", mapHide: "أخفِ الخريطة", mapNet: "تعذّر تحميل الخريطة.", noname: "مدرسة سياقة (الاسم غير مُدرج)", nofilter: "لا نتيجة لهذا البحث." },
+             fr: { pick: "Choisissez votre wilaya pour voir les auto-écoles.", none: "Aucune auto-école répertoriée dans cette wilaya pour l'instant.", n: "%n auto-écoles", n1: "1 auto-école", f: "%f sur %n",
+                    call: "Appeler", map: "Sur la carte", net: "Impossible de charger la liste. Vérifiez votre connexion et réessayez.", load: "Chargement…", q: "Commune ou nom", mapBtn: "Afficher la carte", mapHide: "Masquer la carte", mapNet: "Impossible de charger la carte.", noname: "Auto-école (nom non renseigné)", nofilter: "Aucun résultat pour cette recherche." },
+             dz: { pick: "اختار الولاية تاعك باش تشوف الأوطو إيكول.", none: "مازال ما كاين حتى أوطو إيكول مسجّلة في هاد الولاية.", n: "%n أوطو إيكول", n1: "أوطو إيكول وحدة", f: "%f من %n",
+                    call: "عيّط", map: "في الخريطة", net: "ما قدرناش نحمّلو الليستة. شوف الأنترنت وعاود.", load: "راه يحمّل…", q: "البلدية ولا الاسم", mapBtn: "ورّي الخريطة", mapHide: "خبّي الخريطة", mapNet: "ما قدرناش نحمّلو الخريطة.", noname: "أوطو إيكول (الاسم ماكانش)", nofilter: "ما كاين حتى نتيجة." } };
+    var w = function (k) { return W[lang][k]; };
+    var sel = $("#aefW", box), q = $("#aefQ", box), list = $("#aefList", box), cnt = $("#aefCount", box), mapBtn = $("#aefMapBtn", box), mapEl = $("#aefMap", box);
+    var data = null, rows = [], map = null, layer = null, wanting = false;
+    function esc(x) { return String(x == null ? "" : x).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    function opts() { $$("option", sel).forEach(function (o) { var v = o.getAttribute("data-" + lang); if (v) o.textContent = v; }); q.placeholder = w("q"); }
+    function nameOf(s) { return (lang === "fr" ? (s.nf || s.n || s.na) : (s.na || s.n || s.nf)) || w("noname"); }
+    function load(cb) {
+      if (data) return cb();
+      cnt.textContent = w("load");
+      fetch(box.getAttribute("data-src")).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (d) { data = d; cb(); })
+        .catch(function () { cnt.textContent = w("net"); });
+    }
+    function phones(p) { return (p || []).map(function (x) { var tel = x.replace(/[^+\d]/g, ""); return '<a class="btn btn-ghost btn-sm" href="tel:' + esc(tel) + '" dir="ltr">' + esc(x) + "</a>"; }).join(""); }
+    function render() {
+      var code = +sel.value; if (!code) { list.innerHTML = ""; cnt.textContent = w("pick"); mapBtn.hidden = true; return; }
+      var all = data.s.filter(function (s) { return s.wl === code; }), f = (q.value || "").trim().toLowerCase();
+      rows = f ? all.filter(function (s) { return [s.n, s.na, s.nf, s.c, s.s].join(" ").toLowerCase().indexOf(f) >= 0; }) : all;
+      var total = all.length === 1 ? w("n1") : w("n").replace("%n", fmt(all.length));
+      cnt.textContent = !all.length ? w("none") : (f ? (rows.length ? w("f").replace("%f", fmt(rows.length)).replace("%n", total) : w("nofilter")) : total);
+      list.innerHTML = rows.map(function (s, i) {
+        var addr = [s.s, s.c].filter(Boolean).join(" · ");
+        return '<li class="aef-item"><div class="aef-main"><h3>' + esc(nameOf(s)) + "</h3>" + (addr ? '<p class="aef-addr">' + esc(addr) + "</p>" : "") + "</div>" +
+          '<div class="aef-act">' + phones(s.p) + '<button type="button" class="btn btn-ghost btn-sm" data-aef="' + i + '">' + esc(w("map")) + "</button></div></li>";
+      }).join("");
+      mapBtn.hidden = !all.length; mapBtn.textContent = mapEl.hidden ? w("mapBtn") : w("mapHide");
+      if (map) draw();
+    }
+    function css(href) { var l = document.createElement("link"); l.rel = "stylesheet"; l.href = href; document.head.appendChild(l); }
+    function leaflet(cb) {
+      if (window.L && window.L.map) return cb();
+      css("https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css");
+      var sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
+      sc.onload = cb; sc.onerror = function () { cnt.textContent = w("mapNet"); mapEl.hidden = true; mapBtn.textContent = w("mapBtn"); }; document.head.appendChild(sc);
+    }
+    function draw(focus) {
+      if (!layer) return; layer.clearLayers();
+      var pts = rows.map(function (s, i) {
+        var m = window.L.circleMarker([s.la, s.lo], { radius: 8, color: "#0A4F32", weight: 2, fillColor: "#0E6A43", fillOpacity: 0.9 });
+        m.bindPopup("<b>" + esc(nameOf(s)) + "</b>" + (s.c ? "<br>" + esc(s.c) : "") + (s.p && s.p[0] ? '<br><a href="tel:' + esc(s.p[0].replace(/[^+\d]/g, "")) + '" dir="ltr">' + esc(s.p[0]) + "</a>" : ""));
+        m.addTo(layer); m._i = i; return m;
+      });
+      if (focus != null && pts[focus]) { map.setView(pts[focus].getLatLng(), 15); pts[focus].openPopup(); }
+      else if (pts.length) map.fitBounds(window.L.featureGroup(pts).getBounds().pad(0.15), { maxZoom: 14 });
+    }
+    function showMap(focus) {
+      mapEl.hidden = false; mapBtn.textContent = w("mapHide");
+      leaflet(function () {
+        if (!map) {
+          map = window.L.map(mapEl, { scrollWheelZoom: false });
+          map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+          window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
+          layer = window.L.layerGroup().addTo(map); Measure.add("ae_map");
+        }
+        map.invalidateSize(); draw(focus);
+        if (focus != null) mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    }
+    sel.addEventListener("change", function () {
+      try { localStorage.setItem("rokhssati-wilaya", sel.value); } catch (e) {}
+      if (sel.value) Measure.add("ae_w");
+      load(render);
+    });
+    q.addEventListener("input", function () { if (data) render(); });
+    mapBtn.addEventListener("click", function () { if (mapEl.hidden) showMap(); else { mapEl.hidden = true; mapBtn.textContent = w("mapBtn"); } });
+    list.addEventListener("click", function (e) { var b = e.target.closest("[data-aef]"); if (b) showMap(+b.getAttribute("data-aef")); });
+    opts(); cnt.textContent = w("pick");
+    listeners.push(function () { opts(); if (data && sel.value) render(); else cnt.textContent = w("pick"); });
+    var last = null; try { last = localStorage.getItem("rokhssati-wilaya"); } catch (e) {}
+    if (last && sel.querySelector('option[value="' + last + '"]')) { sel.value = last; load(render); }
   })();
 
   var saved = null;
