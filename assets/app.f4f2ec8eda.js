@@ -1801,4 +1801,7 @@ var RokhCode = (function () {
   var saved = null;
   try { saved = localStorage.getItem("rokhssati-lang"); } catch (e) {}
   applyLang(saved || "ar");
+  // 13/11/2026 : clics sur les cartes des 3 épreuves de l'accueil (ep:code, ep:manoeuvres), sans identifiant
+(function () { try { document.querySelectorAll("a[data-ep]").forEach(function (a) { a.addEventListener("click", function () { try { Measure.add("ep:" + a.getAttribute("data-ep")); } catch (e) {} }); }); } catch (e) {} })();
 })();
+
