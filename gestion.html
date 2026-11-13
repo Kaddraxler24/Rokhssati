@@ -248,6 +248,7 @@ function render(){
     h+=sec('1 bis · Activation par source','Nouveaux visiteurs depuis le 13/11 · '+PLN[pl]+'. Source = utm_source du lien, sinon le site d’où ils viennent. Activé = 1er chapitre, série ou test 2 min terminé.',
       rs.length?'<table><tr><th>Source</th><th>Nouveaux visiteurs</th><th>Activés</th><th>Activation</th></tr>'+rs.map(function(r){return '<tr><td>'+esc(r[0])+'</td><td>'+n(r[1])+'</td><td>'+n(r[2])+'</td><td>'+(r[1]<20?n(r[2])+' / '+n(r[1])+' <small class="muted">(trop peu pour un %)</small>':pct(r[2],r[1]))+'</td></tr>'}).join('')+'</table>'+
       (cps.length?'<h3>Campagnes (utm_campaign)</h3>'+hbars(cps.map(function(c){return [c[0],c[1],n(c[1])]})):'')+
+      (function(){var ep=[['Code de la route',T['ep:code']||0],['Créneau et manœuvres',T['ep:manoeuvres']||0]];return (ep[0][1]+ep[1][1])?'<h3>Accueil · cartes des 3 épreuves (clics, depuis le 13/11)</h3>'+hbars(ep.map(function(c){return [c[0],c[1],n(c[1])]})):'';})()+
       '<p class="muted" style="font-size:13px">Pour suivre un post Facebook : lien <code>https://rokhssati.com/?utm_source=facebook&amp;utm_campaign=nom-du-post</code>.</p>':'<p class="muted">Pas encore de données (mesure lancée le 13/11/2026).</p>','s1b');})();
   h+=sec('2 · Apprentissage : ce qui a été fait','Chapitres, séries et examens · '+PLN[pl]+'. Ouvert / terminé : chaque personne comptée une fois par chapitre.',lt,'s2');
   // 3. Parcours
