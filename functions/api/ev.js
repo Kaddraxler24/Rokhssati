@@ -6,7 +6,7 @@
 import { out, preflight } from "../_lib/common.js";
 import { BOT, day } from "../_lib/stats.js";
 // parcours (09/11/2026) : ss_web / ss_app = sessions, en: = écran d'entrée, pv: = écran vu, nv:A>B = enchaînement, t5: = temps (tranches de 5 s)
-const OK = /^(v_new|r1|r7|a1|c_done|ae_w|ae_map|qk_s|qk_e|ss_web|ss_app|pr_v|pr_i|pr_n|pr_m1|pr_m3|pr_y|pr_c|pv:[a-z0-9-]{1,32}|en:[a-z0-9-]{1,32}|t5:[a-z0-9-]{1,32}|nv:[a-z0-9-]{1,32}>[a-z0-9-]{1,32}|t_start|t_end|e_start|e_end|e_pts|e_tot|co:[a-z0-9-]{2,24}|cd:[a-z0-9-]{2,24}|qko:q[0-9a-f]{6,12})$/;
+const OK = /^((vc|a1c|r1c|r7c):20[0-9]{6}|v_new|r1|r7|a1|c_done|ae_w|ae_map|qk_s|qk_e|rv_ch|ss_web|ss_app|pr_v|pr_i|pr_n|pr_m1|pr_m3|pr_y|pr_c|pv:[a-z0-9-]{1,32}|en:[a-z0-9-]{1,32}|t5:[a-z0-9-]{1,32}|nv:[a-z0-9-]{1,32}>[a-z0-9-]{1,32}|t_start|t_end|e_start|e_end|e_exit|e_res|e_pts|e_tot|co:[a-z0-9-]{2,24}|cd:[a-z0-9-]{2,24}|qko:q[0-9a-f]{6,12})$/;
 export async function onRequest({ request, env }) {
   if (request.method === "OPTIONS") return preflight("POST");
   if (request.method !== "POST") return out({ ok: false }, 405);
