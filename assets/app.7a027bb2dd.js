@@ -1589,9 +1589,9 @@ var RokhCode = (function () {
     fetch("https://rokhssati.com/api/essai?info=1", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
       if (!j || !(j.left > 0) || pass()) return;
       try { localStorage.setItem(K, "1"); } catch (e) {}
-      var M = { ar: ["🎁 أيامك الثلاثة من بريميوم تنتظرك", "مجانًا لأول 10 تثبيتات، بقي %n أماكن. بدون رمز وبدون دفع: امتحانات تجريبية، إحصائيات وسجل كامل.", "فعّل أيامي الثلاثة", "لاحقًا"],
-                fr: ["🎁 Tes 3 jours de Premium t'attendent", "Offerts aux 10 premières installations, plus que %n places. Sans code, sans paiement : examens blancs, statistiques et historique complet.", "Activer mes 3 jours", "Plus tard"],
-                dz: ["🎁 الثلاث أيام بريميوم تاعك راهم يستناو", "بلاش للعشرة الأوائل، بقاو %n بلايص. بلا كود وبلا دراهم: امتحانات تجريبية، إحصائيات والسجل كامل.", "فعّل الثلاث أيام تاعي", "من بعد"] };
+      var M = { ar: ["🎁 أيامك الثلاثة من بريميوم تنتظرك", "مجانًا لأول 20 تثبيتًا جديدًا، بقي %n أماكن. بدون رمز وبدون دفع: امتحانات تجريبية، إحصائيات وسجل كامل.", "فعّل أيامي الثلاثة", "لاحقًا"],
+                fr: ["🎁 Tes 3 jours de Premium t'attendent", "Offerts aux 20 prochaines installations, plus que %n places. Sans code, sans paiement : examens blancs, statistiques et historique complet.", "Activer mes 3 jours", "Plus tard"],
+                dz: ["🎁 الثلاث أيام بريميوم تاعك راهم يستناو", "بلاش للعشرين الأوائل، بقاو %n بلايص. بلا كود وبلا دراهم: امتحانات تجريبية، إحصائيات والسجل كامل.", "فعّل الثلاث أيام تاعي", "من بعد"] };
       var m = M[lang] || M.fr, ov = document.createElement("div");
       ov.className = "sg-ov trial-pop"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("dir", lang === "fr" ? "ltr" : "rtl");
       ov.innerHTML = '<div class="sg-box"><h3></h3><p></p><a class="btn btn-primary btn-xl" href="activer.html?essai=1#trialBox"></a><button type="button" class="btn btn-ghost tp-later"></button></div>';

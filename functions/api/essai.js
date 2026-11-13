@@ -4,7 +4,7 @@
 // One trial per device id and per network address; the server stops after TRIAL_MAX trials.
 import { out, preflight } from "../_lib/common.js";
 import { count } from "../_lib/stats.js";
-const TRIAL_MAX = 10, TRIAL_DAYS = 3, MIN_APP = 40;   // 40 = app 1.4.23
+const TRIAL_MAX = 30, TRIAL_DAYS = 3, MIN_APP = 40;   // 40 = app 1.4.23   // 13/11/2026: +20 places (owner), 10 already used
 const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 const b64url = (u8) => btoa(String.fromCharCode(...u8)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
