@@ -1014,6 +1014,13 @@ html.news-open { overflow: hidden; }
 .cr-epr b { font-size: 18px; }
 .cr-epr span:last-child { color: var(--muted); }
 .cr-epr .ep-new { font-style: normal; font-size: .72rem; font-weight: 800; padding: 2px 9px; border-radius: 999px; background: var(--sign); color: #fff; vertical-align: middle; margin-inline-start: 4px; }
+.sp-img { margin: 0; } .sp-img img { display: block; width: 100%; height: auto; border-radius: 16px; }
+.sp-dl { margin-top: 18px; padding: 18px 20px; border-radius: 16px; background: var(--surface); border: 2px solid var(--sign); text-align: center; }
+.sp-dl .sp-only { font-size: 1.2rem; font-weight: 800; margin: 0 0 4px; }
+.sp-dl p { margin: 0 0 10px; } .sp-dl .sp-btns { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 12px 0 0; }
+.sp-feat { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.sp-feat li { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); }
+.sp-feat .cr-ic { font-size: 26px; } .sp-feat b { font-size: 17px; } .sp-feat span:last-child { color: var(--muted); }
 .cr-epr .ep-soon { font-style: normal; font-size: .72rem; font-weight: 800; padding: 2px 9px; border-radius: 999px; background: var(--amber-soft); color: var(--amber-ink); vertical-align: middle; margin-inline-start: 4px; }
 .cr-epr span.ep-free { color: #0E6A43; font-size: .86rem; font-weight: 700; }
 .ep-home li:nth-child(2) > a { border: 2px solid var(--sign); }
