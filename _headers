@@ -100,3 +100,7 @@
   Cache-Control: public, max-age=0, must-revalidate
 /theme-vehicule
   Cache-Control: public, max-age=0, must-revalidate
+
+/fb/*
+  X-Robots-Tag: noindex
+  Cache-Control: public, max-age=31536000, immutable
