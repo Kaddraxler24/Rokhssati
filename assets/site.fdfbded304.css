@@ -1079,6 +1079,31 @@ html.news-open { overflow: hidden; }
 .ck-b { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.35); }
 .ck-b:hover { background: rgba(255,255,255,.24); }
 .ck-quit { background: rgba(200,40,58,.55) !important; }
+/* 14/11/2026 : commandes façon jeu de conduite (volant cuir et alu, pédales métal, sélecteur R N D) */
+.ck .sim-wheel { opacity: .97; filter: drop-shadow(0 10px 16px rgba(0,0,0,.6)); }
+.ck .sim-pedal { overflow: hidden; color: #10140f; text-shadow: 0 1px 0 rgba(255,255,255,.45); -webkit-backdrop-filter: none; backdrop-filter: none; border: 1px solid rgba(255,255,255,.75); border-radius: 12px 12px 20px 20px; opacity: .94; transform-origin: 50% 100%;
+  background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,0) 22%), repeating-linear-gradient(180deg, rgba(16,20,18,.92) 0 6px, rgba(16,20,18,0) 6px 15px) 50% 58% / 78% 56% no-repeat, linear-gradient(155deg, #e3e7e9 0%, #9da6ab 42%, #c9cfd3 55%, #666f74 100%);
+  box-shadow: 0 12px 20px -8px rgba(0,0,0,.75), 0 3px 0 #4d5559, inset 0 -8px 12px rgba(0,0,0,.28), inset 0 2px 0 rgba(255,255,255,.9); transition: transform .07s, box-shadow .07s, filter .07s; }
+.ck .sim-pedal::after { content: ""; position: absolute; left: 12%; right: 12%; bottom: 5px; height: 5px; border-radius: 3px; background: linear-gradient(180deg, #2a302d, #0c0f0d); box-shadow: 0 1px 0 rgba(255,255,255,.5); }
+.ck .sim-pedal .sp-ar { position: absolute; top: 6px; left: 0; right: 0; text-align: center; font-size: 13px; line-height: 1; color: rgba(16,20,18,.55); text-shadow: 0 1px 0 rgba(255,255,255,.7); }
+.ck .sim-pedal .sp-gear { position: relative; z-index: 1; width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(255,255,255,.85); box-shadow: 0 3px 8px rgba(0,0,0,.5), inset 0 2px 3px rgba(255,255,255,.45), inset 0 -3px 5px rgba(0,0,0,.3); text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+.ck .sim-fwd .sp-gear { background: radial-gradient(circle at 35% 28%, #46e0a0, #0c7a4b 62%, #07502f); } .ck .sim-back .sp-gear { background: radial-gradient(circle at 35% 28%, #7fb2ff, #2a63c8 62%, #173f8a); }
+.ck .ck-ped .sim-pedal { justify-content: center; }
+.ck .sim-pedal .sp-lbl { flex: 0 0 auto; position: relative; z-index: 1; font-size: 11.5px; font-weight: 800; color: #fff; background: rgba(12,16,14,.78); border-radius: 999px; padding: 1px 8px 2px; text-shadow: none; margin-bottom: 8px; }
+.ck .sim-pedal.is-on { transform: perspective(260px) rotateX(20deg) translateY(2px); filter: brightness(.92); }
+.ck .sim-fwd.is-on { border-color: #3ddc97; box-shadow: 0 0 0 2px rgba(61,220,151,.7), 0 0 26px rgba(61,220,151,.6), 0 4px 10px -4px rgba(0,0,0,.7), inset 0 -8px 12px rgba(0,0,0,.3); }
+.ck .sim-back.is-on { border-color: #7fb0ff; box-shadow: 0 0 0 2px rgba(127,176,255,.7), 0 0 26px rgba(127,176,255,.6), 0 4px 10px -4px rgba(0,0,0,.7), inset 0 -8px 12px rgba(0,0,0,.3); }
+.ck:not(.is-fpv) .ck-ped .sim-fwd { width: min(9.6vw, 84px); height: min(32vh, 156px); } .ck:not(.is-fpv) .ck-ped .sim-back { width: min(12.5vw, 108px); height: min(23vh, 114px); }
+.ck:not(.is-fpv) .ck-wheel-box .sim-wheel { width: min(35vh, 180px); height: min(35vh, 180px); }
+.ck .ck-cluster { background: linear-gradient(180deg, rgba(20,27,23,.62), rgba(8,12,10,.72)); border: 1px solid rgba(255,255,255,.22); border-radius: 18px; box-shadow: 0 10px 24px -10px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.18); padding: 7px 12px 5px; }
+.ck .ck-cluster .ck-gear { position: relative !important; width: 112px !important; height: 30px !important; border-radius: 999px; font-size: 0 !important; background: rgba(0,0,0,.55) !important; border: 1px solid rgba(255,255,255,.2); box-shadow: inset 0 2px 5px rgba(0,0,0,.6); margin-bottom: 5px; }
+.ck .ck-cluster .ck-gear::before { content: "R N D"; position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; font: 800 15px/1 Inter, Cairo, sans-serif; word-spacing: 22px; color: rgba(255,255,255,.92); }
+.ck .ck-cluster .ck-gear::after { content: ""; position: absolute; top: 3px; bottom: 3px; width: 32px; left: calc(50% - 16px); border-radius: 999px; background: #5d6862; box-shadow: inset 0 1px 0 rgba(255,255,255,.35); transition: left .12s, background .12s; }
+.ck .ck-cluster .ck-gear.gD::after { left: calc(100% - 35px); background: #17a566; box-shadow: 0 0 12px rgba(61,220,151,.75), inset 0 1px 0 rgba(255,255,255,.4); }
+.ck .ck-cluster .ck-gear.gR::after { left: 3px; background: #3577e6; box-shadow: 0 0 12px rgba(127,176,255,.75), inset 0 1px 0 rgba(255,255,255,.4); }
+.ck .ck-cluster .sim-turns b { font-size: 1.2em; }
+.ck .ck-b { min-width: 34px; height: 34px; padding: 0 12px; display: inline-grid; grid-auto-flow: column; gap: 5px; place-items: center; font-size: 13px; background: linear-gradient(180deg, rgba(40,50,45,.72), rgba(12,17,14,.78)); border: 1px solid rgba(255,255,255,.3); box-shadow: 0 6px 14px -6px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.22); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.ck .ck-quit { background: linear-gradient(180deg, #e04a5c, #a51d30) !important; } .ck .sim-end { background: linear-gradient(180deg, #1fae6d, #0b6a41); } .ck .ck-mode { border-color: rgba(233,180,58,.8); }
 .sim-peek { font: inherit; margin-inline-start: 6px; }
 .ck .ck-view, .ck .ck-mir, .ck .ck-map { display: none !important; }
 .ck:not(.is-fpv) .ck-dash-bg, .ck:not(.is-fpv) .ck-pillars { display: none; }
